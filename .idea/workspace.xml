@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="457bea1e-edee-4980-95cc-4d02bd16cb22" name="Changes" comment="Dev commit 2" />
+    <list default="true" id="457bea1e-edee-4980-95cc-4d02bd16cb22" name="Changes" comment="Changes" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -44,7 +44,6 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="ROOT_SYNC" value="SYNC" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -52,12 +51,12 @@
     &quot;assignee&quot;: &quot;Vighnesh404&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Vighnesh404/Book_Store_Management.git",
-    "accountId": "738363ea-ba13-4bde-97e6-5c756b528b8d"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Vighnesh404/Book_Store_Management.git&quot;,
+    &quot;accountId&quot;: &quot;738363ea-ba13-4bde-97e6-5c756b528b8d&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/6.2.7/spring-web-6.2.7-sources.jar!/org/springframework/web/method/support/InvocableHandlerMethod.java" root0="SKIP_INSPECTION" />
   </component>
@@ -79,10 +78,10 @@
     "Application.com.cts.userservice.UserServiceApplication.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "dev",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/2406313/Documents/workspace-spring-tool-suite-4-4.29.1.RELEASE_Book_Management_Service_Gatway",
+    "last_opened_file_path": "C:/Users/2406313/Documents/workspace-spring-tool-suite-4-4.29.1.RELEASE_book_management_project",
     "settings.editor.selected.configurable": "project.propCompiler"
   }
 }]]></component>
@@ -239,6 +238,31 @@
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="dev" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="origin/master" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="master" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
@@ -264,6 +288,7 @@
     <MESSAGE value="Dev commit 1" />
     <MESSAGE value="Main commit 1" />
     <MESSAGE value="Dev commit 2" />
-    <option name="LAST_COMMIT_MESSAGE" value="Dev commit 2" />
+    <MESSAGE value="Changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changes" />
   </component>
 </project>
