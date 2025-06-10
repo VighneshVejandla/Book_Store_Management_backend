@@ -1,0 +1,6 @@
+package com.cts.dto;
+
+@
+public class PasswordDto {
+	private String password;
+}

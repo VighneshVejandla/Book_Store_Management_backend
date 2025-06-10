@@ -1,0 +1,10 @@
+package com.cts.bookmanagement.service;
+
+import com.cts.bookmanagement.entity.Inventory;
+
+public interface INventoryService {
+	
+	Inventory addInventory(Inventory inventory);
+	Inventory viewAllInvenory;
+	
+}
