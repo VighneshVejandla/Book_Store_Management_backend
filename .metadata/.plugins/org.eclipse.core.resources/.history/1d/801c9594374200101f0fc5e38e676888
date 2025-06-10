@@ -1,0 +1,24 @@
+package com.cts.service;
+
+package com.cts.service;
+
+import com.cts.dto.ProfileDto;
+
+public interface IProfileService {
+
+    ProfileDto createProfile(ProfileDto profileDto);
+
+    ProfileDto getProfileByUserId(Long userId);
+
+    ProfileDto updateProfile(Long userId, ProfileDto profileDto);
+
+    void softDeleteProfile(Long userId);
+
+    void recoverProfile(Long userId);
+
+    void hardDeleteProfile(Long userId);
+
+    int calculateProfileCompletion(ProfileDto profileDto);
+
+    void changeVisibility(Long userId, String visibility);
+}

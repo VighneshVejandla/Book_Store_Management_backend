@@ -1,0 +1,14 @@
+package com.cts.service;
+
+import java.util.List;
+
+import com.cts.dto.ReviewDTO;
+
+public interface IReviewService {
+	
+//	ReviewDTO addReview(ReviewDTO reviewDTO);
+	List<ReviewDTO> viewAllReviews(long userId);
+//	ReviewDTO getReviewById(long bookId);
+	ReviewDTO editReviewById(long reviewId, ReviewDTO reviewDTO);
+	ReviewDTO deleteReviewbyId(long reviewId);
+}

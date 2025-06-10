@@ -1,0 +1,122 @@
+package com.cts.service;
+
+public class ProfileServiceImplement implements IProfileService{
+	@Autowired
+    private ProfileRepository profileRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    private ProfileDto mapToDto(Profile profile) {
+        return ProfileDto.builder()
+                .profileId(profile.getProfileId())
+                .bio(profile.getBio())
+                .phoneNumber(profile.getPhoneNumber())
+                .address(profile.getAddress())
+                .visibility(profile.getVisibility().name())
+                .profileCompletion(profile.getProfileCompletion())
+                .isDeleted(profile.isDeleted())
+                .userId(profile.getUser().getUserId())
+                .build();
+    }
+
+    private Profile mapToEntity(ProfileDto profileDto, User user) {
+        return Profile.builder()
+                .bio(profileDto.getBio())
+                .phoneNumber(profileDto.getPhoneNumber())
+                .address(profileDto.getAddress())
+                .visibility(Profile.Visibility.valueOf(profileDto.getVisibility()))
+                .profileCompletion(calculateProfileCompletion(profileDto))
+                .isDeleted(false)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .user(user)
+                .build();
+    }
+
+    @Override
+    public ProfileDto createProfile(ProfileDto profileDto) {
+        User user = userRepository.findById(profileDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Profile profile = mapToEntity(profileDto, user);
+        profileRepository.save(profile);
+        return mapToDto(profile);
+    }
+
+    @Override
+    public ProfileDto getProfileByUserId(Long userId) {
+        Profile profile = profileRepository.findByUserUserId(userId);
+        if (profile == null || profile.isDeleted()) {
+            throw new RuntimeException("Profile not found or is deleted");
+        }
+        return mapToDto(profile);
+    }
+
+    @Override
+    public ProfileDto updateProfile(Long userId, ProfileDto profileDto) {
+        Profile profile = profileRepository.findByUserUserId(userId);
+        if (profile == null) {
+            throw new RuntimeException("Profile not found");
+        }
+        profile.setBio(profileDto.getBio());
+        profile.setPhoneNumber(profileDto.getPhoneNumber());
+        profile.setAddress(profileDto.getAddress());
+        profile.setVisibility(Profile.Visibility.valueOf(profileDto.getVisibility()));
+        profile.setProfileCompletion(calculateProfileCompletion(profileDto));
+        profile.setUpdatedAt(LocalDateTime.now());
+
+        profileRepository.save(profile);
+        return mapToDto(profile);
+    }
+
+    @Override
+    public void softDeleteProfile(Long userId) {
+        Profile profile = profileRepository.findByUserUserId(userId);
+        if (profile == null) {
+            throw new RuntimeException("Profile not found");
+        }
+        profile.setDeleted(true);
+        profile.setUpdatedAt(LocalDateTime.now());
+        profileRepository.save(profile);
+    }
+
+    @Override
+    public void recoverProfile(Long userId) {
+        Profile profile = profileRepository.findByUserUserId(userId);
+        if (profile == null) {
+            throw new RuntimeException("Profile not found");
+        }
+        profile.setDeleted(false);
+        profile.setUpdatedAt(LocalDateTime.now());
+        profileRepository.save(profile);
+    }
+
+    @Override
+    public void hardDeleteProfile(Long userId) {
+        Profile profile = profileRepository.findByUserUserId(userId);
+        if (profile != null) {
+            profileRepository.delete(profile);
+        }
+    }
+
+    @Override
+    public int calculateProfileCompletion(ProfileDto profileDto) {
+        int completion = 0;
+        if (profileDto.getBio() != null && !profileDto.getBio().isEmpty()) completion += 30;
+        if (profileDto.getPhoneNumber() != null && !profileDto.getPhoneNumber().isEmpty()) completion += 30;
+        if (profileDto.getAddress() != null && !profileDto.getAddress().isEmpty()) completion += 40;
+        return completion;
+    }
+
+    @Override
+    public void changeVisibility(Long userId, String visibility) {
+        Profile profile = profileRepository.findByUserUserId(userId);
+        if (profile == null) {
+            throw new RuntimeException("Profile not found");
+        }
+        profile.setVisibility(Profile.Visibility.valueOf(visibility));
+        profile.setUpdatedAt(LocalDateTime.now());
+        profileRepository.save(profile);
+    }
+}
