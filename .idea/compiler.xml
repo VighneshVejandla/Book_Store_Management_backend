@@ -9,13 +9,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="eurekaserver" />
+        <module name="ReviewService" />
       </profile>
       <profile name="Annotation profile for UserService" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
         <module name="UserService" />
@@ -26,7 +26,6 @@
       <module name="bookmanagemet" target="17" />
       <module name="bookmanagemet (1)" target="17" />
       <module name="OrderService" target="17" />
-      <module name="ReviewService" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
