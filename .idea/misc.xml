@@ -11,6 +11,7 @@
         <option value="$PROJECT_DIR$/OrderService/pom.xml" />
         <option value="$PROJECT_DIR$/eurekaserver/pom.xml" />
         <option value="$PROJECT_DIR$/bookmanagemet_practice/pom.xml" />
+        <option value="$PROJECT_DIR$/CartModule/pom.xml" />
       </list>
     </option>
   </component>
