@@ -1,0 +1,53 @@
+package com.cts.controller;
+
+import java.util.logging.Logger;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.cts.dto.PaymentRequestDto;
+import com.cts.dto.PaymentResponseDto;
+import com.cts.service.PaymentService;
+
+@RestController
+@RequestMapping("/payments")
+public class PaymentController {
+
+	private static final Logger logger = Logger.getLogger(PaymentController.class.getName());
+
+	@Autowired
+	private PaymentService paymentService;
+
+	@PostMapping("/initiate")
+	public PaymentResponseDto initiatePayment(@RequestBody PaymentRequestDto requestDto) {
+		logger.info("Received request to initiate payment");
+		return paymentService.initiatePayment(requestDto);
+	}
+
+	@PutMapping("/updatestatus/{paymentId}")
+	public String updatePaymentStatusToSuccess(@PathVariable Long paymentId) {
+		logger.info("Received request to update payment status for ID: " + paymentId);
+		paymentService.updatePaymentStatusToSuccess(paymentId);
+		return "SUCCESS";
+	}
+
+	@GetMapping("/viewstatus/{paymentId}")
+	public String viewPaymentStatus(@PathVariable Long paymentId) {
+		logger.info("Received request to view payment status for ID: " + paymentId);
+		return paymentService.viewPaymentStatus(paymentId);
+	}
+
+	@PutMapping("/payments/{paymentId}/cancel")
+	public ResponseEntity<String> cancelPayment(@PathVariable Long paymentId) {
+		paymentService.cancelPayment(paymentId);
+		return ResponseEntity.ok("Payment cancelled successfully.");
+	}
+
+}
