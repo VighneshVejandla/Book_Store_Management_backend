@@ -1,72 +1,50 @@
 package com.cts.entity;
 
-import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+@Data
 @Entity
-@Table(name = "book")
 public class Book {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long book_id;
-
-    public int getPrice() {
-		return price;
-	}
-
-	public void setPrice(int price) {
-		this.price = price;
-	}
-
-	public int getStock_quantity() {
-		return stock_quantity;
-	}
-
-	public void setStock_quantity(int stock_quantity) {
-		this.stock_quantity = stock_quantity;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	@Min(value = 0, message = "This is a free book")
-    private int price;
-
-    @Min(value = 0, message = "Out of Stock!")
-    private int stock_quantity;
-
-    private String title;
-
-    @ManyToOne
-    @JoinColumn(name = "auth_id", nullable = false)
-    private Author author;
-
-    public Author getAuthor() {
-		return author;
-	}
-
-	public void setAuthor(Author author) {
-		this.author = author;
-	}
-
-	public Category getCategory() {
-		return category;
-	}
-
-	public void setCategory(Category category) {
-		this.category = category;
-	}
-
-	@ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
-
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long bookId;
+	
+	@NotBlank
+	private String title;
+	
+	@ManyToOne
+	@JoinColumn(name = "author_id")
+	private Author author;
+	
+	@ManyToOne
+	@JoinColumn(name = "category_id")
+	private Category category;
+	
+	@NotNull
+	@Min(value = 0, message = "Must be more than 0")
+	private Double price;
+	
+	@NotNull
+	@Min(value = 0, message = "Out of Stock")
+	private int stockQuantity;
+	private LocalDateTime bookCreatedDate;
+	private boolean isBookDeleted;
+	
+//	@OneToOne(mappedBy = "book", cascade = CascadeType.ALL)
+//	private Inventory inventory;
+	
+//	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+//	private List<Review> review;
 }

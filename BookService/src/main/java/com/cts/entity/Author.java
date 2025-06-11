@@ -1,48 +1,31 @@
 package com.cts.entity;
 
 import java.time.LocalDateTime;
-
 import java.util.List;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 @Entity
 public class Author {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long authId;
-
-//    @NotEmpty
-    @NotNull
-    
-    private String authName;
-
-    private LocalDateTime authorCreatedDate;
-    private boolean isAuthDeleted;
-
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    private List<Book> books;
-
-	public String getAuthName() {
-		return authName;
-	}
-
-	public Long getAuthId() {
-		return authId;
-	}
-
-	public void setAuthId(Long authId) {
-		this.authId = authId;
-	}
-
-	public void setAuthName(String authName) {
-		this.authName = authName;
-	}
-    
-    
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long authId;
+	
+	@NotEmpty
+	private String authName;
+	
+	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+	private List<Book> books;
+	
+	private LocalDateTime authorCreatedDate;
+	private boolean isAuthDeleted;
 }
