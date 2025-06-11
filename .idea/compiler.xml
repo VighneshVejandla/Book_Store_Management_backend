@@ -17,10 +17,22 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
-        <module name="OrderService" />
         <module name="CartModule" />
+      </profile>
+      <profile name="Annotation profile for e_commerce_payment_service" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+        </processorPath>
+        <module name="BookService" />
+        <module name="e_commerce_payment_service" />
+        <module name="OrderService" />
         <module name="UserService" />
+        <module name="InventoryService" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -32,12 +44,15 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Book" options="-parameters" />
+      <module name="BookService" options="-parameters" />
       <module name="CartModule" options="-parameters" />
+      <module name="InventoryService" options="-parameters" />
       <module name="OrderService" options="-parameters" />
       <module name="ReviewService" options="-parameters" />
       <module name="UserService" options="-parameters" />
       <module name="bookmanagemet" options="-parameters" />
       <module name="bookmanagemet (1)" options="-parameters" />
+      <module name="e_commerce_payment_service" options="-parameters" />
       <module name="eurekaserver" options="-parameters" />
     </option>
   </component>
