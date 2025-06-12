@@ -1,13 +1,15 @@
 package com.cts.service;
-
 import java.util.List;
 
-import com.cts.dto.BookDTO;
-import com.cts.dto.CategoryDTO;
+import com.cts.dto.BookDto;
+import com.cts.dto.CategoryDto;
 
 public interface ICategoryService {
-	CategoryDTO addCategory(CategoryDTO categoryDTO);
-	CategoryDTO viewCategory();
-	List<BookDTO> getBooksByCategoryName(String catName);
-	CategoryDTO deleteCategoryByName(String catName);
+	CategoryDto addCategory(CategoryDto categoryDto);
+	List<CategoryDto> viewAllCategories();
+	CategoryDto getCategoryById(Long catId);
+	CategoryDto updateCategoryById(Long catId, CategoryDto categoryDto);
+	void deleteCategoryById(Long catId);
+	List<BookDto> getBooksByCatId(Long catId);
+	CategoryDto getCategoryByCatName(String catName);
 }

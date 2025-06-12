@@ -2,16 +2,25 @@ package com.cts.service;
 
 import java.util.List;
 
-import com.cts.dto.BookDTO;
+import com.cts.dto.BookDto;
 
 public interface IBookService {
-    BookDTO addBook(BookDTO bookDTO);
-    List<BookDTO> viewAllBooks();
-    BookDTO getBookById(int bookId);
-    BookDTO deleteBookById(int bookId);
-    BookDTO updateBookById(int bookId, BookDTO bookDTO);
 
-    List<BookDTO> getBooksByAuthorName(String authName);
-    List<BookDTO> getBooksByCategoryName(String catName); // ✅ Add this
-    List<BookDTO> getBooksByTitle(String title);
+//	Book addBook(Book book);
+	List<BookDto> viewAllBooks();
+
+	BookDto getBookById(Long bookId);
+
+	BookDto updateBookById(Long bookId, BookDto bookDto);
+
+	void deleteBookById(Long bookId);
+
+	BookDto addBook(BookDto bookDto);
+
+	List<BookDto> findBooksByCategoryName(String catName);
+
+	List<BookDto> findBooksByAuthorName(String authName);
+
+	List<BookDto> findBooksByTitle(String title);
+
 }
