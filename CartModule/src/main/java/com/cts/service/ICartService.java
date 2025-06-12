@@ -13,6 +13,7 @@ public interface ICartService {
     void clearCart(Integer userId);
     double calculateTotalPrice(Integer userId);
     CartDTO createCartForUser(Integer userId);
+
     
     List<CartItemDTO> getCartItems(Integer userId);
 

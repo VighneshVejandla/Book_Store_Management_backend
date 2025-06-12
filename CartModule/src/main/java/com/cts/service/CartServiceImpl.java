@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.cts.Config.BookFeignClient;
+import com.cts.Config.UserFeignClient;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.validation.annotation.Validated;
 
 import com.cts.dto.CartDTO;
@@ -32,7 +33,11 @@ public class CartServiceImpl implements ICartService{
 	    private  CartItemRepository cartItemRepository;
 		@Autowired
 	    private  ModelMapper modelMapper;
-	   	   
+		@Autowired
+		UserFeignClient userFeignClient;
+		@Autowired
+		BookFeignClient bookFeignClient;
+
 	    
 	    @Transactional
 	    public CartDTO addProductToCart(Integer userId, CartItemDTO cartItemDto) {
@@ -143,6 +148,9 @@ public class CartServiceImpl implements ICartService{
 	                .map(item -> modelMapper.map(item, CartItemDTO.class))
 	                .collect(Collectors.toList());
 	    }
+
+
+
 	}
 
 	
