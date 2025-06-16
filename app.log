@@ -1,0 +1,393 @@
+2025-06-16 19:36:04 [main] Starting BookApplication using Java 21 with PID 17484 (C:\Users\2406664\Documents\Book_Store_Management\BookService\target\classes started by 2406664 in C:\Users\2406664\Documents\Book_Store_Management)
+2025-06-16 19:36:04 [main] No active profile set, falling back to 1 default profile: "default"
+2025-06-16 19:36:06 [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-16 19:36:07 [main] Finished Spring Data repository scanning in 342 ms. Found 3 JPA repository interfaces.
+2025-06-16 19:36:08 [main] BeanFactory id=a1061b51-0edb-3c94-aee1-bf0af3a49bce
+2025-06-16 19:36:09 [main] Tomcat initialized with port 9001 (http)
+2025-06-16 19:36:09 [main] Starting service [Tomcat]
+2025-06-16 19:36:09 [main] Starting Servlet engine: [Apache Tomcat/10.1.41]
+2025-06-16 19:36:09 [main] Initializing Spring embedded WebApplicationContext
+2025-06-16 19:36:09 [main] Root WebApplicationContext: initialization completed in 4687 ms
+2025-06-16 19:36:09 [main] HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-16 19:36:10 [main] HHH000412: Hibernate ORM core version 6.6.15.Final
+2025-06-16 19:36:10 [main] HHH000026: Second-level cache disabled
+2025-06-16 19:36:10 [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-16 19:36:10 [main] HikariPool-1 - Starting...
+2025-06-16 19:36:11 [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4cf5d999
+2025-06-16 19:36:11 [main] HikariPool-1 - Start completed.
+2025-06-16 19:36:11 [main] HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.41
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-06-16 19:36:16 [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-16 19:36:17 [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-16 19:36:18 [main] Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-06-16 19:36:21 [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-16 19:36:22 [main] Eureka HTTP Client uses RestTemplate.
+2025-06-16 19:36:22 [main] Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-06-16 19:36:22 [main] Setting initial instance status as: STARTING
+2025-06-16 19:36:23 [main] Initializing Eureka in region us-east-1
+2025-06-16 19:36:23 [main] Resolving eureka endpoints via configuration
+2025-06-16 19:36:23 [main] Disable delta property : false
+2025-06-16 19:36:23 [main] Single vip registry refresh property : null
+2025-06-16 19:36:23 [main] Force full registry fetch : false
+2025-06-16 19:36:23 [main] Application is null : false
+2025-06-16 19:36:23 [main] Registered Applications size is zero : true
+2025-06-16 19:36:23 [main] Application version is -1: true
+2025-06-16 19:36:23 [main] Getting all instance registry info from the eureka server
+2025-06-16 19:36:24 [main] The response status is 200
+2025-06-16 19:36:24 [main] Starting heartbeat executor: renew interval is: 30
+2025-06-16 19:36:24 [main] InstanceInfoReplicator onDemand update allowed rate per min is 4
+2025-06-16 19:36:24 [main] Discovery Client initialized at timestamp 1750082784532 with initial instances count: 0
+2025-06-16 19:36:24 [main] Registering application BOOK with eureka with status UP
+2025-06-16 19:36:24 [main] Saw local status change event StatusChangeEvent [timestamp=1750082784576, current=UP, previous=STARTING]
+2025-06-16 19:36:24 [DiscoveryClient-InstanceInfoReplicator-%d] DiscoveryClient_BOOK/LTIN436725.cts.com:Book:9001: registering service...
+2025-06-16 19:36:24 [main] Tomcat started on port 9001 (http) with context path '/'
+2025-06-16 19:36:24 [main] Updating port to 9001
+2025-06-16 19:36:24 [main] Started BookApplication in 21.214 seconds (process running for 22.772)
+2025-06-16 19:36:24 [DiscoveryClient-InstanceInfoReplicator-%d] DiscoveryClient_BOOK/LTIN436725.cts.com:Book:9001 - registration status: 204
+2025-06-16 19:36:54 [DiscoveryClient-CacheRefreshExecutor-%d] Disable delta property : false
+2025-06-16 19:36:54 [DiscoveryClient-CacheRefreshExecutor-%d] Single vip registry refresh property : null
+2025-06-16 19:36:54 [DiscoveryClient-CacheRefreshExecutor-%d] Force full registry fetch : false
+2025-06-16 19:36:54 [DiscoveryClient-CacheRefreshExecutor-%d] Application is null : false
+2025-06-16 19:36:54 [DiscoveryClient-CacheRefreshExecutor-%d] Registered Applications size is zero : true
+2025-06-16 19:36:54 [DiscoveryClient-CacheRefreshExecutor-%d] Application version is -1: false
+2025-06-16 19:36:54 [DiscoveryClient-CacheRefreshExecutor-%d] Getting all instance registry info from the eureka server
+2025-06-16 19:36:54 [DiscoveryClient-CacheRefreshExecutor-%d] The response status is 200
+2025-06-16 19:39:58 [http-nio-9001-exec-3] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-16 19:39:58 [http-nio-9001-exec-3] Initializing Servlet 'dispatcherServlet'
+2025-06-16 19:39:58 [http-nio-9001-exec-3] Completed initialization in 1 ms
+2025-06-16 19:39:59 [http-nio-9001-exec-5] Init duration for springdoc-openapi is: 411 ms
+2025-06-16 19:41:23 [AsyncResolver-bootstrap-executor-%d] Resolving eureka endpoints via configuration
+2025-06-16 19:46:19 [http-nio-9001-exec-7] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.util.NoSuchElementException: No value present] with root cause
+java.util.NoSuchElementException: No value present
+	at java.base/java.util.Optional.get(Optional.java:143)
+	at com.cts.service.BookServiceImpl.getBookById(BookServiceImpl.java:64)
+	at com.cts.controller.BookController.viewBookById(BookController.java:44)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.validation.beanvalidation.MethodValidationInterceptor.invoke(MethodValidationInterceptor.java:174)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:728)
+	at com.cts.controller.BookController$$SpringCGLIB$$0.viewBookById(<generated>)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-06-16 19:46:23 [AsyncResolver-bootstrap-executor-%d] Resolving eureka endpoints via configuration
+2025-06-16 19:51:23 [AsyncResolver-bootstrap-executor-%d] Resolving eureka endpoints via configuration
+2025-06-16 19:56:23 [AsyncResolver-bootstrap-executor-%d] Resolving eureka endpoints via configuration
+2025-06-16 19:59:00 [http-nio-9001-exec-8] Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Unexpected character (',' (code 44)): was expecting double-quote to start field name]
+2025-06-16 19:59:11 [http-nio-9001-exec-3] Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Unexpected character (',' (code 44)): was expecting double-quote to start field name]
+2025-06-16 20:01:23 [AsyncResolver-bootstrap-executor-%d] Resolving eureka endpoints via configuration
+2025-06-16 20:03:50 [SpringApplicationShutdownHook] Unregistering application BOOK with eureka with status DOWN
+2025-06-16 20:03:50 [SpringApplicationShutdownHook] Saw local status change event StatusChangeEvent [timestamp=1750084430027, current=DOWN, previous=UP]
+2025-06-16 20:03:50 [DiscoveryClient-InstanceInfoReplicator-%d] DiscoveryClient_BOOK/LTIN436725.cts.com:Book:9001: registering service...
+2025-06-16 20:03:50 [SpringApplicationShutdownHook] Commencing graceful shutdown. Waiting for active requests to complete
+2025-06-16 20:03:50 [tomcat-shutdown] Graceful shutdown complete
+2025-06-16 20:03:50 [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-06-16 20:03:50 [DiscoveryClient-InstanceInfoReplicator-%d] DiscoveryClient_BOOK/LTIN436725.cts.com:Book:9001 - registration status: 204
+2025-06-16 20:03:50 [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2025-06-16 20:03:50 [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
+2025-06-16 20:03:50 [SpringApplicationShutdownHook] Shutting down DiscoveryClient ...
+2025-06-16 20:03:53 [SpringApplicationShutdownHook] Unregistering ...
+2025-06-16 20:03:53 [SpringApplicationShutdownHook] DiscoveryClient_BOOK/LTIN436725.cts.com:Book:9001 - deregister  status: 200
+2025-06-16 20:03:53 [SpringApplicationShutdownHook] Completed shut down of DiscoveryClient
+2025-06-16 20:03:56 [main] Starting BookApplication using Java 21 with PID 13832 (C:\Users\2406664\Documents\Book_Store_Management\BookService\target\classes started by 2406664 in C:\Users\2406664\Documents\Book_Store_Management)
+2025-06-16 20:03:56 [main] No active profile set, falling back to 1 default profile: "default"
+2025-06-16 20:03:57 [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-16 20:03:57 [main] Finished Spring Data repository scanning in 138 ms. Found 3 JPA repository interfaces.
+2025-06-16 20:03:57 [main] BeanFactory id=a1061b51-0edb-3c94-aee1-bf0af3a49bce
+2025-06-16 20:03:58 [main] Tomcat initialized with port 9001 (http)
+2025-06-16 20:03:58 [main] Starting service [Tomcat]
+2025-06-16 20:03:58 [main] Starting Servlet engine: [Apache Tomcat/10.1.41]
+2025-06-16 20:03:58 [main] Initializing Spring embedded WebApplicationContext
+2025-06-16 20:03:58 [main] Root WebApplicationContext: initialization completed in 2163 ms
+2025-06-16 20:03:58 [main] HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-16 20:03:58 [main] HHH000412: Hibernate ORM core version 6.6.15.Final
+2025-06-16 20:03:58 [main] HHH000026: Second-level cache disabled
+2025-06-16 20:03:59 [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-16 20:03:59 [main] HikariPool-1 - Starting...
+2025-06-16 20:03:59 [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4aa517c3
+2025-06-16 20:03:59 [main] HikariPool-1 - Start completed.
+2025-06-16 20:03:59 [main] HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.41
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-06-16 20:04:00 [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-16 20:04:00 [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-16 20:04:01 [main] Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-06-16 20:04:02 [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-06-16 20:04:03 [main] Eureka HTTP Client uses RestTemplate.
+2025-06-16 20:04:03 [main] Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-06-16 20:04:03 [main] Setting initial instance status as: STARTING
+2025-06-16 20:04:03 [main] Initializing Eureka in region us-east-1
+2025-06-16 20:04:03 [main] Resolving eureka endpoints via configuration
+2025-06-16 20:04:03 [main] Disable delta property : false
+2025-06-16 20:04:03 [main] Single vip registry refresh property : null
+2025-06-16 20:04:03 [main] Force full registry fetch : false
+2025-06-16 20:04:03 [main] Application is null : false
+2025-06-16 20:04:03 [main] Registered Applications size is zero : true
+2025-06-16 20:04:03 [main] Application version is -1: true
+2025-06-16 20:04:03 [main] Getting all instance registry info from the eureka server
+2025-06-16 20:04:03 [main] The response status is 200
+2025-06-16 20:04:03 [main] Starting heartbeat executor: renew interval is: 30
+2025-06-16 20:04:03 [main] InstanceInfoReplicator onDemand update allowed rate per min is 4
+2025-06-16 20:04:03 [main] Discovery Client initialized at timestamp 1750084443733 with initial instances count: 2
+2025-06-16 20:04:03 [main] Registering application BOOK with eureka with status UP
+2025-06-16 20:04:03 [main] Saw local status change event StatusChangeEvent [timestamp=1750084443741, current=UP, previous=STARTING]
+2025-06-16 20:04:03 [DiscoveryClient-InstanceInfoReplicator-%d] DiscoveryClient_BOOK/LTIN436725.cts.com:Book:9001: registering service...
+2025-06-16 20:04:03 [main] Tomcat started on port 9001 (http) with context path '/'
+2025-06-16 20:04:03 [main] Updating port to 9001
+2025-06-16 20:04:03 [main] Started BookApplication in 8.19 seconds (process running for 9.105)
+2025-06-16 20:04:03 [DiscoveryClient-InstanceInfoReplicator-%d] DiscoveryClient_BOOK/LTIN436725.cts.com:Book:9001 - registration status: 204
+2025-06-16 20:06:04 [http-nio-9001-exec-1] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-16 20:06:04 [http-nio-9001-exec-1] Initializing Servlet 'dispatcherServlet'
+2025-06-16 20:06:04 [http-nio-9001-exec-1] Completed initialization in 0 ms
+2025-06-16 20:06:05 [http-nio-9001-exec-5] Init duration for springdoc-openapi is: 461 ms
+2025-06-16 20:06:15 [http-nio-9001-exec-6] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.util.NoSuchElementException: No value present] with root cause
+java.util.NoSuchElementException: No value present
+	at java.base/java.util.Optional.get(Optional.java:143)
+	at com.cts.service.BookServiceImpl.getBookById(BookServiceImpl.java:64)
+	at com.cts.controller.BookController.viewBookById(BookController.java:44)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.validation.beanvalidation.MethodValidationInterceptor.invoke(MethodValidationInterceptor.java:174)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:728)
+	at com.cts.controller.BookController$$SpringCGLIB$$0.viewBookById(<generated>)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-06-16 20:09:03 [AsyncResolver-bootstrap-executor-%d] Resolving eureka endpoints via configuration
+2025-06-16 20:14:03 [AsyncResolver-bootstrap-executor-%d] Resolving eureka endpoints via configuration
+2025-06-16 21:01:36 [HikariPool-1:housekeeper] HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=45m36s903ms252µs800ns).
+2025-06-16 21:04:10 [AsyncResolver-bootstrap-executor-%d] Resolving eureka endpoints via configuration
+2025-06-16 21:06:59 [http-nio-9001-exec-8] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.util.NoSuchElementException: No value present] with root cause
+java.util.NoSuchElementException: No value present
+	at java.base/java.util.Optional.get(Optional.java:143)
+	at com.cts.service.BookServiceImpl.getBookById(BookServiceImpl.java:64)
+	at com.cts.controller.BookController.viewBookById(BookController.java:44)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.validation.beanvalidation.MethodValidationInterceptor.invoke(MethodValidationInterceptor.java:174)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:728)
+	at com.cts.controller.BookController$$SpringCGLIB$$0.viewBookById(<generated>)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-06-16 21:07:42 [http-nio-9001-exec-10] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.util.NoSuchElementException: No value present] with root cause
+java.util.NoSuchElementException: No value present
+	at java.base/java.util.Optional.get(Optional.java:143)
+	at com.cts.service.BookServiceImpl.getBookById(BookServiceImpl.java:64)
+	at com.cts.controller.BookController.viewBookById(BookController.java:44)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.validation.beanvalidation.MethodValidationInterceptor.invoke(MethodValidationInterceptor.java:174)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:728)
+	at com.cts.controller.BookController$$SpringCGLIB$$0.viewBookById(<generated>)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-06-16 21:09:10 [AsyncResolver-bootstrap-executor-%d] Resolving eureka endpoints via configuration
