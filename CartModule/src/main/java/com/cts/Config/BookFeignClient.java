@@ -1,7 +1,9 @@
 package com.cts.Config;
 
-import com.cts.dto.BookDto;
+
+import com.cts.dto.BookSummaryDto;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,8 +15,8 @@ import java.util.List;
 public interface BookFeignClient {
 
 // Get a book by its ID
-@GetMapping("/books/{id}")
-BookDto getBookById(@PathVariable("id") Long id);
+@GetMapping("/bookmanage/viewbookbyid/{bookId}")
+ResponseEntity<BookSummaryDto> getBookById(@PathVariable long bookId);
 
 
 }

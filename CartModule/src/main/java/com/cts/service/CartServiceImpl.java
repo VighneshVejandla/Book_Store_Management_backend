@@ -6,17 +6,18 @@ import java.util.stream.Collectors;
 
 import com.cts.Config.BookFeignClient;
 import com.cts.Config.UserFeignClient;
+import com.cts.dto.*;
+import com.cts.exception.ProductNotFoundException;
+import feign.FeignException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import com.cts.dto.CartDTO;
-import com.cts.dto.CartItemDTO;
 import com.cts.entity.Cart;
 import com.cts.entity.CartItem;
 import com.cts.exception.CartNotFoundException;
-import com.cts.exception.ProductNotFoundException;
 import com.cts.exception.UserNotFoundException;
 import com.cts.repository.CartItemRepository;
 import com.cts.repository.CartRepository;
@@ -38,28 +39,46 @@ public class CartServiceImpl implements ICartService{
 		@Autowired
 		BookFeignClient bookFeignClient;
 
-	    
+
+
+		@Override
 	    @Transactional
-	    public CartDTO addProductToCart(Integer userId, CartItemDTO cartItemDto) {
+	    public CartDTO addProductToCart(Integer userId, ProductDTO productdto,Integer bookId) {
+			UserDto user = getUserById(userId);
+			BookSummaryDto bookData=getBookDetails(bookId).getBody();
+			//BookSummaryDto bookData = bookFeignClient.getBookById(bookId).getBody();
+			System.out.println(bookData);
+
 	        Cart cart = cartRepository.findCartByUserId(userId).orElseThrow(()->new UserNotFoundException("User not found with Id"+userId));
 	                ;
 
-	        Optional<CartItem> existingItemOpt = cartItemRepository.findByCartAndBookId(cart, cartItemDto.getBookId());
+	        Optional<CartItem> existingItemOpt = cartItemRepository.findByCartAndBookId(cart, bookData.getBookId());
 
 	        if (existingItemOpt.isPresent()) {
 	            CartItem existingItem = cartItemRepository.findById(existingItemOpt.get().getId())
 	                    .orElseThrow(() -> new RuntimeException("CartItem not found!")); // Ensure fresh entity
-	            existingItem.setQuantity(existingItem.getQuantity() + cartItemDto.getQuantity());
+	            existingItem.setQuantity(existingItem.getQuantity() + productdto.getQuantity());
 	            cartItemRepository.save(existingItem);
 	        } else {
-	            CartItem cartItem = modelMapper.map(cartItemDto, CartItem.class);
+				CartItemDTO cartDetails=modelMapper.map(productdto,CartItemDTO.class);
+				cartDetails.setBookId(bookData.getBookId());
+				cartDetails.setBookName(bookData.getTitle());
+				cartDetails.setBookPrice(bookData.getPrice());
+
+	            CartItem cartItem = modelMapper.map(cartDetails, CartItem.class);
 	            cartItem.setCart(cart);
 	            cartItemRepository.save(cartItem);
 	        }
-	        cartRepository.save(cart);
-	        return modelMapper.map(cart, CartDTO.class);
+
+			double totalPrice = cartItemRepository.findByCart(cart).stream()
+					.mapToDouble(item -> item.getBookPrice() * item.getQuantity())
+					.sum();
+
+			cart.setTotalPrice(totalPrice);
+			cartRepository.save(cart);
+			return modelMapper.map(cart, CartDTO.class);
 	    }
-    	@Override  
+    	@Override
 	    @Transactional
 	    public CartDTO increaseProductQuantity(Integer userId, Integer bookId, Integer quantityToAdd) {
 	        Cart cart = cartRepository.findCartByUserId(userId)
@@ -148,9 +167,23 @@ public class CartServiceImpl implements ICartService{
 	                .map(item -> modelMapper.map(item, CartItemDTO.class))
 	                .collect(Collectors.toList());
 	    }
+	public UserDto getUserById(Integer userId) {
+		try {
+			return userFeignClient.getUserId(userId);
+		} catch (FeignException.NotFound e) {
+			throw new UserNotFoundException("User ID " + userId + " not found.");
+		}
+	}
 
-
-
+	public ResponseEntity<BookSummaryDto> getBookDetails(Integer bookId){
+			try
+			{
+				return bookFeignClient.getBookById(bookId);
+			}
+			catch(FeignException.NotFound e){
+				throw new ProductNotFoundException("Book Details for BookId "+bookId+" not found");
+			}
+	}
 	}
 
 	

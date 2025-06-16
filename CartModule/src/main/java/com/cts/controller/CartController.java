@@ -3,6 +3,7 @@ package com.cts.controller;
 import java.util.List;
 
 //import org.modelmapper.ModelMapper;
+import com.cts.dto.ProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +31,9 @@ public class CartController {
 
 
 
-	@PostMapping("/{userId}/addproduct")
-	public ResponseEntity<CartDTO> addToCart(@PathVariable Integer userId, @Valid @RequestBody CartItemDTO cartItemDto) {
-		return ResponseEntity.ok(cartService.addProductToCart(userId, cartItemDto));
+	@PostMapping("/{userId}/addproduct/{bookId}")
+	public ResponseEntity<CartDTO> addToCart(@PathVariable Integer userId, @PathVariable Integer bookId,@Valid @RequestBody ProductDTO productdto) {
+		return ResponseEntity.ok(cartService.addProductToCart(userId, productdto,bookId));
 	}
 
 	@PutMapping("/{userId}/increaseqnty/{productId}")
@@ -84,5 +85,6 @@ public class CartController {
 	public ResponseEntity<List<CartItemDTO>> getCartItems(@PathVariable Integer userId) {
 		return ResponseEntity.ok(cartService.getCartItems(userId));
 	}
+
 
 }
