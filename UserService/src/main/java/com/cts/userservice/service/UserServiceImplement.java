@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import com.cts.userservice.exception.UserNotFoundByEmailException;
 import com.cts.userservice.exception.UserNotFoundByIdException;
+import com.cts.userservice.feignclient.CartFeignClient;
 import com.cts.userservice.repository.ProfileRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class UserServiceImplement implements IUserService {
 	@Qualifier("userServiceModelMapper")
 	ModelMapper modelMapper;
 
+	@Autowired
+	CartFeignClient cartFeignClient;
+
 	@Override
 	public UserDto addUser(UserDto userDto) {
 
@@ -49,6 +53,13 @@ public class UserServiceImplement implements IUserService {
 		newUser.setDeleted(false);
 
 		User saveUser = userRepository.save(newUser);
+
+		try{
+			cartFeignClient.createCart(saveUser.getUserId());
+		}catch (Exception e){
+			throw new RuntimeException("User created but failed to create Cart: " + e.getMessage());
+		}
+
 		return modelMapper.map(saveUser, UserDto.class);
 	}
 
@@ -109,6 +120,12 @@ public class UserServiceImplement implements IUserService {
 					profile.setDeleted(true);
 					profileRepository.save(profile);
 				});
+
+		try{
+			cartFeignClient.clearCart(userId);
+		}catch (Exception e){
+			throw new RuntimeException("Cart Deletion failed: " + e.getMessage());
+		}
 	}
 
 	@Override
