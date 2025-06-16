@@ -15,6 +15,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -26,13 +29,14 @@ public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long orderId;
-	
 	private long userId;
-	private LocalDate orderDate;
+	private LocalDate orderCreatedDate;
 	private double totalAmount;
+	//@NotBlank(message = "Status cannot be blank")
 	private String status;
-	private LocalDateTime orderCreatedDate;
+	private LocalDateTime orderUpdatedDate;
 	private boolean isOrderDeleted;
+	private Long paymentId;
 	
 	@ElementCollection
     @CollectionTable(name = "order_books", joinColumns = @JoinColumn(name = "order_id"))

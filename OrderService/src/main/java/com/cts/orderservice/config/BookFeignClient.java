@@ -12,9 +12,9 @@ import com.cts.orderservice.dto.BookDto;
 @FeignClient(url="http://localhost:9001", value="BOOK")
 public interface BookFeignClient {
 
-	@GetMapping("/bookstore/book/{Id}")
+	@GetMapping("/bookmanage/viewbookbyid/{Id}")
 	public BookDto getBooks(@PathVariable Long Id); 
 	
-	@PutMapping("/bookstore/book/{Id}")
+	@PutMapping("/bookmanage/updatebook/{Id}")
 	public BookDto updatebook(@PathVariable Long Id, @RequestBody BookDto bookDTO);
 }
