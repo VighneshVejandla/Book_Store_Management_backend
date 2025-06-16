@@ -21,7 +21,7 @@
         </processorPath>
         <module name="CartModule" />
       </profile>
-      <profile name="Annotation profile for e_commerce_payment_service" enabled="true">
+      <profile name="Annotation profile for BookStore_Managment_System" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />

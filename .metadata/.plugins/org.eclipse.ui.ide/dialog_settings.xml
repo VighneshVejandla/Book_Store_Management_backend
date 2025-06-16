@@ -4,8 +4,8 @@
 		<item value="org.eclipse.buildship:3.1.10.v20240802-1314"/>
 		<item value="org.eclipse.egit.gitflow.feature:7.2.0.202503040940-r"/>
 		<item value="org.eclipse.egit:7.2.0.202503040940-r"/>
-		<item value="org.eclipse.emf.common:2.34.0.v20241204-1554"/>
-		<item value="org.eclipse.emf.ecore:2.39.0.v20241018-1213"/>
+		<item value="org.eclipse.emf.common:2.35.0.v20250401-0947"/>
+		<item value="org.eclipse.emf.ecore:2.40.0.v20250414-1351"/>
 		<item value="org.eclipse.epp.mpc:1.12.0.v20250130-1529"/>
 		<item value="org.eclipse.help:2.3.2100.v20250228-0140"/>
 		<item value="org.eclipse.jdt:3.20.100.v20250228-0140"/>
@@ -39,9 +39,9 @@
 		<section name="NewWizard.dialogBounds">
 			<item key="DIALOG_X_ORIGIN" value="0"/>
 			<item key="DIALOG_Y_ORIGIN" value="0"/>
-			<item key="DIALOG_WIDTH" value="525"/>
-			<item key="DIALOG_HEIGHT" value="500"/>
-			<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+			<item key="DIALOG_WIDTH" value="875"/>
+			<item key="DIALOG_HEIGHT" value="563"/>
+			<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-18|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
 		</section>
 	</section>
 	<section name="SmartImportWizard">
@@ -50,6 +50,7 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="C:\Users\2406655\Documents\Book_Store_Management"/>
 			<item value="C:\Users\2406313\Documents\workspace-spring-tool-suite-4-4.29.1.RELEASE_book_management_project\OrderService"/>
 			<item value="C:\Users\2406313\Documents\Personal\Spring-Security"/>
 			<item value="C:\Users\2406313\Documents\workspace-spring-tool-suite-4-4.29.1.RELEASE_book_management_project\ReviewService"/>
@@ -58,10 +59,18 @@
 		</list>
 		<section name="SmartImportWizard.dialogBounds">
 			<item key="DIALOG_X_ORIGIN" value="249"/>
-			<item key="DIALOG_Y_ORIGIN" value="8"/>
-			<item key="DIALOG_WIDTH" value="885"/>
-			<item key="DIALOG_HEIGHT" value="629"/>
-			<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+			<item key="DIALOG_Y_ORIGIN" value="11"/>
+			<item key="DIALOG_WIDTH" value="1493"/>
+			<item key="DIALOG_HEIGHT" value="837"/>
+			<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-18|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
 		</section>
+	</section>
+	<section name="ChooseWorkspaceDialogSettings">
+		<item key="DIALOG_X_ORIGIN" value="518"/>
+		<item key="DIALOG_Y_ORIGIN" value="133"/>
+	</section>
+	<section name="WORKBENCH_SETTINGS">
+		<list key="ENABLED_TRANSFERS">
+		</list>
 	</section>
 </section>
