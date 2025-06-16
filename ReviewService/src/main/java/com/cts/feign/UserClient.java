@@ -8,12 +8,12 @@ import com.cts.dto.UserDTO;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
-@FeignClient(value = "userservice", url = "http://localhost:8083")
+@FeignClient(value = "userservice", url = "http://localhost:8009")
 public interface UserClient {
    
 	@CircuitBreaker(name = "UserService", fallbackMethod = "getFallbackUser")
-    @GetMapping("/user/{id}")
-    UserDTO getUserById(@PathVariable Long id);
+    @GetMapping("/user/{userId}")
+    UserDTO getUserById(@PathVariable Long userId);
 
     default UserDTO getFallbackUser(Long id, Throwable ex) {
         return new UserDTO();

@@ -22,7 +22,7 @@ public class InventoryController {
     public ResponseEntity<InventoryDTO> addInventory(@RequestBody InventoryDTO inventoryDTO){
         return ResponseEntity.ok(inventoryService.addInventory(inventoryDTO));
     }
-
+    
     @GetMapping("/viewallinventory")
     public ResponseEntity<List<InventoryDTO>> viewAllInventory() {
         return ResponseEntity.ok(inventoryService.viewAllInventory());

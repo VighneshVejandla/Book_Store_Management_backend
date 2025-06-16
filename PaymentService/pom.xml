@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.cts</groupId>
-	<artifactId>e_commerce_payment_service</artifactId>
+	<artifactId>PaymentService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>e_commerce_payment_service</name>
 	<description>Demo project for Spring Boot</description>
