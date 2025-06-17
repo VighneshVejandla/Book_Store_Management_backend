@@ -43,32 +43,44 @@ public class CartServiceImpl implements ICartService{
 
 		@Override
 	    @Transactional
-	    public CartDTO addProductToCart(Integer userId, ProductDTO productdto,Integer bookId) {
+	    public CartDTO addProductToCart(Integer userId, ProductDTO productdto,Long bookId) {
 			UserDto user = getUserById(userId);
+			//System.out.println(user);
 			BookSummaryDto bookData=getBookDetails(bookId).getBody();
 			//BookSummaryDto bookData = bookFeignClient.getBookById(bookId).getBody();
 			System.out.println(bookData);
 
 	        Cart cart = cartRepository.findCartByUserId(userId).orElseThrow(()->new UserNotFoundException("User not found with Id"+userId));
-	                ;
 
-	        Optional<CartItem> existingItemOpt = cartItemRepository.findByCartAndBookId(cart, bookData.getBookId());
 
-	        if (existingItemOpt.isPresent()) {
+	        Optional<CartItem> existingItemOpt = cartItemRepository.findByCartAndBookId(cart, bookId);
+			//System.out.println("The status of the optional item:"+existingItemOpt);
+	        if (existingItemOpt.isPresent())
+			{
+				System.out.println("We are in if block");
 	            CartItem existingItem = cartItemRepository.findById(existingItemOpt.get().getId())
 	                    .orElseThrow(() -> new RuntimeException("CartItem not found!")); // Ensure fresh entity
 	            existingItem.setQuantity(existingItem.getQuantity() + productdto.getQuantity());
 	            cartItemRepository.save(existingItem);
-	        } else {
+	        } else
+			{
+				System.out.println("We are in the else block");
 				CartItemDTO cartDetails=modelMapper.map(productdto,CartItemDTO.class);
+
 				cartDetails.setBookId(bookData.getBookId());
 				cartDetails.setBookName(bookData.getTitle());
 				cartDetails.setBookPrice(bookData.getPrice());
 
-	            CartItem cartItem = modelMapper.map(cartDetails, CartItem.class);
-	            cartItem.setCart(cart);
-	            cartItemRepository.save(cartItem);
-	        }
+
+				CartItem cartItem = new CartItem();
+				cartItem.setBookId(bookData.getBookId());
+				cartItem.setBookName(bookData.getTitle());
+				cartItem.setBookPrice(bookData.getPrice());
+				cartItem.setQuantity(productdto.getQuantity());
+				cartItem.setCart(cart);
+				cartItemRepository.save(cartItem);
+
+			}
 
 			double totalPrice = cartItemRepository.findByCart(cart).stream()
 					.mapToDouble(item -> item.getBookPrice() * item.getQuantity())
@@ -80,7 +92,7 @@ public class CartServiceImpl implements ICartService{
 	    }
     	@Override
 	    @Transactional
-	    public CartDTO increaseProductQuantity(Integer userId, Integer bookId, Integer quantityToAdd) {
+	    public CartDTO increaseProductQuantity(Integer userId, Long bookId, Integer quantityToAdd) {
 	        Cart cart = cartRepository.findCartByUserId(userId)
 	                .orElseThrow(() -> new CartNotFoundException("Cart not found for user: " + userId));
 
@@ -100,7 +112,7 @@ public class CartServiceImpl implements ICartService{
 
     	@Override
 	    @Transactional
-	    public CartDTO decreaseProductQuantity(Integer userId, Integer bookId, Integer quantityToRemove) {
+	    public CartDTO decreaseProductQuantity(Integer userId, Long bookId, Integer quantityToRemove) {
 	        Cart cart = cartRepository.findCartByUserId(userId)
 	                .orElseThrow(() -> new CartNotFoundException("Cart not found for user: " + userId));
 
@@ -175,7 +187,7 @@ public class CartServiceImpl implements ICartService{
 		}
 	}
 
-	public ResponseEntity<BookSummaryDto> getBookDetails(Integer bookId){
+	public ResponseEntity<BookSummaryDto> getBookDetails(Long bookId){
 			try
 			{
 				return bookFeignClient.getBookById(bookId);

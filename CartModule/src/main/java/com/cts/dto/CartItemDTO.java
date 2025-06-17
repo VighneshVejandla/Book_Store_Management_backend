@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class CartItemDTO {
 
-	private Integer bookId;
+	private Long bookId;
     private String bookName;
     private Double bookPrice;
     @Min(value = 0, message = "Quantity cannot be less than zero")
