@@ -36,7 +36,7 @@ public class CartController {
 		return ResponseEntity.ok(cartService.addProductToCart(userId, productdto,bookId));
 	}
 
-	@PutMapping("/{userId}/increaseqnty/{productId}")
+	@PutMapping("/{userId}/increaseqnty/{bookId}")
 	public ResponseEntity<CartDTO> increaseProductQuantity(@PathVariable Integer userId,
 			@PathVariable Long bookId, @Valid @RequestParam Integer quantityToAdd) {
 
@@ -44,7 +44,7 @@ public class CartController {
 		return ResponseEntity.ok(updatedCart);
 	}
 
-	@PutMapping("/{userId}/decreaseqnty/{productId}")
+	@PutMapping("/{userId}/decreaseqnty/{bookId}")
 	public ResponseEntity<CartDTO> decreaseProductQuantity(@PathVariable Integer userId,
 			@PathVariable Long bookId, @Valid @RequestParam Integer quantityToRemove) {
 
@@ -52,10 +52,10 @@ public class CartController {
 		return ResponseEntity.ok(updatedCart);
 	}
 
-	@DeleteMapping("/{userId}/removeproduct/{productId}")
-	public ResponseEntity<String> removeFromCart(@PathVariable Integer userId, @PathVariable Integer productId) {
-		cartService.removeProductFromCart(userId, productId);
-		return ResponseEntity.ok("Product removed successfully.");
+	@DeleteMapping("/{userId}/removeBook/{bookId}")
+	public ResponseEntity<String> removeFromCart(@PathVariable Integer userId, @PathVariable Long bookId) {
+		cartService.removeProductFromCart(userId, bookId);
+		return ResponseEntity.ok("Book removed successfully.");
 	}
 
 	@DeleteMapping("/{userId}/clearcart")

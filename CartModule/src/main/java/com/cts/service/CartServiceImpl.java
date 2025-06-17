@@ -5,8 +5,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.cts.Config.BookFeignClient;
+import com.cts.Config.InventoryFeignClient;
 import com.cts.Config.UserFeignClient;
 import com.cts.dto.*;
+import com.cts.exception.OutOfStockException;
 import com.cts.exception.ProductNotFoundException;
 import feign.FeignException;
 import org.modelmapper.ModelMapper;
@@ -38,111 +40,185 @@ public class CartServiceImpl implements ICartService{
 		UserFeignClient userFeignClient;
 		@Autowired
 		BookFeignClient bookFeignClient;
+		@Autowired
+		InventoryFeignClient inventoryFeignClient;
 
 
 
-		@Override
-	    @Transactional
-	    public CartDTO addProductToCart(Integer userId, ProductDTO productdto,Long bookId) {
-			UserDto user = getUserById(userId);
-			//System.out.println(user);
-			BookSummaryDto bookData=getBookDetails(bookId).getBody();
-			//BookSummaryDto bookData = bookFeignClient.getBookById(bookId).getBody();
-			System.out.println(bookData);
+	@Override
+	@Transactional
+	public CartDTO addProductToCart(Integer userId, ProductDTO productdto, Long bookId) {
+		UserDto user = getUserById(userId);
 
-	        Cart cart = cartRepository.findCartByUserId(userId).orElseThrow(()->new UserNotFoundException("User not found with Id"+userId));
+		BookSummaryDto bookData = getBookDetails(bookId).getBody();
+		if (bookData == null) {
+			throw new RuntimeException("Book details not found for bookId: " + bookId);
+		}
 
+		Cart cart = cartRepository.findCartByUserId(userId)
+				.orElseThrow(() -> new UserNotFoundException("User not found with Id: " + userId));
 
-	        Optional<CartItem> existingItemOpt = cartItemRepository.findByCartAndBookId(cart, bookId);
-			//System.out.println("The status of the optional item:"+existingItemOpt);
-	        if (existingItemOpt.isPresent())
-			{
-				System.out.println("We are in if block");
-	            CartItem existingItem = cartItemRepository.findById(existingItemOpt.get().getId())
-	                    .orElseThrow(() -> new RuntimeException("CartItem not found!")); // Ensure fresh entity
-	            existingItem.setQuantity(existingItem.getQuantity() + productdto.getQuantity());
-	            cartItemRepository.save(existingItem);
-	        } else
-			{
-				System.out.println("We are in the else block");
-				CartItemDTO cartDetails=modelMapper.map(productdto,CartItemDTO.class);
+		int requiredQty = productdto.getQuantity();
 
-				cartDetails.setBookId(bookData.getBookId());
-				cartDetails.setBookName(bookData.getTitle());
-				cartDetails.setBookPrice(bookData.getPrice());
+		int stockData = inventoryFeignClient.getStockByBookId(bookId);
+		if ((stockData == 0)) {
+			throw new RuntimeException("Stock data not found for bookId: " + bookId);
+		}
 
+		Optional<CartItem> existingItemOpt = cartItemRepository.findByCartAndBookId(cart, bookId);
+		if (existingItemOpt.isPresent()) {
+			CartItem existingItem = cartItemRepository.findById(existingItemOpt.get().getId())
+					.orElseThrow(() -> new RuntimeException("CartItem not found!"));
 
-				CartItem cartItem = new CartItem();
-				cartItem.setBookId(bookData.getBookId());
-				cartItem.setBookName(bookData.getTitle());
-				cartItem.setBookPrice(bookData.getPrice());
-				cartItem.setQuantity(productdto.getQuantity());
-				cartItem.setCart(cart);
-				cartItemRepository.save(cartItem);
+			int updatedQty = existingItem.getQuantity() + requiredQty;
 
+			if (updatedQty > stockData) {
+				throw new OutOfStockException("Cannot increase quantity beyond available stock: " + stockData);
 			}
 
-			double totalPrice = cartItemRepository.findByCart(cart).stream()
-					.mapToDouble(item -> item.getBookPrice() * item.getQuantity())
-					.sum();
+			existingItem.setQuantity(updatedQty);
+			cartItemRepository.save(existingItem);
+		} else {
+			if (requiredQty > stockData) {
+				throw new OutOfStockException("Requested quantity exceeds available stock for bookId: " + bookId);
+			}
 
-			cart.setTotalPrice(totalPrice);
-			cartRepository.save(cart);
-			return modelMapper.map(cart, CartDTO.class);
-	    }
-    	@Override
-	    @Transactional
-	    public CartDTO increaseProductQuantity(Integer userId, Long bookId, Integer quantityToAdd) {
-	        Cart cart = cartRepository.findCartByUserId(userId)
-	                .orElseThrow(() -> new CartNotFoundException("Cart not found for user: " + userId));
+			CartItem cartItem = new CartItem();
+			cartItem.setBookId(bookData.getBookId());
+			cartItem.setBookName(bookData.getTitle());
+			cartItem.setBookPrice(bookData.getPrice());
+			cartItem.setQuantity(requiredQty);
+			cartItem.setCart(cart);
+			cartItemRepository.save(cartItem);
+		}
 
-	        CartItem cartItem = cartItemRepository.findByCartAndBookId(cart, bookId)
-	                .orElseThrow(() -> new ProductNotFoundException("Product not found in cart!"));
+		double totalPrice = cartItemRepository.findByCart(cart).stream()
+				.mapToDouble(item -> item.getBookPrice() * item.getQuantity())
+				.sum();
 
-	        //  Increase quantity
-	        cartItem.setQuantity(cartItem.getQuantity() + quantityToAdd);
-	        cartItemRepository.save(cartItem);
+		cart.setTotalPrice(totalPrice);
+		cartRepository.save(cart);
 
-	        
-	        
-	        cartRepository.save(cart);
+		return modelMapper.map(cart, CartDTO.class);
+	}
 
-	        return modelMapper.map(cart, CartDTO.class);
-	    }
 
-    	@Override
-	    @Transactional
-	    public CartDTO decreaseProductQuantity(Integer userId, Long bookId, Integer quantityToRemove) {
-	        Cart cart = cartRepository.findCartByUserId(userId)
-	                .orElseThrow(() -> new CartNotFoundException("Cart not found for user: " + userId));
+	@Override
+	@Transactional
+	public CartDTO increaseProductQuantity(Integer userId, Long bookId, Integer quantityToAdd) {
+		if (quantityToAdd == null || quantityToAdd <= 0) {
+			throw new IllegalArgumentException("Quantity to add must be a positive number.");
+		}
 
-	        CartItem cartItem = cartItemRepository.findByCartAndBookId(cart, bookId)
-	                .orElseThrow(() -> new ProductNotFoundException("Product not found in cart!"));
+		// Fetch available stock from inventory service
+		int stockData = inventoryFeignClient.getStockByBookId(bookId);
 
-	        //  Decrease quantity, 
-	        if (cartItem.getQuantity() > quantityToRemove) {
-	            cartItem.setQuantity(cartItem.getQuantity() - quantityToRemove);
-	        } else {
-	            cartItemRepository.delete(cartItem); // If quantity becomes 0, remove item from cart
-	        }
+		// Fetch cart
+		Cart cart = cartRepository.findCartByUserId(userId)
+				.orElseThrow(() -> new CartNotFoundException("Cart not found for user: " + userId));
 
-	      
-	        return modelMapper.map(cart, CartDTO.class);
-	    }
+		// Fetch cart item
+		CartItem cartItem = cartItemRepository.findByCartAndBookId(cart, bookId)
+				.orElseThrow(() -> new ProductNotFoundException("Product not found in cart!"));
 
-	    @Override
-	    public void removeProductFromCart(Integer userId, Integer bookId) {
-	        Cart cart = cartRepository.findCartByUserId(userId)
-	                .orElseThrow(() -> new CartNotFoundException("Cart not found for user: " + userId));
-	        cart.getCartItems().removeIf(item -> item.getBookId().equals(bookId));
-	        cartRepository.save(cart);
-	    }
+		// Check if total desired quantity exceeds stock
+		int newQuantity = cartItem.getQuantity() + quantityToAdd;
+		if (newQuantity > stockData) {
+			throw new OutOfStockException("Requested quantity exceeds available stock for bookId: " + bookId);
+		}
 
-	    @Override
+		// Calculate additional cost before updating quantity
+		double additionalCost = cartItem.getBookPrice() * quantityToAdd;
+
+		// Update quantity
+		cartItem.setQuantity(newQuantity);
+		cartItemRepository.save(cartItem);
+
+		// Update cart total price
+		cart.setTotalPrice(cart.getTotalPrice() + additionalCost);
+		cartRepository.save(cart);
+
+		// Return updated cart DTO
+		return modelMapper.map(cart, CartDTO.class);
+	}
+
+
+
+
+
+	@Override
+	@Transactional
+	public CartDTO decreaseProductQuantity(Integer userId, Long bookId, Integer quantityToRemove) {
+		if (quantityToRemove == null || quantityToRemove <= 0) {
+			throw new IllegalArgumentException("Quantity to remove must be a positive number.");
+		}
+
+		Cart cart = cartRepository.findCartByUserId(userId)
+				.orElseThrow(() -> new CartNotFoundException("Cart not found for user: " + userId));
+
+		CartItem cartItem = cartItemRepository.findByCartAndBookId(cart, bookId)
+				.orElseThrow(() -> new ProductNotFoundException("Product not found in cart!"));
+
+		double itemPrice = cartItem.getBookPrice();
+		int currentQuantity = cartItem.getQuantity();
+
+		if (currentQuantity > quantityToRemove) {
+			cartItem.setQuantity(currentQuantity - quantityToRemove);
+			cartItemRepository.save(cartItem);
+
+			// Update total price
+			double reduction = itemPrice * quantityToRemove;
+			cart.setTotalPrice(cart.getTotalPrice() - reduction);
+		} else {
+			// Remove item and update total price
+			double reduction = itemPrice * currentQuantity;
+			cart.setTotalPrice(cart.getTotalPrice() - reduction);
+			cartItemRepository.delete(cartItem);
+		}
+
+		cartRepository.save(cart);
+
+		return modelMapper.map(cart, CartDTO.class);
+	}
+
+
+
+	@Override
+	@Transactional
+	public void removeProductFromCart(Integer userId, Long bookId) {
+		Cart cart = cartRepository.findCartByUserId(userId)
+				.orElseThrow(() -> new ProductNotFoundException("Cart not found for user ID: " + userId));
+
+		Optional<CartItem> itemToRemoveOpt = cart.getCartItems().stream()
+				.filter(item -> item.getBookId().equals(bookId))
+				.findFirst();
+
+		if (itemToRemoveOpt.isEmpty()) {
+			throw new ProductNotFoundException("Book with ID " + bookId + " not found in cart.");
+		}
+
+		CartItem itemToRemove = itemToRemoveOpt.get();
+
+		// Update total price safely
+		double itemTotalPrice = itemToRemove.getBookPrice() * itemToRemove.getQuantity();
+		cart.setTotalPrice(Math.max(0, cart.getTotalPrice() - itemTotalPrice));
+
+		// Remove item from cart and database
+		cart.getCartItems().remove(itemToRemove);
+		cartItemRepository.delete(itemToRemove); // Ensure it's removed from DB
+
+		cartRepository.save(cart);
+	}
+
+
+
+
+	@Override
 	    public void clearCart(Integer userId) {
 	        Cart cart = cartRepository.findCartByUserId(userId)
 	                .orElseThrow(() -> new CartNotFoundException("Cart not found for user: " + userId));
 	        cart.getCartItems().clear();
+			cart.setTotalPrice(0.0);
 	        cartRepository.save(cart);
 	    }
 
@@ -196,6 +272,17 @@ public class CartServiceImpl implements ICartService{
 				throw new ProductNotFoundException("Book Details for BookId "+bookId+" not found");
 			}
 	}
+
+
+	/*private void validateStockAvailability(Long bookId, int requiredQty) {
+		ResponseEntity<ProductDTO> stockData = inventoryFeignClient.getStockByBookId(bookId);
+		if (stockData == null) {
+			throw new RuntimeException("Stock data not found for bookId: " + bookId);
+		}
+		if (requiredQty > stockData.getQuantity()) {
+			throw new OutOfStockException("The required quantity for bookId: " + bookId + " exceeds the stock limit!");
+		}
+	}*/
 	}
 
 	

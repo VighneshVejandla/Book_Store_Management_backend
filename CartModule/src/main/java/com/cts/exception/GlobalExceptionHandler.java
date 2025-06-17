@@ -44,4 +44,8 @@ public ResponseEntity<String> handleUserNotFound(UserNotFoundException ex) {
 	return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 }
 
+@ExceptionHandler(OutOfStockException.class)
+public ResponseEntity<String> handleOutOfStock( OutOfStockException ex) {
+	return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+}
 }
