@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.cts.orderservice.config.PaymentFeignClient;
+import com.cts.orderservice.exception.PaymentStatusException;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -44,6 +46,9 @@ public class OrderServiceImpl implements IOrderService{
 	@Autowired
 	UserFeignClient userFeignClient;
 
+	@Autowired
+	PaymentFeignClient paymentFeignClient;
+
 	private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
 	@Override
@@ -52,6 +57,10 @@ public class OrderServiceImpl implements IOrderService{
 		logger.info("Received request to create order for userId: {}", orderDTO.getUserId());
 		Map<Long,Integer> bookIds = orderDTO.getBookIdsWithQuantity();
 		logger.debug("Fetching user from userid: {}",orderDTO.getUserId());
+		logger.info("Check Payment Status");
+//		if(paymentFeignClient.viewPaymentStatus(orderDTO.getPaymentId()) != "Success"){
+//			throw new PaymentStatusException("Payment is not done !");
+//		}
 		UserDto user = getUserById(orderDTO.getUserId());
 		List<ResBookDto> books = new ArrayList<>();
 		for (Map.Entry<Long, Integer> entry : bookIds.entrySet()) {

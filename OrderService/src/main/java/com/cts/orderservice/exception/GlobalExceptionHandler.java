@@ -16,7 +16,11 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<String>(exception.getMessage(),HttpStatus.BAD_REQUEST);
 	}
 	@ExceptionHandler(OutOfStockException.class)
-	public ResponseEntity<String> myException(OutOfStockException exception){
+	public ResponseEntity<String> myException1(OutOfStockException exception){
+		return new ResponseEntity<String>(exception.getMessage(),HttpStatus.BAD_REQUEST);
+	}
+	@ExceptionHandler(PaymentStatusException.class)
+	public ResponseEntity<String> myException2(PaymentStatusException exception){
 		return new ResponseEntity<String>(exception.getMessage(),HttpStatus.BAD_REQUEST);
 	}
 	@ExceptionHandler(MethodArgumentNotValidException.class)
