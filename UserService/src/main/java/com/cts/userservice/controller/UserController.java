@@ -2,7 +2,9 @@ package com.cts.userservice.controller;
 
 import java.util.List;
 
+import com.cts.userservice.dto.CartItemDTO;
 import com.cts.userservice.entity.User;
+import com.cts.userservice.feignclient.CartFeignClient;
 import com.cts.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +33,9 @@ public class UserController {
 
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	CartFeignClient cartFeignClient;
 
 	@PostMapping("/adduser")
 	public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) {
@@ -87,4 +92,9 @@ public class UserController {
 		return new ResponseEntity<List<User>>(userService.getAllDeletedUsers(), HttpStatus.OK);
 	}
 
+	@GetMapping("/viewcartitems/{userId}")
+	public ResponseEntity<List<CartItemDTO>> viewCartItems(@PathVariable Long userId){
+		List<CartItemDTO> cartItems = cartFeignClient.getCartItems(userId);
+		return new ResponseEntity<>(cartItems, HttpStatus.OK);
+	}
 }

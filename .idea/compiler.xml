@@ -10,27 +10,21 @@
         <outputRelativeToContentRoot value="true" />
         <module name="eurekaserver" />
         <module name="ReviewService" />
+        <module name="APIGateway" />
       </profile>
-      <profile name="Annotation profile for e_commerce_payment_service" enabled="true">
+      <profile name="Annotation profile for UserService" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
+        <module name="BookService" />
         <module name="OrderService" />
         <module name="CartModule" />
         <module name="UserService" />
-      </profile>
-      <profile name="Annotation profile for PaymentService" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
-        </processorPath>
         <module name="PaymentService" />
+        <module name="InventoryService" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -41,8 +35,11 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="APIGateway" options="-parameters" />
       <module name="Book" options="-parameters" />
+      <module name="BookService" options="-parameters" />
       <module name="CartModule" options="-parameters" />
+      <module name="InventoryService" options="-parameters" />
       <module name="OrderService" options="-parameters" />
       <module name="PaymentService" options="-parameters" />
       <module name="ReviewService" options="-parameters" />

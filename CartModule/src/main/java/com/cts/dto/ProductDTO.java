@@ -4,9 +4,7 @@ import lombok.Data;
 
 @Data
 public class ProductDTO {
-	private Integer bookId;
-    private String bookName;
-    private double bookprice;
+	//private Integer bookId;
     private int quantity;
 
 }

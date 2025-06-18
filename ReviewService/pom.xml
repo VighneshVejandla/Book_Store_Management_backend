@@ -45,7 +45,6 @@
 			<artifactId>jakarta.validation-api</artifactId>
 		</dependency>
 
-
 		<!-- Eureka Discovery Client -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>

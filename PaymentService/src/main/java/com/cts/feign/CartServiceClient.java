@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(url = "http://localhost:9926", value="CARTMODULE")
 public interface CartServiceClient {
-    @GetMapping("/api/v1/cart/{userId}/amountForPayment")
-    ResponseEntity<CartToPaymentDTO> calculateTotalPrice(@PathVariable Integer userId);
+    @GetMapping("/api/v1/cart/{userId}/total-price")
+    ResponseEntity<Double> calculateTotalPrice(@PathVariable Integer userId);
 }

@@ -50,10 +50,9 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	public Double processPayment(Integer userId) {
 		//double amount = cartServiceClient.calculateTotalPrice(userId);
-		ResponseEntity<CartToPaymentDTO> demo = cartServiceClient.calculateTotalPrice(userId);
-		CartToPaymentDTO amount = demo.getBody();
+		ResponseEntity<Double> demo = cartServiceClient.calculateTotalPrice(userId);
         //return "Processing payment of " + amount.getTotalPrice() + " for user ID: " + userId;
-		return amount.getTotalPrice();
+		return demo.getBody();
 }
 
 	@Override
@@ -92,10 +91,10 @@ public class PaymentServiceImpl implements PaymentService {
 		Duration timeElapsed = Duration.between(payment.getCreatedAt(), LocalDateTime.now());
 		long secondsElapsed = timeElapsed.toSeconds();
 
-		if (secondsElapsed > 30){
+		if (secondsElapsed > 60){
 			logger.warning("Timeout detected: " + secondsElapsed + " seconds");
 			paymentRepository.delete(payment);
-			throw new TransactionTimeException("Transaction timeout: time exceeded beyond 30 seconds");
+			throw new TransactionTimeException("Transaction timeout: time exceeded beyond 60 seconds");
 
 		}
 
