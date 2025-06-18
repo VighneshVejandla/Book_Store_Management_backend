@@ -12,11 +12,11 @@ public class PaymentResponseDto {
 	private String status;
 	private String upiId;
 	private Long userId;
-	private Long orderId;
+	//private Long orderId;
 	private double amount;
 
 	public PaymentResponseDto(Long paymentId, String upiUri, LocalDateTime createdAt, String status, String upiId,
-			Long userId, Long orderId, double amount) {
+							  Long userId, double amount) {
 		super();
 		this.paymentId = paymentId;
 		this.upiUri = upiUri;
@@ -25,7 +25,5 @@ public class PaymentResponseDto {
 		this.upiId = upiId;
 		this.userId = userId;
 		this.amount = amount;
-		this.orderId = orderId;
-	}
-
+			}
 }

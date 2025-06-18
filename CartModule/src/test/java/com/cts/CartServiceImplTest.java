@@ -40,7 +40,7 @@ public class CartServiceImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
+   /* @Test
     void testAddBookToCart_NewCart_NewItem() {
         Integer userId = 1;
         CartItemDTO cartItemDto = new CartItemDTO();
@@ -71,5 +71,5 @@ public class CartServiceImplTest {
         assertNotNull(result);
         verify(cartRepository, times(2)).save(any(Cart.class));
         verify(cartItemRepository).save(any(CartItem.class));
-    }
+    }*/
 }

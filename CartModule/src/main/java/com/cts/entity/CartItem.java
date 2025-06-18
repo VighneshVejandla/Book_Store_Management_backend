@@ -22,12 +22,13 @@ public class CartItem {
     @ManyToOne
     @JoinColumn(name = "cart_id")
     private Cart cart;
-    private Integer bookId; 
+    private Long bookId;
     private String bookName;
     private double bookPrice; 
     
     private int quantity;
-    @Version  // Enables version-based optimistic locking
+    @Version
     private Integer version;
+
 
 }

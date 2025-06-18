@@ -17,6 +17,6 @@ public class PaymentRequestDto {
 	private double amount;
 
 	// @NotNull(message = "Order Id is required.")
-	private Long orderId;
+	//private Long orderId;
 
 }

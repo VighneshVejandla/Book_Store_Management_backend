@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(ProductNotFoundException.class)
 	public ResponseEntity<Map<String, String>> handleProductNotFoundException(ProductNotFoundException ex) {
 		Map<String, String> errorResponse = new HashMap<>();
-		errorResponse.put("error", "Product not found"); // ✅ Custom message instead of default 404
+		errorResponse.put("error", ex.getMessage()); // ✅ Custom message instead of default 404
 
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
 	}
@@ -44,4 +44,8 @@ public ResponseEntity<String> handleUserNotFound(UserNotFoundException ex) {
 	return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 }
 
+@ExceptionHandler(OutOfStockException.class)
+public ResponseEntity<String> handleOutOfStock( OutOfStockException ex) {
+	return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+}
 }
