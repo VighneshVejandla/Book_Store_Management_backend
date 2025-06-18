@@ -1,66 +1,113 @@
 package com.cts.controller;
 
-import com.cts.dto.InventoryDTO;
-import com.cts.service.IInventoryService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.cts.dto.InventoryDTO;
+import com.cts.service.IInventoryService;
+import com.cts.service.InventoryServiceImpl;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/inventory")
-@Tag(name = "Inventory Management", description = "APIs for managing inventory")
 public class InventoryController {
 
     @Autowired
     private IInventoryService inventoryService;
 
-    @PostMapping("/addInventory")
-    public ResponseEntity<InventoryDTO> addInventory(@RequestBody InventoryDTO inventoryDTO){
-        return ResponseEntity.ok(inventoryService.addInventory(inventoryDTO));
+    
+    @GetMapping("/total-stock")
+    public ResponseEntity<Long> getTotalOverallStock() {
+        long totalStock = inventoryService.getTotalOverallStock();
+        return ResponseEntity.ok(totalStock);
+    }
+
+    @GetMapping("/stockByBookId/{bookId}")
+    public ResponseEntity<Integer> getStockByBookId(@PathVariable Long bookId) {
+        int stock = inventoryService.getStockByBookId(bookId);
+        return ResponseEntity.ok(stock);
+    }
+
+    
+    @PostMapping("/{bookId}/increment")
+    public ResponseEntity<?> incrementStock(@PathVariable Long bookId,
+                                            @RequestBody Map<String, Integer> requestBody) {
+        try {
+            // Extract quantity from the request body Map
+            Integer quantity = requestBody.get("quantity");
+            if (quantity == null) {
+                return ResponseEntity.badRequest().body("Request body must contain 'quantity'.");
+            }
+
+            int updatedStock = inventoryService.incrementStock(bookId, quantity);
+            return ResponseEntity.ok(updatedStock);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
     
-    @GetMapping("/viewallinventory")
-    public ResponseEntity<List<InventoryDTO>> viewAllInventory() {
-        return ResponseEntity.ok(inventoryService.viewAllInventory());
+    @PostMapping("/{bookId}/decrement")
+    public ResponseEntity<?> decrementStock(@PathVariable Long bookId,@RequestBody Map<String, Integer> requestBody) {
+    	try {
+    		// Extract quantity from the request body Map
+    		Integer quantity = requestBody.get("quantity");
+    		if (quantity == null) {
+    			return ResponseEntity.badRequest().body("Request body must contain 'quantity'.");
+    		}
+    		
+    		int updatedStock = inventoryService.incrementStock(bookId, quantity);
+    		return ResponseEntity.ok(updatedStock);
+    	} catch (IllegalArgumentException e) {
+    		return ResponseEntity.badRequest().body(e.getMessage());
+    	}
     }
 
-    @GetMapping("/inventorybyid/{id}")
-    public ResponseEntity<InventoryDTO> viewInventoryById(@PathVariable int id) {
-        return ResponseEntity.ok(inventoryService.viewInventoryById(id));
+    
+    
+    @GetMapping("/{bookId}/available")
+    public ResponseEntity<Boolean> isBookAvailable(@PathVariable Long bookId) {
+        boolean available = inventoryService.isBookAvailable(bookId);
+        return ResponseEntity.ok(available);
     }
 
-    @PutMapping("/inventorybyid/{id}")
-    public ResponseEntity<InventoryDTO> updateInventory(@PathVariable int id, @RequestBody InventoryDTO inventoryDTO) {
-        return ResponseEntity.ok(inventoryService.updateInventoryById(id, inventoryDTO));
+    @GetMapping("/low-stock")
+    public ResponseEntity<?> getLowStockBookIds(@RequestBody Map<String, Integer> requestBody) {
+        try {
+            Integer threshold = requestBody.get("threshold");
+            if (threshold == null) {
+                return ResponseEntity.badRequest().body("Request body must contain 'threshold'.");
+            }
+            List<Long> lowStockBookIds = inventoryService.getLowStockBookIds(threshold);
+            return ResponseEntity.ok(lowStockBookIds);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
-    @DeleteMapping("/deleteinventorybyid/{id}")
-    public ResponseEntity<InventoryDTO> deleteInventory(@PathVariable int id) {
-        return ResponseEntity.ok(inventoryService.deleteInventoryById(id));
+    
+    @GetMapping("/out-of-stock")
+    public ResponseEntity<List<Long>> getOutOfStockBookIds() {
+        List<Long> outOfStockBookIds = inventoryService.getOutOfStockBookIds();
+        return ResponseEntity.ok(outOfStockBookIds);
     }
 
-    @DeleteMapping("/deleteall")
-    public ResponseEntity<String> deleteAllInventory() {
-        inventoryService.deleteAllInventory();
-        return ResponseEntity.ok("All inventory records deleted.");
+    @GetMapping("/critical-stock")
+    public ResponseEntity<?> getCriticalStockBookIds(@RequestBody Map<String, Integer> requestBody) {
+        try {
+            Integer lowStockThreshold = requestBody.get("lowStockThreshold");
+            if (lowStockThreshold == null) {
+                return ResponseEntity.badRequest().body("Request body must contain 'lowStockThreshold'.");
+            }
+            List<Long> criticalStockBookIds = inventoryService.getCriticalStockBooksIds(lowStockThreshold);
+            return ResponseEntity.ok(criticalStockBookIds);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
-
-    @GetMapping("/totalstock")
-    public ResponseEntity<Integer> viewTotalStock() {
-        return ResponseEntity.ok(inventoryService.viewStock());
-    }
-
-    @GetMapping("/viewstockbyid/{bookId}")
-    public ResponseEntity<Integer> viewStockByBookId(@PathVariable int bookId) {
-        return ResponseEntity.ok(inventoryService.book_stock_by_id(bookId));
-    }
-
-    @GetMapping("/bookcount") 
-    public ResponseEntity<Integer> getBookCount() {
-        return ResponseEntity.ok(inventoryService.book_count());
-    }
+    
 }

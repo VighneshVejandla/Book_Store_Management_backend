@@ -1,15 +1,19 @@
 package com.cts.service;
 
 import java.time.LocalDateTime;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cts.dto.BookDto;
+import com.cts.config.InventoryFeignClient;
+import com.cts.dto.*;
 import com.cts.entity.Book;
 import com.cts.repository.IAuthorRepository;
 import com.cts.repository.IBookRepository;
@@ -30,20 +34,26 @@ public class BookServiceImpl implements IBookService{
 	@Autowired
 	ModelMapper modelMapper;
 	
+	@Autowired
+	InventoryFeignClient inventoryFeignClient;
+	
 	@Override
 	public BookDto addBook(BookDto bookDto) {
-		
-		Book newBook = modelMapper.map(bookDto, Book.class);
-		
-		newBook.setBookCreatedDate(LocalDateTime.now());
-		newBook.setBookDeleted(false);
-		
-		Book saveBook = bookRepository.save(newBook);
-		
-		BookDto mappedDto =  modelMapper.map(saveBook, BookDto.class);
-		
-		return mappedDto;
+	    Book newBook = modelMapper.map(bookDto, Book.class);
+	    newBook.setBookCreatedDate(LocalDateTime.now());
+	    newBook.setBookDeleted(false);
+
+	    Book savedBook = bookRepository.save(newBook);
+	    BookDto mappedDto = modelMapper.map(savedBook, BookDto.class);
+	    
+	    Map<String, Integer> requestBody = new HashMap<>();
+	    requestBody.put("quantity", savedBook.getStockQuantity());
+
+	    inventoryFeignClient.incrementStock(savedBook.getBookId(), requestBody);
+
+	    return mappedDto;
 	}
+
 
 	@Override
 	public List<BookDto> viewAllBooks() {
@@ -117,7 +127,47 @@ public class BookServiceImpl implements IBookService{
                 .map(book -> modelMapper.map(book, BookDto.class))
                 .collect(Collectors.toList());
     }
+    
+    @Override
+    public List<BookDto> getBooksByAuthorId(Long authorId) {
+        List<Book> books = bookRepository.findByAuthor_AuthId(authorId);
+        return books.stream()
+                    .filter(book -> !book.isBookDeleted())
+                    .map(book -> modelMapper.map(book, BookDto.class))
+                    .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookDto> getBooksByCategoryId(Long categoryId) {
+        List<Book> books = bookRepository.findByCategory_CatId(categoryId);
+        return books.stream()
+                    .filter(book -> !book.isBookDeleted())
+                    .map(book -> modelMapper.map(book, BookDto.class))
+                    .collect(Collectors.toList());
+    }
+    
+    @Override
+    public String purchaseBook(Long bookId, int quantity) {
+
+        Boolean available = inventoryFeignClient.isBookAvailable(bookId);
+        if (available == null || !available) {
+            throw new RuntimeException("Insufficient stock for book ID: " + bookId);
+        }
+
+        // Prepare request body as a Map
+        Map<String, Integer> requestBody = new HashMap<>();
+        requestBody.put("quantity", quantity);
+
+        // Call the updated Feign client method
+        inventoryFeignClient.decrementStock(bookId, requestBody);
+
+        Book book = bookRepository.findById(bookId)
+            .orElseThrow(() -> new RuntimeException("Book not found"));
+
+        return "Purchase successful for book: " + book.getTitle();
+    }
 
 
+    
 
 }

@@ -2,17 +2,25 @@ package com.cts.dto;
 
 import lombok.Data;
 
+@Data
 public class InventoryDTO {
-    public int getInventoryId() {
+	
+	
+	private Long inventoryId;
+    private Long bookId;
+    private int quantity;
+    
+    
+    public Long getInventoryId() {
 		return inventoryId;
 	}
-	public void setInventoryId(int inventoryId) {
+	public void setInventoryId(Long inventoryId) {
 		this.inventoryId = inventoryId;
 	}
-	public int getBookId() {
+	public Long getBookId() {
 		return bookId;
 	}
-	public void setBookId(int bookId) {
+	public void setBookId(Long bookId) {
 		this.bookId = bookId;
 	}
 	public int getQuantity() {
@@ -21,7 +29,5 @@ public class InventoryDTO {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	private int inventoryId;
-    private int bookId;
-    private int quantity;
+	
 }

@@ -9,7 +9,7 @@ import com.cts.entity.CartItem;
 
 public interface CartItemRepository extends JpaRepository<CartItem, Integer>{
 	List<CartItem> findByCart(Cart cart);
-	Optional<CartItem> findByCartAndBookId(Cart cart, Integer bookId);
+	Optional<CartItem> findByCartAndBookId(Cart cart, Long bookId);
 
 }
 
