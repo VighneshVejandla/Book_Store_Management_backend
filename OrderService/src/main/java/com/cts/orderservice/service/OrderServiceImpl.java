@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.cts.orderservice.config.PaymentFeignClient;
+import com.cts.orderservice.dto.*;
 import com.cts.orderservice.exception.PaymentStatusException;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
@@ -19,11 +20,6 @@ import org.springframework.stereotype.Service;
 
 import com.cts.orderservice.config.BookFeignClient;
 import com.cts.orderservice.config.UserFeignClient;
-import com.cts.orderservice.dto.BookDto;
-import com.cts.orderservice.dto.OrderDTO;
-import com.cts.orderservice.dto.ResBookDto;
-import com.cts.orderservice.dto.ResOrderDTO;
-import com.cts.orderservice.dto.UserDto;
 import com.cts.orderservice.entity.Order;
 import com.cts.orderservice.exception.IdNotFoundException;
 import com.cts.orderservice.exception.OutOfStockException;
@@ -58,9 +54,14 @@ public class OrderServiceImpl implements IOrderService{
 		Map<Long,Integer> bookIds = orderDTO.getBookIdsWithQuantity();
 		logger.debug("Fetching user from userid: {}",orderDTO.getUserId());
 		logger.info("Check Payment Status");
-//		if(paymentFeignClient.viewPaymentStatus(orderDTO.getPaymentId()) != "Success"){
-//			throw new PaymentStatusException("Payment is not done !");
-//		}
+		try {
+			PaymentInfoDTO paymentDto = paymentFeignClient.viewPaymentDetails(orderDTO.getPaymentId());
+			if(!(paymentDto.getStatus().equals("SUCCESS"))){
+				throw new PaymentStatusException("Payment is not done !");
+			}
+		} catch (FeignException.BadRequest ex) {
+			throw new PaymentStatusException("Invalid Payment ID: " + orderDTO.getPaymentId());
+		}
 		UserDto user = getUserById(orderDTO.getUserId());
 		List<ResBookDto> books = new ArrayList<>();
 		for (Map.Entry<Long, Integer> entry : bookIds.entrySet()) {
