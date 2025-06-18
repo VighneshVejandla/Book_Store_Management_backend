@@ -39,5 +39,13 @@ public class GlobalExceptionHandler {
 		errormessage.setHttpstatus(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<ErrorMessage>(errormessage, HttpStatus.BAD_REQUEST);
 	}
+	@ExceptionHandler(TransactionTimeException.class)
+	public ResponseEntity<ErrorMessage> ChangeTimeoutException(TransactionTimeException st) {
+		ErrorMessage errormessage = new ErrorMessage();
+		errormessage.setMessage(st.getMessage());
+		errormessage.setHttpstatus(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<ErrorMessage>(errormessage, HttpStatus.BAD_REQUEST);
+	}
+
 
 }
