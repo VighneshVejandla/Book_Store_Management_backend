@@ -4,20 +4,23 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "inventory")
 public class Inventory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int inventoryId;
+    private Long inventoryId;
+    
+    private Long bookId;
 
     private int quantity;
 
-    public int getInventoryId() {
+    public Long getInventoryId() {
 		return inventoryId;
 	}
 
-	public void setInventoryId(int inventoryId) {
+	public void setInventoryId(Long inventoryId) {
 		this.inventoryId = inventoryId;
 	}
 
@@ -29,13 +32,24 @@ public class Inventory {
 		this.quantity = quantity;
 	}
 
-	public int getBookId() {
+	public Long getBookId() {
 		return bookId;
 	}
 
-	public void setBookId(int bookId) {
+	public void setBookId(Long bookId) {
 		this.bookId = bookId;
 	}
 
-	private int bookId;
+	public Inventory(Long bookId, int quantity) {
+		super();
+		this.bookId = bookId;
+		this.quantity = quantity;
+	}
+
+	public Inventory() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	
 }

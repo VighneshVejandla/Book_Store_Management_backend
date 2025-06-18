@@ -10,7 +10,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 
 @SpringBootApplication
-@EnableFeignClients(basePackages = "com.cts.config")
+@EnableFeignClients
 @EnableDiscoveryClient
 public class BookApplication {
 	
