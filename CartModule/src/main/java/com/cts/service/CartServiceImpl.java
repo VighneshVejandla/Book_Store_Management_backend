@@ -142,6 +142,8 @@ public class CartServiceImpl implements ICartService{
 	        return cart.getCartItems().stream()
 	                .map(item -> modelMapper.map(item, CartItemDTO.class))
 	                .collect(Collectors.toList());
+
+
 	    }
 	}
 

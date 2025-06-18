@@ -12,6 +12,7 @@
         <option value="$PROJECT_DIR$/eurekaserver/pom.xml" />
         <option value="$PROJECT_DIR$/bookmanagemet_practice/pom.xml" />
         <option value="$PROJECT_DIR$/CartModule/pom.xml" />
+        <option value="$PROJECT_DIR$/PaymentService/pom.xml" />
       </list>
     </option>
   </component>
