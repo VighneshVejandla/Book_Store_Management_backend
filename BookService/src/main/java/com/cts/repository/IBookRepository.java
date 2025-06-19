@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.cts.dto.BookDto;
 import com.cts.entity.Book;
 
 public interface IBookRepository extends JpaRepository<Book, Long> {
@@ -17,4 +18,8 @@ public interface IBookRepository extends JpaRepository<Book, Long> {
     List<Book> findBooksByAuthorName(@Param("authName") String authName);
 
     List<Book> findByTitle(String title);
+    
+    List<Book> findByAuthor_AuthId(Long authId);
+    List<Book> findByCategory_CatId(Long catId);
+    
 }

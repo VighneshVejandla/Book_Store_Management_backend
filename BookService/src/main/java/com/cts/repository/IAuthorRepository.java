@@ -14,7 +14,8 @@ import com.cts.entity.Book;
 public interface IAuthorRepository extends JpaRepository<Author, Long>{
 	
 	Author findByAuthName(String authName);
-	List<Book> findByBooksBookId(long id);
+//	List<Book> findByBooksBookId(long id);
+	List<Author> findByBooksBookId(long bookId);
 	
 
 }
