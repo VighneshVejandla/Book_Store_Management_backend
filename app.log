@@ -405,3 +405,4 @@ java.util.NoSuchElementException: No value present
 2025-06-19 20:47:27 [http-nio-9001-exec-1] Completed initialization in 1 ms
 2025-06-19 20:47:28 [http-nio-9001-exec-9] Init duration for springdoc-openapi is: 580 ms
 2025-06-19 20:51:43 [AsyncResolver-bootstrap-executor-%d] Resolving eureka endpoints via configuration
+2025-06-19 20:56:43 [AsyncResolver-bootstrap-executor-%d] Resolving eureka endpoints via configuration
