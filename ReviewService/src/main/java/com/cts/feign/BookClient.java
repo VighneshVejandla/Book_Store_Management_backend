@@ -8,11 +8,11 @@ import com.cts.dto.BookDTO;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
-@FeignClient(value = "Book", url = "http://localhost:9001")
+@FeignClient(value = "BOOK", url = "http://localhost:9001")
 public interface BookClient {
     @CircuitBreaker(name = "Book", fallbackMethod = "getFallbackBook")
-    @GetMapping("/bookstore/book/{id}")
-    BookDTO getBookById(@PathVariable Long id);
+    @GetMapping("/bookmanage/viewbookbyid/{bookId}")
+    BookDTO viewBookById(@PathVariable Long bookId);
     
     default BookDTO getFallbackBook(Long id, Throwable ex) {
     	BookDTO fallbackBook = new BookDTO();

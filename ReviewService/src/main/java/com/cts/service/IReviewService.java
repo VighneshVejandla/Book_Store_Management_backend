@@ -6,7 +6,7 @@ import com.cts.dto.ReviewDTO;
 
 public interface IReviewService {
 	
-	ReviewDTO addReview(ReviewDTO reviewDTO);
+	ReviewDTO addReview(Long userId, Long bookId, ReviewDTO reviewDTO);
 	List<ReviewDTO> viewAllReviews(Long userId);
 	ReviewDTO getReviewById(Long bookId);
 	ReviewDTO editReviewById(Long reviewId, ReviewDTO reviewDTO);

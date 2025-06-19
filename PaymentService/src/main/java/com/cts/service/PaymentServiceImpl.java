@@ -55,8 +55,14 @@ public class PaymentServiceImpl implements PaymentService {
 		return demo.getBody();
 }
 
+
+
 	@Override
 	public PaymentResponseDto initiatePayment(Long userId, InitiatePaymentDTO initiatePaymentDTO) {
+
+		Double amount = processPayment(Math.toIntExact(userId));
+		if (amount <=0)
+			throw new AmountException("No items in cart, aborting payment operations");
 
 		if (paymentRepository.existsByUserIdAndStatus(Math.toIntExact(userId), "PENDING")){
 			throw new UserIdException("User ID " + userId + " already initiated a pending payment");
@@ -83,28 +89,35 @@ public class PaymentServiceImpl implements PaymentService {
 		// Retrieve payment from the database
 		Optional<Payment> optionalPayment = paymentRepository.findById(paymentId);
 
+
 		if (optionalPayment.isEmpty()) {
 			throw new PaymentException("Payment ID " + paymentId + " not found in database!");
 		}
 
 		Payment payment = optionalPayment.get();
+		Long userIdentity = payment.getUserId();
 		Duration timeElapsed = Duration.between(payment.getCreatedAt(), LocalDateTime.now());
 		long secondsElapsed = timeElapsed.toSeconds();
 
-		if (secondsElapsed > 60){
-			logger.warning("Timeout detected: " + secondsElapsed + " seconds");
-			paymentRepository.delete(payment);
-			throw new TransactionTimeException("Transaction timeout: time exceeded beyond 60 seconds");
 
-		}
 
 		// Update status only if it's currently "PENDING"
 		if (!"PENDING".equals(payment.getStatus())) {
 			throw new StatusChangeException("Payment status must be Pending to update, found: " + payment.getStatus());
 		}
 
+		if (secondsElapsed > 60){
+			logger.warning("Timeout detected: " + secondsElapsed + " seconds");
+			paymentRepository.delete(payment);
+
+
+			throw new TransactionTimeException("Transaction timeout: time exceeded beyond 60 seconds");
+
+		}
+
 		payment.setStatus("SUCCESS");
 		payment.setUpdatedAt(LocalDateTime.now());
+		ResponseEntity<String> cartDelete = cartServiceClient.clearCart(Math.toIntExact(userIdentity));
 		paymentRepository.save(payment); // Persist the updated payment status
 
 		logger.info("Payment status updated to SUCCESS for ID: " + paymentId);

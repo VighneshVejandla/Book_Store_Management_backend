@@ -2,8 +2,13 @@ package com.cts.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.cts.dto.BookDTO;
+import com.cts.dto.UserDTO;
+import com.cts.exception.BookNotFoundException;
+import com.cts.exception.UserNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,11 +35,18 @@ public class ReviewServiceImplement implements IReviewService {
     ModelMapper modelMapper;
 
     @Override
-    public ReviewDTO addReview(ReviewDTO reviewDTO) {
+    public ReviewDTO addReview(Long userId, Long bookId, ReviewDTO reviewDTO) {
         // Validate the user and book exist via the Feign clients.
-//        userClient.getUserById(reviewDTO.getUserId());
-//        bookClient.getBookById(reviewDTO.getBookId());
-//
+        UserDTO userDTO = userClient.viewUserById(userId);
+        if (userDTO == null)
+            throw new UserNotFoundException("User ID: " +  " needs to be registered in order to be able to comment");
+
+
+        //System.out.println(userDTO.getUserId());
+        BookDTO bookDTO = bookClient.viewBookById(bookId);
+        if(bookDTO == null)
+            throw new BookNotFoundException("Book ID: " + bookId + " not found in database");
+
 //        Review review = new Review();
 ////        review.setUserId(reviewDTO.getUserId());
 ////        review.setBookId(reviewDTO.getBookId());
@@ -48,11 +60,20 @@ public class ReviewServiceImplement implements IReviewService {
 //        Review savedReview = reviewRepository.save(review);
     	
     	Review newReview = modelMapper.map(reviewDTO, Review.class);
+        //ReviewDTO reviewDTO = new ReviewDTO();
     	
     	newReview.setCreatedAt(LocalDateTime.now());
     	newReview.setUpdatedAt(LocalDateTime.now());
     	newReview.setReviewDeleted(false);
-    	
+        newReview.setRating(reviewDTO.getRating());
+        newReview.setBookId(bookId);
+        newReview.setUserId(userId);
+        newReview.setCreatedAt(LocalDateTime.now());
+        newReview.setUpdatedAt(LocalDateTime.now());
+        newReview.setDownvotes(0);
+        newReview.setUpvotes(0);
+        newReview.setFlags(0);
+
     	Review saveReview = reviewRepository.save(newReview);
     	
     	
@@ -168,9 +189,10 @@ public class ReviewServiceImplement implements IReviewService {
     // Helper method to convert entity to DTO.
     private ReviewDTO convertToDTO(Review review) {
         ReviewDTO dto = new ReviewDTO();
+        /*
         dto.setReviewId(review.getReviewId());
         dto.setUserId(review.getUserId());
-        dto.setBookId(review.getBookId());
+        dto.setBookId(review.getBookId());*/
         dto.setRating(review.getRating());
         dto.setComment(review.getComment());
 //        dto.setCreatedAt(review.getCreatedAt());
