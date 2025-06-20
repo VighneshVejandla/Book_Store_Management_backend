@@ -92,15 +92,29 @@ public class CategoryServiceImpl implements ICategoryService {
 		return null; // Return null if category is found but marked as deleted
 	}
 
+//	@Override
+//	public void deleteCategoryById(Long catId) {
+//		Category category = categoryRepo.findById(catId)
+//				.orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + catId)); // Use an
+//																											// actual
+//																											// exception
+//		category.setCatDeleted(true); // Soft delete
+//		categoryRepo.save(category);
+//	}
+
 	@Override
 	public void deleteCategoryById(Long catId) {
 		Category category = categoryRepo.findById(catId)
 				.orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + catId)); // Use an
-																											// actual
-																											// exception
+		// actual
+		if(category.getBooks() != null && !category.getBooks().isEmpty())
+		{
+			throw new IllegalStateException("Cannot delete category. Books are still associated with this category.");
+		}
 		category.setCatDeleted(true); // Soft delete
 		categoryRepo.save(category);
 	}
+
 
 	@Override
 	public CategoryDto getCategoryByCatName(String catName) {

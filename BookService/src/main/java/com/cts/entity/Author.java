@@ -10,18 +10,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
 @Entity
-
 public class Author {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long authId;
 	
-	@NotEmpty
+	@NotEmpty(message = "Author name must not be empty")
+	@Size(max=100, message = "Author name must be exceed 100 characters")
 	private String authName;
 	
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
@@ -29,6 +30,8 @@ public class Author {
 	
 	private LocalDateTime authorCreatedDate;
 	private boolean isAuthDeleted;
+
+
 	public Long getAuthId() {
 		return authId;
 	}
