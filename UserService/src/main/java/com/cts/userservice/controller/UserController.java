@@ -3,6 +3,7 @@ package com.cts.userservice.controller;
 import java.util.List;
 
 import com.cts.userservice.dto.CartItemDTO;
+import com.cts.userservice.dto.UserRoleDto;
 import com.cts.userservice.entity.User;
 import com.cts.userservice.feignclient.CartFeignClient;
 import com.cts.userservice.repository.UserRepository;
@@ -55,6 +56,11 @@ public class UserController {
 	@PutMapping("/updateuser/{userId}")
 	public ResponseEntity<UserDto> updateUserById(@PathVariable Long userId, @RequestBody UserDto user) {
 		return new ResponseEntity<UserDto>(userService.updateUserById(userId, user), HttpStatus.OK);
+	}
+
+	@PutMapping("/updaterole/{userId}")
+	public ResponseEntity<UserRoleDto> updateRoleById(@PathVariable Long userId, @RequestBody UserRoleDto user) {
+		return new ResponseEntity<UserRoleDto>(userService.updateRoleById(userId, user), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/deleteuser/{userId}")

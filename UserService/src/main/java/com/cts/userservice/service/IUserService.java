@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.cts.userservice.dto.PasswordDto;
 import com.cts.userservice.dto.UserDto;
+import com.cts.userservice.dto.UserRoleDto;
 import com.cts.userservice.entity.User;
 
 
@@ -20,5 +21,6 @@ public interface IUserService {
 	void changePassword(Long userId, PasswordDto userDto);
 
 	List<User> getAllDeletedUsers();
+	UserRoleDto updateRoleById(Long userId, UserRoleDto userroleDto);
 
 }

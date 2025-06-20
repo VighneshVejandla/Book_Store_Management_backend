@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.cts.userservice.dto.UserRoleDto;
+import com.cts.userservice.exception.InvalidRoleException;
 import com.cts.userservice.exception.UserNotFoundByEmailException;
 import com.cts.userservice.exception.UserNotFoundByIdException;
 import com.cts.userservice.feignclient.CartFeignClient;
@@ -183,4 +185,29 @@ public class UserServiceImplement implements IUserService {
 	public List<User> getAllDeletedUsers() {
 		return userRepository.findByIsDeletedTrue();
 	}
+
+
+	@Override
+	public UserRoleDto updateRoleById(Long userId, UserRoleDto userRoleDto) {
+
+		User updateUser = userRepository.findById(userId)
+				.orElseThrow(() -> new UserNotFoundByIdException("User", "Id", userId));
+
+		// Manual validation for role
+		String newRole = userRoleDto.getRole();
+		if (!"user".equalsIgnoreCase(newRole) && !"admin".equalsIgnoreCase(newRole)) {
+			throw new InvalidRoleException("Invalid role provided. Role must be 'user' or 'admin'.");
+		}
+
+		updateUser.setRole(newRole); // Assuming setRole takes String
+		updateUser.setUpdatedDate(LocalDateTime.now());
+
+		User saveUser = userRepository.save(updateUser);
+
+		return modelMapper.map(saveUser, UserRoleDto.class);
+	}
+
 }
+
+
+
