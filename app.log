@@ -1332,3 +1332,4 @@ java.lang.NoSuchMethodError: 'void org.springframework.web.method.ControllerAdvi
 2025-06-20 17:08:19 [http-nio-9001-exec-1] Initializing Servlet 'dispatcherServlet'
 2025-06-20 17:08:19 [http-nio-9001-exec-1] Completed initialization in 4 ms
 2025-06-20 17:08:21 [http-nio-9001-exec-4] Init duration for springdoc-openapi is: 848 ms
+2025-06-20 17:13:14 [AsyncResolver-bootstrap-executor-%d] Resolving eureka endpoints via configuration
