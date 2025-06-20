@@ -122,6 +122,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
 	}
 
+	@ExceptionHandler(InvalidRoleException.class)
+	public ResponseEntity<ErrorDetails> handleProfileAlreadyExistsException(InvalidRoleException ex, WebRequest request){
+		ErrorDetails errorDetails = new ErrorDetails(
+				LocalDateTime.now(),
+				ex.getMessage(),
+				request.getDescription(false),
+				"INVALID_ROLE_ENTERED"
+		);
+		return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+	}
 
 	@ExceptionHandler(ProfileExceptions.ProfileAlreadyExistsException.class)
 	public ResponseEntity<ErrorDetails> handleProfileAlreadyExistsException(ProfileExceptions.ProfileAlreadyExistsException ex, WebRequest request){

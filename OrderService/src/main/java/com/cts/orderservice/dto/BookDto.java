@@ -4,10 +4,10 @@ import lombok.Data;
 
 @Data
 public class BookDto {
-	private Long authId;
-	private Long catId;
-	private Long book_id;
-	private int price;
-	private int stock_quantity;
+	private Long bookId;
 	private String title;
+	private Double price;
+	private int stockQuantity;
+	private AuthorDto author;
+	private CategoryDto category;
 }

@@ -102,14 +102,29 @@ public class AuthorServiceImpl implements IAuthorService {
 		return null;
 	}
 
+//	@Override
+//	public void deleteAuthorById(Long authId) {
+//		Author author = authorRepo.findById(authId)
+//				.orElseThrow(() -> new ResourceNotFoundException("Author not found with ID: " + authId)); // Use an
+//																											// actual
+//																											// exception
+//		author.setAuthDeleted(true); // Soft delete
+//		authorRepo.save(author);
+//	}
+
 	@Override
 	public void deleteAuthorById(Long authId) {
 		Author author = authorRepo.findById(authId)
 				.orElseThrow(() -> new ResourceNotFoundException("Author not found with ID: " + authId)); // Use an
 																											// actual
-																											// exception
+		if(author.getBooks() != null && !author.getBooks().isEmpty())
+		{
+			throw new IllegalStateException("Cannot delete author. Books are still associated with this author.");
+		}
 		author.setAuthDeleted(true); // Soft delete
 		authorRepo.save(author);
 	}
+
+
 
 }

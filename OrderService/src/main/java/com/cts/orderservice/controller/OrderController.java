@@ -1,10 +1,13 @@
 package com.cts.orderservice.controller;
 
 import java.util.List;
+import java.util.Map;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,13 +23,14 @@ import com.cts.orderservice.service.IOrderService;
 
 @RestController
 @RequestMapping("/bookstore")
+@Validated
 public class OrderController {
 	
 	@Autowired
 	IOrderService orderService;
 	
 	@PostMapping("/addOrder")
-	ResponseEntity<ResOrderDTO> addOrder(@RequestBody OrderDTO orderDTO) {
+	ResponseEntity<ResOrderDTO> addOrder(@Valid @RequestBody OrderDTO orderDTO) {
 		return new ResponseEntity<ResOrderDTO>(orderService.addOrder(orderDTO), HttpStatus.OK);
 	}
 	@GetMapping("/getOrderByUserId/{id}")
@@ -41,8 +45,12 @@ public class OrderController {
 	ResponseEntity<ResOrderDTO> updateOrderById(@RequestBody OrderDTO orderdto,@PathVariable Long id) {
 		return new ResponseEntity<ResOrderDTO>(orderService.updateOrder(orderdto,id), HttpStatus.OK);
 	}
-	@DeleteMapping("/calcelOrder/{id}")
-	ResponseEntity<String> cancelOrder(@PathVariable Long id){
-		return new ResponseEntity<String>(orderService.cancelOrder(id),HttpStatus.OK);
+	@PutMapping("/updateStatusById/{id}")
+	ResponseEntity<ResOrderDTO> updateOrderById(@RequestBody Map<String, String> request, @PathVariable Long id) {
+		return new ResponseEntity<ResOrderDTO>(orderService.updateStatus(id,request), HttpStatus.OK);
+	}
+	@DeleteMapping("/deleteOrderById/{id}")
+	ResponseEntity<String> deleteOrderById(@PathVariable Long id){
+		return new ResponseEntity<String>(orderService.deleteOrderById(id),HttpStatus.OK);
 	}
 }

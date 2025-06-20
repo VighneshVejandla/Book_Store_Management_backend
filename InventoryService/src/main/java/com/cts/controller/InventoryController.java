@@ -60,7 +60,7 @@ public class InventoryController {
     			return ResponseEntity.badRequest().body("Request body must contain 'quantity'.");
     		}
     		
-    		int updatedStock = inventoryService.incrementStock(bookId, quantity);
+    		int updatedStock = inventoryService.decrementStock(bookId, quantity);
     		return ResponseEntity.ok(updatedStock);
     	} catch (IllegalArgumentException e) {
     		return ResponseEntity.badRequest().body(e.getMessage());
