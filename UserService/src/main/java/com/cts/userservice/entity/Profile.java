@@ -34,6 +34,8 @@ public class Profile {
 
     private boolean isDeleted; // Soft delete for profile
 
+    private String profileImageUrl;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
