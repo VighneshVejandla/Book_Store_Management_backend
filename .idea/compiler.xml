@@ -9,8 +9,9 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="eurekaserver" />
-        <module name="ReviewService" />
+        <module name="api-gateway" />
         <module name="APIGateway" />
+        <module name="ReviewService" />
       </profile>
       <profile name="Annotation profile for BookStore_Managment_System" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -54,6 +55,7 @@
       <module name="PaymentService" options="-parameters" />
       <module name="ReviewService" options="-parameters" />
       <module name="UserService" options="-parameters" />
+      <module name="api-gateway" options="-parameters" />
       <module name="bookmanagemet" options="-parameters" />
       <module name="bookmanagemet (1)" options="-parameters" />
       <module name="e_commerce_payment_service" options="-parameters" />

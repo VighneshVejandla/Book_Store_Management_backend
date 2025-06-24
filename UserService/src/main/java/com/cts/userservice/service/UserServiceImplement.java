@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.cts.userservice.dto.AuthDto;
 import com.cts.userservice.dto.UserRoleDto;
 import com.cts.userservice.exception.InvalidRoleException;
 import com.cts.userservice.exception.UserNotFoundByEmailException;
@@ -14,6 +15,7 @@ import com.cts.userservice.repository.ProfileRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.cts.userservice.dto.PasswordDto;
@@ -38,6 +40,9 @@ public class UserServiceImplement implements IUserService {
 	@Autowired
 	CartFeignClient cartFeignClient;
 
+	@Autowired
+	PasswordEncoder passwordEncoder;
+
 	@Override
 	public UserDto addUser(UserDto userDto) {
 
@@ -46,8 +51,10 @@ public class UserServiceImplement implements IUserService {
 
 		User newUser = modelMapper.map(userDto, User.class);
 
-		String password = userDto.getPassword();
-		newUser.setPassword(password);
+//		String password = userDto.getPassword();
+
+		String encodedPassword = passwordEncoder.encode(userDto.getPassword());
+		newUser.setPassword(encodedPassword);
 
 		newUser.setRole("user");
 		newUser.setCreatedDate(LocalDateTime.now());
@@ -91,6 +98,14 @@ public class UserServiceImplement implements IUserService {
 	}
 
 	@Override
+	public AuthDto getUserByEmail(String email) {
+		User optionalUser = userRepository.findByEmail(email)
+				.filter(u -> !u.isDeleted()) // Filter out deleted users
+				.orElseThrow(() -> new UserNotFoundByEmailException("User", "id", email));
+		return modelMapper.map(optionalUser, AuthDto.class);
+	}
+
+	@Override
 	public UserDto updateUserById(Long userId, UserDto userDto) {
 
 		User updateUser = userRepository.findById(userId)
@@ -99,8 +114,12 @@ public class UserServiceImplement implements IUserService {
 		updateUser.setName(userDto.getName());
 		updateUser.setEmail(userDto.getEmail());
 
-		String password = userDto.getPassword();
-		updateUser.setPassword(password);
+//		String password = userDto.getPassword();
+//		updateUser.setPassword(password);
+
+		String encodedPassword = passwordEncoder.encode(userDto.getPassword());
+		updateUser.setPassword(encodedPassword);
+
 		updateUser.setUpdatedDate(LocalDateTime.now());
 
 		User saveUser = userRepository.save(updateUser);
