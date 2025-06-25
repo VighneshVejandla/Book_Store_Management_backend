@@ -2,7 +2,10 @@ package com.cts.controller;
 
 import java.util.List;
 
+import com.cts.dto.BookDTO;
+import com.cts.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,4 +74,17 @@ public class ReviewController {
         reviewService.hardDeleteReview(reviewId);
         return ResponseEntity.ok("Review permanently deleted successfully");
     }
+
+    @GetMapping("/books/by-min-rating")
+    public ResponseEntity<?> getBooksByMinRating(@RequestParam double minRating) {
+        try {
+            List<BookDTO> books = reviewService.getBooksByMinRating(minRating);
+            return new ResponseEntity<>(books, HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("An internal error occurred while fetching books: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

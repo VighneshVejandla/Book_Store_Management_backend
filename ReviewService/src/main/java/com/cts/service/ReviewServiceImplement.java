@@ -3,6 +3,7 @@ package com.cts.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.cts.dto.BookDTO;
@@ -13,6 +14,7 @@ import com.cts.exception.UserNotFoundException;
 import feign.FeignException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.cts.dto.ReviewDTO;
 import com.cts.entity.Review;
@@ -229,5 +231,55 @@ public class ReviewServiceImplement implements IReviewService {
         dto.setDownvotes(review.getDownvotes());
         dto.setFlags(review.getFlags());
         return dto;
+    }
+
+
+
+    @Override
+    public List<BookDTO> getBooksByMinRating(double minRating) {
+//        List<Review> relevantReviews = reviewRepository.findByRatingGreaterThanEqual(minRating).stream()
+//                .filter(review -> !review.isReviewDeleted())
+//                .collect(Collectors.toList());
+        List<Review> relevantReviews = reviewRepository.findAll().stream()
+                .filter(review -> !review.isReviewDeleted() && review.getRating() >= minRating)
+                .collect(Collectors.toList());
+
+
+        if (relevantReviews.isEmpty()) {
+            throw new ResourceNotFoundException("No reviews found with a rating of " + minRating + " or higher.");
+        }
+
+        // 2. Extract unique book IDs from these reviews to avoid fetching duplicate book details
+        Set<Long> uniqueBookIds = relevantReviews.stream()
+                .map(Review::getBookId)
+                .collect(Collectors.toSet()); // Use Set to ensure uniqueness
+
+        // 3. Fetch book details for each unique book ID using the BookClient Feign client
+        List<BookDTO> books = uniqueBookIds.stream()
+                .map(bookId -> {
+                    try {
+                        ResponseEntity<BookDTO> response = bookClient.viewBookById(bookId);
+                        if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                            return response.getBody();
+                        }
+                        System.err.println("Warning: Book with ID " + bookId + " not found or unavailable from book service.");
+                        return null; // Return null to filter out later
+                    } catch (FeignException fe) {
+                        System.err.println("Error fetching book with ID " + bookId + " from book service: " + fe.getMessage());
+                        return null; // Return null to filter out later
+                    } catch (Exception e) {
+                        System.err.println("Unexpected error fetching book with ID " + bookId + ": " + e.getMessage());
+                        return null; // Return null to filter out later
+                    }
+                })
+                .filter(bookDTO -> bookDTO != null) // Filter out any books that couldn't be fetched
+                .collect(Collectors.toList());
+
+        if (books.isEmpty()) {
+            // This can happen if reviews were found, but none of the corresponding books could be fetched
+            throw new ResourceNotFoundException("No books could be retrieved for the given rating criteria after checking the book service.");
+        }
+
+        return books;
     }
 }

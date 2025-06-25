@@ -28,7 +28,7 @@ public interface BookClient {
 
     default BookDTO getFallbackBook(Long id, Throwable ex) {
         BookDTO fallbackBook = new BookDTO();
-        fallbackBook.setBook_id(id);
+        fallbackBook.setBookId(id);
         fallbackBook.setTitle("Book Information Unavailable");
         return fallbackBook;
     }
