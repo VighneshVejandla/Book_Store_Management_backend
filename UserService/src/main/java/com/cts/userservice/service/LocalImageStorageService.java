@@ -1,7 +1,8 @@
 package com.cts.userservice.service;
 
+import com.cts.userservice.service.ImageStorageService;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Service; // <-- Make sure this import is present
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

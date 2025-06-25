@@ -1,7 +1,9 @@
 package com.cts.userservice.service;
 
-import com.cts.userservice.exception.UserNotFoundByIdException;
-import com.cts.userservice.repository.UserRepository;
+import com.cts.userservice.exception.UserNotFoundByIdException; // Assuming this exception exists
+import com.cts.userservice.repository.UserRepository; // To check if user exists
+import com.cts.userservice.service.ImageStorageService;
+import com.cts.userservice.service.UserImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @Service
-public class UserImageServiceImpl implements IUserImageService {
+public class UserImageServiceImpl implements UserImageService {
 
     @Autowired
     ImageStorageService imageStorageService;

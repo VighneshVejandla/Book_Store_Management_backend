@@ -50,23 +50,25 @@ public class UserServiceImplement implements IUserService {
 				.ifPresent((user)-> {throw new EmailAlreadyExistsException("Email Already Exists");});
 
 		User newUser = modelMapper.map(userDto, User.class);
+		String rawPassword = userDto.getPassword();
+		String passwordRegex = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?`~])(?=.*[^\\s]).{8,}$";
+		if (!rawPassword.matches(passwordRegex)) {
+			throw new IllegalArgumentException("Password must have at least 8 characters, including an alphabet, a number, and a special character, with no whitespace.");
+		}
 
-//		String password = userDto.getPassword();
-
-		String encodedPassword = passwordEncoder.encode(userDto.getPassword());
+		String encodedPassword = passwordEncoder.encode(rawPassword);
 		newUser.setPassword(encodedPassword);
 
 		newUser.setRole("user");
 		newUser.setCreatedDate(LocalDateTime.now());
 		newUser.setUpdatedDate(LocalDateTime.now());
 		newUser.setDeleted(false);
-
 		User saveUser = userRepository.save(newUser);
 
 		try{
-			cartFeignClient.createCart(saveUser.getUserId());
+			cartFeignClient.createCart(newUser.getUserId());
 		}catch (Exception e){
-			throw new RuntimeException("User created but failed to create Cart: " + e.getMessage());
+			throw new IllegalArgumentException("failed to create Cart: " + e.getMessage());
 		}
 
 		return modelMapper.map(saveUser, UserDto.class);
