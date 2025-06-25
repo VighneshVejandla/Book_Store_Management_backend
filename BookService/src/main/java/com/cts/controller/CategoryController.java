@@ -22,7 +22,6 @@ import com.cts.service.ICategoryService;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin
 @Validated
 @RestController
 @RequestMapping("/bookmanage")

@@ -25,7 +25,6 @@ import com.cts.service.IBookService;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin
 @RestController
 @Validated
 @RequestMapping("/bookmanage")
@@ -33,12 +32,12 @@ public class BookController {
 
 	@Autowired
 	IBookService bookService;
-	
+
 	@PostMapping("/addbook")
 	public ResponseEntity<BookDto> addBook(@Valid @RequestBody BookDto bookDto){
 		return new ResponseEntity<BookDto>(bookService.addBook(bookDto), HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/viewallbooks")
 	public ResponseEntity<List<BookDto>> viewAllBooks(){
 		return new ResponseEntity<List<BookDto>>(bookService.viewAllBooks(), HttpStatus.OK);
@@ -49,21 +48,21 @@ public class BookController {
 	{
 		return new ResponseEntity<BookDto>(bookService.getBookById(bookId), HttpStatus.OK);
 	}
-	
+
 	@PutMapping("/updatebook/{bookId}")
 	public ResponseEntity<BookDto> updateBookById(@PathVariable Long bookId, @RequestBody BookDto book)
 	{
 		return new ResponseEntity<BookDto>(bookService.updateBookById(bookId, book), HttpStatus.OK);
 	}
-	
+
 	@DeleteMapping("/deletebook/{bookId}")
 	public ResponseEntity<String> deleteBookById(@PathVariable Long bookId)
 	{
 		  bookService.deleteBookById(bookId);
-		
+
 		  return new ResponseEntity<String>("deleted successfully", HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/viewbycategory/{catName}")
     public ResponseEntity<List<BookDto>> viewBooksByCategory(@PathVariable String catName) {
         List<BookDto> books = bookService.findBooksByCategoryName(catName);
@@ -90,8 +89,8 @@ public class BookController {
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    
-    
+
+
     @GetMapping("/books/author/{authorId}")
     public ResponseEntity<List<BookDto>> getBooksByAuthorId(@PathVariable Long authorId) {
         List<BookDto> books = bookService.getBooksByAuthorId(authorId);
@@ -102,14 +101,25 @@ public class BookController {
     public ResponseEntity<List<BookDto>> getBooksByCategoryId(@PathVariable Long categoryId) {
         List<BookDto> books = bookService.getBooksByCategoryId(categoryId);
         return ResponseEntity.ok(books);
-        
+
     }
-    
-    @PostMapping("/books/purchase")
-    public ResponseEntity<String> purchaseBook(@RequestParam Long bookId, @RequestParam int quantity) {
-        String response = bookService.purchaseBook(bookId, quantity);
-        return ResponseEntity.ok(response);
+
+    @GetMapping("/books/isbn/{isbn}")
+    public ResponseEntity<BookDto> getBookByIsbn(@PathVariable String isbn) {
+        BookDto bookDto = bookService.findBookByIsbn(isbn);
+        return ResponseEntity.ok(bookDto);
     }
+
+
+    @GetMapping("/price")
+    public ResponseEntity<List<BookDto>> getBooksByPriceRange(
+            @RequestParam double min,
+            @RequestParam double max) {
+        return ResponseEntity.ok(bookService.findBooksByPriceRange(min, max));
+    }
+
+
+
 
 
 }

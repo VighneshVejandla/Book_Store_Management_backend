@@ -29,4 +29,7 @@ public interface IBookService {
 
 	String purchaseBook(Long bookId, int quantity);
 
+	BookDto findBookByIsbn(String isbn);
+
+	List<BookDto> findBooksByPriceRange(double min, double max);
 }

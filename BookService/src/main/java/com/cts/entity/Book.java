@@ -40,6 +40,8 @@ public class Book {
 	private int stockQuantity;
 	private LocalDateTime bookCreatedDate;
 	private boolean isBookDeleted;
+
+	private String isbn;
 	
 	
 	
