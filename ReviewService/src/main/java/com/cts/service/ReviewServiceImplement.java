@@ -1,6 +1,7 @@
 package com.cts.service;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -180,5 +181,17 @@ public class ReviewServiceImplement implements IReviewService {
         dto.setDownvotes(review.getDownvotes());
         dto.setFlags(review.getFlags());
         return dto;
+    }
+
+    @Override
+    public List<ReviewDTO> TrendingBooks(Long count) {
+        List<ReviewDTO> reviews = reviewRepository.findAll()
+                .stream()
+                .map(this::convertToDTO)
+                .sorted(Comparator.comparingDouble(ReviewDTO::getRating).reversed())
+                .limit(count)
+                .collect(Collectors.toList());
+        return reviews;
+
     }
 }

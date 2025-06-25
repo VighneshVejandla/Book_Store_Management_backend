@@ -2,10 +2,7 @@ package com.cts.service;
 
 import java.time.LocalDateTime;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -173,7 +170,15 @@ public class BookServiceImpl implements IBookService{
         return "Purchase successful for book: " + book.getTitle();
     }
 
-
-    
-
+	@Override
+	public List<BookDto> getRandomBooks(Long count) {
+		List<Book> books = bookRepository.findAll();
+		List<BookDto> bookDtos=  books.stream()
+				.map(book -> modelMapper.map(book, BookDto.class))
+				.collect(Collectors.toList());
+		Collections.shuffle(bookDtos);
+		return bookDtos.stream()
+				.limit(count)
+				.collect(Collectors.toList());
+	}
 }

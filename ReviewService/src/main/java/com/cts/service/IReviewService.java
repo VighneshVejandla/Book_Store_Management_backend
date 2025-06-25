@@ -14,6 +14,7 @@ public interface IReviewService {
 	ReviewDTO upvoteReview(Long reviewId);
 	ReviewDTO downvoteReview(Long reviewId);
 	ReviewDTO flagReview(Long reviewId);
+	List<ReviewDTO> TrendingBooks(Long count);
 	void hardDeleteReview(Long reviewId);
 
 }

@@ -12,19 +12,20 @@
         <module name="ReviewService" />
         <module name="APIGateway" />
       </profile>
-      <profile name="Annotation profile for Book" enabled="true">
+      <profile name="Annotation profile for e_commerce_payment_service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
-        <module name="BookService" />
-        <module name="e_commerce_payment_service" />
-        <module name="CartModule" />
-        <module name="OrderService" />
         <module name="UserService" />
         <module name="InventoryService" />
+        <module name="BookService" />
+        <module name="e_commerce_payment_service" />
+        <module name="OrderService" />
+        <module name="CartModule" />
+        <module name="PaymentService" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -41,6 +42,7 @@
       <module name="CartModule" options="-parameters" />
       <module name="InventoryService" options="-parameters" />
       <module name="OrderService" options="-parameters" />
+      <module name="PaymentService" options="-parameters" />
       <module name="ReviewService" options="-parameters" />
       <module name="UserService" options="-parameters" />
       <module name="bookmanagemet" options="-parameters" />

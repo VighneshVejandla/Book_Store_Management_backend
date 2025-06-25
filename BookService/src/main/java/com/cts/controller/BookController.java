@@ -25,7 +25,6 @@ import com.cts.service.IBookService;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin
 @RestController
 @Validated
 @RequestMapping("/bookmanage")
@@ -111,5 +110,8 @@ public class BookController {
         return ResponseEntity.ok(response);
     }
 
-
+    @GetMapping("/getRandombooks/{count}")
+    public ResponseEntity<List<BookDto>> getRandomBooks(@PathVariable Long count){
+        return new ResponseEntity<List<BookDto>>(bookService.getRandomBooks(count), HttpStatus.OK);
+    }
 }

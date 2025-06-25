@@ -29,4 +29,6 @@ public interface IBookService {
 
 	String purchaseBook(Long bookId, int quantity);
 
+	List<BookDto> getRandomBooks(Long count);
+
 }
