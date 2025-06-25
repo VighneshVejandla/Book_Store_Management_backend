@@ -25,7 +25,8 @@ import com.cts.service.IBookService;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin
+
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @Validated
 @RequestMapping("/bookmanage")
