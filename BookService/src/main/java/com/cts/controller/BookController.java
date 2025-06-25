@@ -2,10 +2,13 @@ package com.cts.controller;
 
 import java.util.List;
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,12 +17,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 import com.cts.dto.BookDto;
 import com.cts.service.IBookService;
 
 import jakarta.validation.Valid;
 
+
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @Validated
 @RequestMapping("/bookmanage")
@@ -84,4 +91,26 @@ public class BookController {
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    
+    
+    @GetMapping("/books/author/{authorId}")
+    public ResponseEntity<List<BookDto>> getBooksByAuthorId(@PathVariable Long authorId) {
+        List<BookDto> books = bookService.getBooksByAuthorId(authorId);
+        return ResponseEntity.ok(books);
+    }
+
+    @GetMapping("/books/category/{categoryId}")
+    public ResponseEntity<List<BookDto>> getBooksByCategoryId(@PathVariable Long categoryId) {
+        List<BookDto> books = bookService.getBooksByCategoryId(categoryId);
+        return ResponseEntity.ok(books);
+        
+    }
+    
+    @PostMapping("/books/purchase")
+    public ResponseEntity<String> purchaseBook(@RequestParam Long bookId, @RequestParam int quantity) {
+        String response = bookService.purchaseBook(bookId, quantity);
+        return ResponseEntity.ok(response);
+    }
+
+
 }

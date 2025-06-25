@@ -14,6 +14,7 @@ import com.cts.service.ICartService;
 
 import jakarta.validation.Valid;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/v1/cart")
 @CrossOrigin(origins = "http://localhost:5174/")

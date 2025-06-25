@@ -9,17 +9,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class Category {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long catId;
 
-	@NotBlank
+	@NotBlank(message = "Category name must not be blank")
+	@Size(max=100, message="Category name must be not exceed 100 characters")
 	private String catName;
 	
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
@@ -27,5 +31,50 @@ public class Category {
 	
 	private LocalDateTime catCreatedDate;
 	private boolean isCatDeleted;
+
+
+
+	public Long getCatId() {
+		return catId;
+	}
+	public void setCatId(Long catId) {
+		this.catId = catId;
+	}
+	public String getCatName() {
+		return catName;
+	}
+	public void setCatName(String catName) {
+		this.catName = catName;
+	}
+	public List<Book> getBooks() {
+		return books;
+	}
+	public void setBooks(List<Book> books) {
+		this.books = books;
+	}
+	public LocalDateTime getCatCreatedDate() {
+		return catCreatedDate;
+	}
+	public void setCatCreatedDate(LocalDateTime catCreatedDate) {
+		this.catCreatedDate = catCreatedDate;
+	}
+	public boolean isCatDeleted() {
+		return isCatDeleted;
+	}
+	public void setCatDeleted(boolean isCatDeleted) {
+		this.isCatDeleted = isCatDeleted;
+	}
+	public Category(Long catId, @NotBlank String catName, List<Book> books, LocalDateTime catCreatedDate,
+			boolean isCatDeleted) {
+		super();
+		this.catId = catId;
+		this.catName = catName;
+		this.books = books;
+		this.catCreatedDate = catCreatedDate;
+		this.isCatDeleted = isCatDeleted;
+	}
+	
+	
+	
 	
 }

@@ -23,4 +23,10 @@ public interface IBookService {
 
 	List<BookDto> findBooksByTitle(String title);
 
+	List<BookDto> getBooksByAuthorId(Long authorId);
+
+	List<BookDto> getBooksByCategoryId(Long categoryId);
+
+	String purchaseBook(Long bookId, int quantity);
+
 }
