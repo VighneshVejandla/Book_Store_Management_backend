@@ -2,8 +2,7 @@ package com.cts.userservice.controller;
 
 import java.util.List;
 
-import com.cts.userservice.dto.CartItemDTO;
-import com.cts.userservice.dto.UserRoleDto;
+import com.cts.userservice.dto.*;
 import com.cts.userservice.entity.User;
 import com.cts.userservice.feignclient.CartFeignClient;
 import com.cts.userservice.repository.UserRepository;
@@ -14,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import com.cts.userservice.dto.PasswordDto;
-import com.cts.userservice.dto.UserDto;
 import com.cts.userservice.service.IUserService;
 
 import jakarta.validation.Valid;
