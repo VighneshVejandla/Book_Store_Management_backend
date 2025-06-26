@@ -5,11 +5,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface IProfileService {
 
-    ProfileDto createProfile(ProfileDto profileDto, Long userId, MultipartFile image);
+    ProfileDto createProfile(ProfileDto profileDto, Long userId);
+
+    ProfileDto updateProfile(Long userId, ProfileDto profileDto);
+
+    void uploadProfileImage(Long userId, MultipartFile image);
 
     ProfileDto getProfileByUserId(Long userId);
-
-    ProfileDto updateProfile(Long userId, ProfileDto profileDto, MultipartFile image);
 
     void deleteProfileByUserId(Long userId);
 
@@ -17,9 +19,4 @@ public interface IProfileService {
 
     void hardDeleteProfile(Long userId);
 
-//
-//
-//    int calculateProfileCompletion(ProfileDto profileDto);
-//
-//    void changeVisibility(Long userId, String visibility);
 }

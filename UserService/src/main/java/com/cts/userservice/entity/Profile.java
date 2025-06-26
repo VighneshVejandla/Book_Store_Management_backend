@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Data
@@ -27,14 +28,11 @@ public class Profile {
 
     private String address;
 
-//    @Enumerated(EnumType.STRING)
-//    private Visibility visibility; // PUBLIC, PRIVATE, FRIENDS_ONLY
-
-//    private int profileCompletion; // %
 
     private boolean isDeleted; // Soft delete for profile
 
-    private String profileImageUrl;
+    @Column(columnDefinition = "LONGTEXT")
+    private String imageBase64;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

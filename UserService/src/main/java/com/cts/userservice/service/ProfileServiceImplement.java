@@ -2,6 +2,7 @@ package com.cts.userservice.service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,8 @@ import com.cts.userservice.feignclient.OrderFeignClient;
 import com.cts.userservice.feignclient.ReviewClient;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.cts.userservice.dto.ProfileDto;
@@ -22,6 +25,8 @@ import com.cts.userservice.entity.Profile;
 import com.cts.userservice.entity.User;
 import com.cts.userservice.repository.ProfileRepository;
 import com.cts.userservice.repository.UserRepository;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -42,8 +47,8 @@ public class ProfileServiceImplement implements IProfileService {
     @Autowired
     OrderFeignClient orderFeignClient;
 
-    @Autowired
-    ImageStorageService imageStorageService;
+//    @Autowired
+//    ImageStorageService imageStorageService;
 
     private ProfileDto mapToDto(Profile profile) {
         return modelMapper.map(profile, ProfileDto.class);
@@ -54,34 +59,57 @@ public class ProfileServiceImplement implements IProfileService {
     }
 
     @Override
-    public ProfileDto createProfile(ProfileDto profileDto, Long userId, MultipartFile image) {
-
+    public ProfileDto createProfile(ProfileDto profileDto, Long userId) {
         User user = userRepository.findById(userId)
-                .filter(u -> !u.isDeleted())
-                .orElseThrow(() -> new UserNotFoundByIdException("User", "id", userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
-        if (profileRepository.findByUserUserId(userId) != null) {
-            throw new ProfileExceptions.ProfileAlreadyExistsException("Profile already exists for user ID: " + userId);
-        }
+        Profile profile = Profile.builder()
+                .bio(profileDto.getBio())
+                .phoneNumber(profileDto.getPhoneNumber())
+                .address(profileDto.getAddress())
+                .imageBase64(null) // no image initially
+                .user(user)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .isDeleted(false)
+                .build();
 
-        Profile profile = mapToEntity(profileDto);
-
-        profile.setCreatedAt(LocalDateTime.now());
-        profile.setUpdatedAt(LocalDateTime.now());
-        profile.setUser(user);
-
-        if(image != null && !image.isEmpty()){
-            try {
-                String path = imageStorageService.saveImage(image, userId);
-                profile.setProfileImageUrl(path);
-            }catch (IOException e){
-                throw new RuntimeException("Image upload failed: " + e.getMessage());
-            }
-        }
-
-        Profile savedProfile = profileRepository.save(profile);
-        return mapToDto(savedProfile);
+        return mapToDto(profileRepository.save(profile));
     }
+
+    @Override
+    public ProfileDto updateProfile(Long userId, ProfileDto profileDto) {
+        Profile profile = Optional.ofNullable(profileRepository.findByUserUserId(userId))
+                .orElseThrow(() -> new ResourceNotFoundException("Profile", "userId", userId));
+
+        profile.setBio(profileDto.getBio());
+        profile.setPhoneNumber(profileDto.getPhoneNumber());
+        profile.setAddress(profileDto.getAddress());
+        profile.setUpdatedAt(LocalDateTime.now());
+
+        return mapToDto(profileRepository.save(profile));
+    }
+
+    @Override
+    public void uploadProfileImage(Long userId, MultipartFile image) {
+        if (image == null || image.isEmpty()) {
+            throw new RuntimeException("Image file is required");
+        }
+
+        Profile profile = Optional.ofNullable(profileRepository.findByUserUserId(userId))
+                .orElseThrow(() -> new ResourceNotFoundException("Profile", "userId", userId));
+
+        try {
+            String base64Image = Base64.getEncoder().encodeToString(image.getBytes());
+            profile.setImageBase64(base64Image);
+            profile.setUpdatedAt(LocalDateTime.now());
+            profileRepository.save(profile);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to upload image", e);
+        }
+    }
+
+
 
     @Override
     public ProfileDto getProfileByUserId(Long userId) {
@@ -104,27 +132,7 @@ public class ProfileServiceImplement implements IProfileService {
                 .orElseThrow(() -> new ProfileExceptions.ProfileIsInActiveException("Profile"+userId+"is Already is In active"));
     }
 
-    @Override
-    public ProfileDto updateProfile(Long userId, ProfileDto profileDto, MultipartFile image) {
 
-        return Optional.ofNullable(profileRepository.findByUserUserId(userId))
-                .map(profile -> {
-                    profile.setBio(profileDto.getBio());
-                    profile.setPhoneNumber(profileDto.getPhoneNumber());
-                    profile.setAddress(profileDto.getAddress());
-                    profile.setUpdatedAt(LocalDateTime.now());
-                    if(image != null && !image.isEmpty()){
-                        try{
-                            profile.setProfileImageUrl(imageStorageService.saveImage(image, userId));
-                        }catch (IOException e){
-                            throw new RuntimeException("Image Upload failed : " + e.getMessage());
-                        }
-                    }
-                    return profileRepository.save(profile);
-                }).map(this::mapToDto)
-                .orElseThrow(() -> new ResourceNotFoundException("Profile", "UserId", userId));
-
-    }
 
     @Override
     public void deleteProfileByUserId(Long userId) {
