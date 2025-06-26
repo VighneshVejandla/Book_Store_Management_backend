@@ -15,13 +15,11 @@ import lombok.Data;
 @Entity
 @Table(name = "reviews")
 public class Review {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long reviewId;
-	
 	private Long userId;
-	
 	private Long bookId;
 	
 	@Min(value = 0, message = "Very Bad")
@@ -36,6 +34,5 @@ public class Review {
 	// Extra fields:
     private int upvotes = 0;
     private int downvotes = 0;
-    private int flags = 0; 
-	
+    private int flags = 0;
 }

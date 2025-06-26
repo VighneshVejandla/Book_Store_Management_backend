@@ -7,12 +7,18 @@ import com.cts.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.cts.dto.ReviewDTO;
 import com.cts.service.IReviewService;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/reviews")
 public class ReviewController {
@@ -49,7 +55,7 @@ public class ReviewController {
         reviewService.deleteReviewbyId(reviewId);
         return ResponseEntity.ok("Review deleted successfully");
     }
-
+    
     // New endpoint: Upvote a review.
     @PostMapping("/{reviewId}/upvote")
     public ResponseEntity<ReviewDTO> upvoteReview(@PathVariable Long reviewId) {
@@ -67,12 +73,17 @@ public class ReviewController {
     public ResponseEntity<ReviewDTO> flagReview(@PathVariable Long reviewId) {
         return ResponseEntity.ok(reviewService.flagReview(reviewId));
     }
-
+    
     // New endpoint: Hard delete a review (permanent deletion).
     @DeleteMapping("/hard/{reviewId}")
     public ResponseEntity<String> hardDeleteReview(@PathVariable Long reviewId) {
         reviewService.hardDeleteReview(reviewId);
         return ResponseEntity.ok("Review permanently deleted successfully");
+    }
+
+    @GetMapping("/trendingBooks/{count}")
+    public ResponseEntity<List<ReviewDTO>> trendingBooks(@PathVariable Long count){
+        return new ResponseEntity<List<ReviewDTO>>(reviewService.TrendingBooks(count), HttpStatus.OK);
     }
 
     @GetMapping("/books/by-min-rating")
