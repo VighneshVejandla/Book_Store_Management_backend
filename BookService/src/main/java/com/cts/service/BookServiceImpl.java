@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.cts.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -193,7 +192,15 @@ public class BookServiceImpl implements IBookService{
 				.collect(Collectors.toList());
 	}
 
-
-
-
+	@Override
+	public List<BookDto> getRandomBooks(Long count) {
+		List<Book> books = bookRepository.findAll();
+		List<BookDto> bookDtos=  books.stream()
+				.map(book -> modelMapper.map(book, BookDto.class))
+				.collect(Collectors.toList());
+		Collections.shuffle(bookDtos);
+		return bookDtos.stream()
+				.limit(count)
+				.collect(Collectors.toList());
+	}
 }

@@ -1,6 +1,7 @@
 package com.cts.service;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -34,41 +35,9 @@ public class ReviewServiceImplement implements IReviewService {
 
     @Autowired
     BookClient bookClient;
-
+    
     @Autowired
     ModelMapper modelMapper;
-
-//    @Override
-//    public ReviewDTO addReview(ReviewDTO reviewDTO) {
-//        // Validate the user and book exist via the Feign clients.
-
-    /// /        userClient.getUserById(reviewDTO.getUserId());
-    /// /        bookClient.getBookById(reviewDTO.getBookId());
-    /// /
-    /// /        Review review = new Review();
-    /// ///        review.setUserId(reviewDTO.getUserId());
-    /// ///        review.setBookId(reviewDTO.getBookId());
-    /// ///        review.setRating(reviewDTO.getRating());
-    /// ///        review.setComment(reviewDTO.getComment());
-    /// /        review.setCreatedAt(LocalDateTime.now());
-    /// /        review.setUpdatedAt(LocalDateTime.now());
-    /// /        review.setReviewDeleted(false);
-    /// /
-    /// /
-    /// /        Review savedReview = reviewRepository.save(review);
-//
-//    	Review newReview = modelMapper.map(reviewDTO, Review.class);
-//
-//    	newReview.setCreatedAt(LocalDateTime.now());
-//    	newReview.setUpdatedAt(LocalDateTime.now());
-//    	newReview.setReviewDeleted(false);
-//
-//    	Review saveReview = reviewRepository.save(newReview);
-//
-//
-//        return modelMapper.map(saveReview, ReviewDTO.class);
-//    }
-
 
     @Override
     public ReviewDTO addReview(Long userId, Long bookId, ReviewDTO reviewDTO) {
@@ -116,11 +85,11 @@ public class ReviewServiceImplement implements IReviewService {
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
-
+        
         if (reviews.isEmpty()) {
             throw new ResourceNotFoundException("Review not found for User ID: " + userId);
         }
-
+        
         return reviews;
     }
 
@@ -142,7 +111,7 @@ public class ReviewServiceImplement implements IReviewService {
         review.setRating(reviewDTO.getRating());
         review.setComment(reviewDTO.getComment());
         review.setUpdatedAt(LocalDateTime.now());
-
+        
         Review updatedReview = reviewRepository.save(review);
         return convertToDTO(updatedReview);
     }
@@ -155,7 +124,7 @@ public class ReviewServiceImplement implements IReviewService {
         // Soft delete the review.
         review.setReviewDeleted(true);
         review.setUpdatedAt(LocalDateTime.now());
-
+        
         Review deletedReview = reviewRepository.save(review);
         return convertToDTO(deletedReview);
     }
@@ -207,15 +176,15 @@ public class ReviewServiceImplement implements IReviewService {
         return convertToDTO(updatedReview);
     }
 
-
+    
     @Override
     public void hardDeleteReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
+            .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
         reviewRepository.delete(review);
     }
 
-
+    
     // Helper method to convert entity to DTO.
     private ReviewDTO convertToDTO(Review review) {
         ReviewDTO dto = new ReviewDTO();
@@ -231,6 +200,18 @@ public class ReviewServiceImplement implements IReviewService {
         dto.setDownvotes(review.getDownvotes());
         dto.setFlags(review.getFlags());
         return dto;
+    }
+
+    @Override
+    public List<ReviewDTO> TrendingBooks(Long count) {
+        List<ReviewDTO> reviews = reviewRepository.findAll()
+                .stream()
+                .map(this::convertToDTO)
+                .sorted(Comparator.comparingDouble(ReviewDTO::getRating).reversed())
+                .limit(count)
+                .collect(Collectors.toList());
+        return reviews;
+
     }
 
 

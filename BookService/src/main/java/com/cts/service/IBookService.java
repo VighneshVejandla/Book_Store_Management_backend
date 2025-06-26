@@ -32,4 +32,6 @@ public interface IBookService {
 	BookDto findBookByIsbn(String isbn);
 
 	List<BookDto> findBooksByPriceRange(double min, double max);
+	List<BookDto> getRandomBooks(Long count);
+
 }

@@ -25,6 +25,8 @@ import com.cts.service.IBookService;
 
 import jakarta.validation.Valid;
 
+
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @Validated
 @RequestMapping("/bookmanage")
@@ -32,12 +34,12 @@ public class BookController {
 
 	@Autowired
 	IBookService bookService;
-
+	
 	@PostMapping("/addbook")
 	public ResponseEntity<BookDto> addBook(@Valid @RequestBody BookDto bookDto){
 		return new ResponseEntity<BookDto>(bookService.addBook(bookDto), HttpStatus.OK);
 	}
-
+	
 	@GetMapping("/viewallbooks")
 	public ResponseEntity<List<BookDto>> viewAllBooks(){
 		return new ResponseEntity<List<BookDto>>(bookService.viewAllBooks(), HttpStatus.OK);
@@ -48,21 +50,21 @@ public class BookController {
 	{
 		return new ResponseEntity<BookDto>(bookService.getBookById(bookId), HttpStatus.OK);
 	}
-
+	
 	@PutMapping("/updatebook/{bookId}")
 	public ResponseEntity<BookDto> updateBookById(@PathVariable Long bookId, @RequestBody BookDto book)
 	{
 		return new ResponseEntity<BookDto>(bookService.updateBookById(bookId, book), HttpStatus.OK);
 	}
-
+	
 	@DeleteMapping("/deletebook/{bookId}")
 	public ResponseEntity<String> deleteBookById(@PathVariable Long bookId)
 	{
 		  bookService.deleteBookById(bookId);
-
+		
 		  return new ResponseEntity<String>("deleted successfully", HttpStatus.OK);
 	}
-
+	
 	@GetMapping("/viewbycategory/{catName}")
     public ResponseEntity<List<BookDto>> viewBooksByCategory(@PathVariable String catName) {
         List<BookDto> books = bookService.findBooksByCategoryName(catName);
@@ -89,8 +91,8 @@ public class BookController {
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-
+    
+    
     @GetMapping("/books/author/{authorId}")
     public ResponseEntity<List<BookDto>> getBooksByAuthorId(@PathVariable Long authorId) {
         List<BookDto> books = bookService.getBooksByAuthorId(authorId);
@@ -101,7 +103,7 @@ public class BookController {
     public ResponseEntity<List<BookDto>> getBooksByCategoryId(@PathVariable Long categoryId) {
         List<BookDto> books = bookService.getBooksByCategoryId(categoryId);
         return ResponseEntity.ok(books);
-
+        
     }
 
     @GetMapping("/books/isbn/{isbn}")
@@ -120,6 +122,8 @@ public class BookController {
 
 
 
-
-
+    @GetMapping("/getRandombooks/{count}")
+    public ResponseEntity<List<BookDto>> getRandomBooks(@PathVariable Long count){
+        return new ResponseEntity<List<BookDto>>(bookService.getRandomBooks(count), HttpStatus.OK);
+    }
 }

@@ -19,26 +19,16 @@
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
+        <module name="UserService" />
+        <module name="InventoryService" />
         <module name="BookService" />
         <module name="e_commerce_payment_service" />
-        <module name="CartModule" />
         <module name="OrderService" />
-        <module name="UserService" />
+        <module name="CartModule" />
         <module name="PaymentService" />
-      </profile>
-      <profile name="Annotation profile for BookStore_Managment_System" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
-        </processorPath>
-        <module name="InventoryService" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="api-gateway" target="21" />
       <module name="Book" target="17" />
       <module name="bookmanagemet" target="17" />
       <module name="bookmanagemet (1)" target="17" />
@@ -55,7 +45,6 @@
       <module name="PaymentService" options="-parameters" />
       <module name="ReviewService" options="-parameters" />
       <module name="UserService" options="-parameters" />
-      <module name="api-gateway" options="-parameters" />
       <module name="bookmanagemet" options="-parameters" />
       <module name="bookmanagemet (1)" options="-parameters" />
       <module name="e_commerce_payment_service" options="-parameters" />
