@@ -33,10 +33,16 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.viewAllReviews(userId));
     }
 
+//    @GetMapping("/book/{bookId}")
+//    public ResponseEntity<ReviewDTO> getReviewByBook(@PathVariable Long bookId) {
+//        return ResponseEntity.ok(reviewService.getReviewById(bookId));
+//    }
+
     @GetMapping("/book/{bookId}")
-    public ResponseEntity<ReviewDTO> getReviewByBook(@PathVariable Long bookId) {
-        return ResponseEntity.ok(reviewService.getReviewById(bookId));
+    public ResponseEntity<List<ReviewDTO>> getReviewsByBook(@PathVariable Long bookId) {
+        return ResponseEntity.ok(reviewService.getAllReviewsForBook(bookId));
     }
+
 
     @PutMapping("/{reviewId}")
     public ResponseEntity<ReviewDTO> editReview(@PathVariable Long reviewId, @RequestBody ReviewDTO reviewDTO) {
