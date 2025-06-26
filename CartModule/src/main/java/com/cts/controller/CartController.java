@@ -14,10 +14,10 @@ import com.cts.service.ICartService;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5174")
 @RestController
 @RequestMapping("/api/v1/cart")
-@CrossOrigin(origins = "http://localhost:5174/")
+
 public class CartController {
 
 	@Autowired
