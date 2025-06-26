@@ -9,7 +9,7 @@ import com.cts.dto.UserDTO;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
-@FeignClient(value = "userservice", url = "http://localhost:8009")
+@FeignClient(value = "userservice", url = "http://localhost:8006")
 public interface UserClient {
    
 //	@CircuitBreaker(name = "UserService", fallbackMethod = "getFallbackUser")

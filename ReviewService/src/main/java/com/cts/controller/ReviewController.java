@@ -3,18 +3,12 @@ package com.cts.controller;
 import java.util.List;
 
 import com.cts.dto.BookDTO;
+import com.cts.dto.ResReviewDTO;
 import com.cts.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.cts.dto.ReviewDTO;
 import com.cts.service.IReviewService;
@@ -40,10 +34,16 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.viewAllReviews(userId));
     }
 
+//    @GetMapping("/book/{bookId}")
+//    public ResponseEntity<ReviewDTO> getReviewByBook(@PathVariable Long bookId) {
+//        return ResponseEntity.ok(reviewService.getReviewById(bookId));
+//    }
+
     @GetMapping("/book/{bookId}")
-    public ResponseEntity<ReviewDTO> getReviewByBook(@PathVariable Long bookId) {
-        return ResponseEntity.ok(reviewService.getReviewById(bookId));
+    public ResponseEntity<List<ReviewDTO>> getReviewsByBook(@PathVariable Long bookId) {
+        return ResponseEntity.ok(reviewService.getAllReviewsForBook(bookId));
     }
+
 
     @PutMapping("/{reviewId}")
     public ResponseEntity<ReviewDTO> editReview(@PathVariable Long reviewId, @RequestBody ReviewDTO reviewDTO) {
@@ -82,8 +82,8 @@ public class ReviewController {
     }
 
     @GetMapping("/trendingBooks/{count}")
-    public ResponseEntity<List<ReviewDTO>> trendingBooks(@PathVariable Long count){
-        return new ResponseEntity<List<ReviewDTO>>(reviewService.TrendingBooks(count), HttpStatus.OK);
+    public ResponseEntity<List<ResReviewDTO>> trendingBooks(@PathVariable Long count){
+        return new ResponseEntity<List<ResReviewDTO>>(reviewService.TrendingBooks(count), HttpStatus.OK);
     }
 
     @GetMapping("/books/by-min-rating")

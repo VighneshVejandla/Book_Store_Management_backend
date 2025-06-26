@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.cts.dto.BookDTO;
+import com.cts.dto.ResReviewDTO;
 import com.cts.dto.UserDTO;
 import com.cts.exception.BookNotFoundException;
 import com.cts.exception.ReviewExistsException;
@@ -94,13 +95,22 @@ public class ReviewServiceImplement implements IReviewService {
     }
 
     @Override
-    public ReviewDTO getReviewById(Long bookId) {
+    public List<ReviewDTO> getAllReviewsForBook(Long bookId) {
         return reviewRepository.findByBookId(bookId)
                 .stream()
-                .findFirst()
                 .map(this::convertToDTO)
-                .orElseThrow(() -> new ResourceNotFoundException("Review not found for Book ID: " + bookId));
+                .collect(Collectors.toList());
     }
+
+
+//    @Override
+//    public ReviewDTO getReviewById(Long bookId) {
+//        return reviewRepository.findByBookId(bookId)
+//                .stream()
+//                .findFirst()
+//                .map(this::convertToDTO)
+//                .orElseThrow(() -> new ResourceNotFoundException("Review not found for Book ID: " + bookId));
+//    }
 
     @Override
     public ReviewDTO editReviewById(Long reviewId, ReviewDTO reviewDTO) {
@@ -188,12 +198,12 @@ public class ReviewServiceImplement implements IReviewService {
     // Helper method to convert entity to DTO.
     private ReviewDTO convertToDTO(Review review) {
         ReviewDTO dto = new ReviewDTO();
-//        dto.setReviewId(review.getReviewId());
-//        dto.setUserId(review.getUserId());
+        dto.setReviewId(review.getReviewId());
+        dto.setUserId(review.getUserId());
 //        dto.setBookId(review.getBookId());
         dto.setRating(review.getRating());
         dto.setComment(review.getComment());
-//        dto.setCreatedAt(review.getCreatedAt());
+        dto.setCreatedAt(review.getCreatedAt());
 //        dto.setUpdatedAt(review.getUpdatedAt());
 //        dto.setReviewDeleted(review.isReviewDeleted());
         dto.setUpvotes(review.getUpvotes());
@@ -203,11 +213,11 @@ public class ReviewServiceImplement implements IReviewService {
     }
 
     @Override
-    public List<ReviewDTO> TrendingBooks(Long count) {
-        List<ReviewDTO> reviews = reviewRepository.findAll()
+    public List<ResReviewDTO> TrendingBooks(Long count) {
+        List<ResReviewDTO> reviews = reviewRepository.findAll()
                 .stream()
-                .map(this::convertToDTO)
-                .sorted(Comparator.comparingDouble(ReviewDTO::getRating).reversed())
+                .map((review)->modelMapper.map(review,ResReviewDTO.class))
+                .sorted(Comparator.comparingDouble(ResReviewDTO::getRating).reversed())
                 .limit(count)
                 .collect(Collectors.toList());
         return reviews;

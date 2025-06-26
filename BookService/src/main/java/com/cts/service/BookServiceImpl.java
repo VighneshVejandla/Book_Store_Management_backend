@@ -75,7 +75,8 @@ public class BookServiceImpl implements IBookService{
 
 	@Override
 	public BookDto getBookById(Long bookId) {
-	    Book book = bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book with ID " + bookId + " not found."));
+	    Book book = bookRepository.findById(bookId)
+				.orElseThrow( () -> new ResourceNotFoundException("Book not found with Book Id" + bookId));
 	    	if(!book.isBookDeleted()) {
 	    		return modelMapper.map(book, BookDto.class);
 	    	}
@@ -178,8 +179,6 @@ public class BookServiceImpl implements IBookService{
 
 		return modelMapper.map(book, BookDto.class);
 	}
-
-
 
 	@Override
 	public List<BookDto> findBooksByPriceRange(double min, double max) {
