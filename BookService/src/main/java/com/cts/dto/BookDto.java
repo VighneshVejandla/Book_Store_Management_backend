@@ -14,6 +14,8 @@ public class BookDto {
 	private AuthorDto author;
 	private CategoryDto category;
 
+	private String isbn;
+
 	private String imageBase64;
 
 }

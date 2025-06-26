@@ -2,12 +2,10 @@ package com.cts.service;
 
 import java.time.LocalDateTime;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import com.cts.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -77,7 +75,7 @@ public class BookServiceImpl implements IBookService{
 
 	@Override
 	public BookDto getBookById(Long bookId) {
-	    Book book = bookRepository.findById(bookId).get();
+	    Book book = bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book with ID " + bookId + " not found."));
 	    	if(!book.isBookDeleted()) {
 	    		return modelMapper.map(book, BookDto.class);
 	    	}
