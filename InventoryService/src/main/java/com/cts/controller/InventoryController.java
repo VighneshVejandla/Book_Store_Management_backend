@@ -12,7 +12,6 @@ import com.cts.dto.InventoryDTO;
 import com.cts.service.IInventoryService;
 import com.cts.service.InventoryServiceImpl;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/inventory")
 public class InventoryController {

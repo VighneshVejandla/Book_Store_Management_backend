@@ -5,21 +5,16 @@ import com.cts.userservice.dto.OrderSummaryDto;
 import com.cts.userservice.service.ProfileServiceImplement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.cts.userservice.dto.ProfileDto;
 import com.cts.userservice.service.IProfileService;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/profile")
@@ -31,19 +26,22 @@ public class ProfileController {
     @Autowired
     ProfileServiceImplement profileServiceImplement;
 
-    @PostMapping("/create/{userId}")
-    public ResponseEntity<ProfileDto> createProfile(@RequestBody ProfileDto profileDto, @PathVariable Long userId) {
-        return new ResponseEntity<ProfileDto>(profileService.createProfile(profileDto, userId), HttpStatus.OK);
+    @PostMapping(value = "/create/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ProfileDto> createProfile(@RequestPart(value = "profileDto") ProfileDto profileDto,
+                                                    @PathVariable Long userId,
+                                                    @RequestPart(value ="image") MultipartFile image) {
+        return new ResponseEntity<ProfileDto>(profileService.createProfile(profileDto, userId, image), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/update/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ProfileDto> updateProfile(@PathVariable Long userId, @RequestPart(value = "profileDto") ProfileDto profileDto,
+                                                    @RequestPart(value = "image", required = false) MultipartFile image) {
+        return new ResponseEntity<ProfileDto>(profileService.updateProfile(userId, profileDto, image), HttpStatus.OK);
     }
 
     @GetMapping("/view/{userId}")
     public ResponseEntity<ProfileDto> getProfile(@PathVariable Long userId) {
         return new ResponseEntity<ProfileDto>(profileService.getProfileByUserId(userId), HttpStatus.OK);
-    }
-
-    @PutMapping("/update/{userId}")
-    public ResponseEntity<ProfileDto> updateProfile(@PathVariable Long userId, @RequestBody ProfileDto profileDto) {
-        return new ResponseEntity<ProfileDto>(profileService.updateProfile(userId, profileDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{userId}")
@@ -89,5 +87,22 @@ public class ProfileController {
         OrderSummaryDto summary = profileServiceImplement.getUserOrderSummary(userId);
         return new ResponseEntity<OrderSummaryDto>( summary, HttpStatus.OK);
     }
+
+
+
+    //    -----------------pushing the image into Cloudinary---------------
+//    @PostMapping(value = "/uploadImage/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseEntity<?> uploadProfileImage(@PathVariable Long userId, @RequestParam("image")MultipartFile file){
+//        try{
+//            ProfileDto profileDto = profileServiceImplement.uploadProfileImage(userId, file);
+//            return new ResponseEntity<>(profileDto, HttpStatus.OK);
+//        }catch (IOException e){
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INSUFFICIENT_SPACE_ON_RESOURCE)
+//                    .body("Upload Failed : " + e.getMessage());
+//        }
+//
+//    }
+
 }
 

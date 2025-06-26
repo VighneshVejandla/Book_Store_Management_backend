@@ -1,9 +1,10 @@
 package com.cts.service;
 
-import java.awt.print.Book;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.cts.dto.BookDTO;
@@ -42,31 +43,29 @@ public class ReviewServiceImplement implements IReviewService {
     public ReviewDTO addReview(Long userId, Long bookId, ReviewDTO reviewDTO) {
         String username;
 
-        try{
+        try {
             UserDTO userDTO = userClient.viewUserById(userId).getBody();
             username = userDTO.getName();
-        }
-        catch(FeignException.NotFound fe){
+        } catch (FeignException.NotFound fe) {
             throw new UserNotFoundException("User should be registered in order to be able to review");
         }
 
-        try{
-        BookDTO bookDTO = bookClient.viewBookById(bookId).getBody();
-        }
-        catch (FeignException.InternalServerError fe){
-            throw new BookNotFoundException("Book ID " + bookId  + " does not exist in inventory");
+        try {
+            BookDTO bookDTO = bookClient.viewBookById(bookId).getBody();
+        } catch (FeignException.InternalServerError fe) {
+            throw new BookNotFoundException("Book ID " + bookId + " does not exist in inventory");
         }
 
         Optional<Review> checkReview = reviewRepository.findByUserIdAndBookId(userId, bookId);
         if (checkReview.isPresent())
             throw new ReviewExistsException("User " + username + " already reviewed this book");
 
-    	Review newReview = modelMapper.map(reviewDTO, Review.class);
+        Review newReview = modelMapper.map(reviewDTO, Review.class);
         //ReviewDTO reviewDTO = new ReviewDTO();
 
-    	newReview.setCreatedAt(LocalDateTime.now());
-    	newReview.setUpdatedAt(LocalDateTime.now());
-    	newReview.setReviewDeleted(false);
+        newReview.setCreatedAt(LocalDateTime.now());
+        newReview.setUpdatedAt(LocalDateTime.now());
+        newReview.setReviewDeleted(false);
         newReview.setRating(reviewDTO.getRating());
         newReview.setBookId(bookId);
         newReview.setUserId(userId);
@@ -76,7 +75,7 @@ public class ReviewServiceImplement implements IReviewService {
         newReview.setUpvotes(0);
         newReview.setFlags(0);
 
-    	Review saveReview = reviewRepository.save(newReview);
+        Review saveReview = reviewRepository.save(newReview);
         return modelMapper.map(saveReview, ReviewDTO.class);
     }
 
@@ -189,10 +188,9 @@ public class ReviewServiceImplement implements IReviewService {
     // Helper method to convert entity to DTO.
     private ReviewDTO convertToDTO(Review review) {
         ReviewDTO dto = new ReviewDTO();
-        /*
-        dto.setReviewId(review.getReviewId());
-        dto.setUserId(review.getUserId());
-        dto.setBookId(review.getBookId());*/
+//        dto.setReviewId(review.getReviewId());
+//        dto.setUserId(review.getUserId());
+//        dto.setBookId(review.getBookId());
         dto.setRating(review.getRating());
         dto.setComment(review.getComment());
 //        dto.setCreatedAt(review.getCreatedAt());
@@ -202,5 +200,67 @@ public class ReviewServiceImplement implements IReviewService {
         dto.setDownvotes(review.getDownvotes());
         dto.setFlags(review.getFlags());
         return dto;
+    }
+
+    @Override
+    public List<ReviewDTO> TrendingBooks(Long count) {
+        List<ReviewDTO> reviews = reviewRepository.findAll()
+                .stream()
+                .map(this::convertToDTO)
+                .sorted(Comparator.comparingDouble(ReviewDTO::getRating).reversed())
+                .limit(count)
+                .collect(Collectors.toList());
+        return reviews;
+
+    }
+
+
+
+    @Override
+    public List<BookDTO> getBooksByMinRating(double minRating) {
+//        List<Review> relevantReviews = reviewRepository.findByRatingGreaterThanEqual(minRating).stream()
+//                .filter(review -> !review.isReviewDeleted())
+//                .collect(Collectors.toList());
+        List<Review> relevantReviews = reviewRepository.findAll().stream()
+                .filter(review -> !review.isReviewDeleted() && review.getRating() >= minRating)
+                .collect(Collectors.toList());
+
+
+        if (relevantReviews.isEmpty()) {
+            throw new ResourceNotFoundException("No reviews found with a rating of " + minRating + " or higher.");
+        }
+
+        // 2. Extract unique book IDs from these reviews to avoid fetching duplicate book details
+        Set<Long> uniqueBookIds = relevantReviews.stream()
+                .map(Review::getBookId)
+                .collect(Collectors.toSet()); // Use Set to ensure uniqueness
+
+        // 3. Fetch book details for each unique book ID using the BookClient Feign client
+        List<BookDTO> books = uniqueBookIds.stream()
+                .map(bookId -> {
+                    try {
+                        ResponseEntity<BookDTO> response = bookClient.viewBookById(bookId);
+                        if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                            return response.getBody();
+                        }
+                        System.err.println("Warning: Book with ID " + bookId + " not found or unavailable from book service.");
+                        return null; // Return null to filter out later
+                    } catch (FeignException fe) {
+                        System.err.println("Error fetching book with ID " + bookId + " from book service: " + fe.getMessage());
+                        return null; // Return null to filter out later
+                    } catch (Exception e) {
+                        System.err.println("Unexpected error fetching book with ID " + bookId + ": " + e.getMessage());
+                        return null; // Return null to filter out later
+                    }
+                })
+                .filter(bookDTO -> bookDTO != null) // Filter out any books that couldn't be fetched
+                .collect(Collectors.toList());
+
+        if (books.isEmpty()) {
+            // This can happen if reviews were found, but none of the corresponding books could be fetched
+            throw new ResourceNotFoundException("No books could be retrieved for the given rating criteria after checking the book service.");
+        }
+
+        return books;
     }
 }

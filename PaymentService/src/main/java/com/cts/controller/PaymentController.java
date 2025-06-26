@@ -3,18 +3,19 @@ package com.cts.controller;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.cts.dto.*;
-import com.cts.feign.UserClient;
+import com.cts.dto.InitiatePaymentDTO;
+import com.cts.dto.PaymentInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.cts.dto.PaymentRequestDto;
+import com.cts.dto.PaymentResponseDto;
 import com.cts.service.PaymentService;
 
-
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/payments")
-@CrossOrigin(origins = "http://localhost:3000")
 public class PaymentController {
 
 	private static final Logger logger = Logger.getLogger(PaymentController.class.getName());
