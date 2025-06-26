@@ -1,5 +1,6 @@
 package com.cts.service;
 
+import java.awt.print.Book;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -8,9 +9,12 @@ import java.util.stream.Collectors;
 import com.cts.dto.BookDTO;
 import com.cts.dto.UserDTO;
 import com.cts.exception.BookNotFoundException;
+import com.cts.exception.ReviewExistsException;
 import com.cts.exception.UserNotFoundException;
+import feign.FeignException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.cts.dto.ReviewDTO;
 import com.cts.entity.Review;
@@ -36,32 +40,30 @@ public class ReviewServiceImplement implements IReviewService {
 
     @Override
     public ReviewDTO addReview(Long userId, Long bookId, ReviewDTO reviewDTO) {
-        // Validate the user and book exist via the Feign clients.
-        UserDTO userDTO = userClient.viewUserById(userId);
-        if (userDTO == null)
-            throw new UserNotFoundException("User ID: " +  " needs to be registered in order to be able to comment");
+        String username;
 
+        try{
+            UserDTO userDTO = userClient.viewUserById(userId).getBody();
+            username = userDTO.getName();
+        }
+        catch(FeignException.NotFound fe){
+            throw new UserNotFoundException("User should be registered in order to be able to review");
+        }
 
-        //System.out.println(userDTO.getUserId());
-        BookDTO bookDTO = bookClient.viewBookById(bookId);
-        if(bookDTO == null)
-            throw new BookNotFoundException("Book ID: " + bookId + " not found in database");
+        try{
+        BookDTO bookDTO = bookClient.viewBookById(bookId).getBody();
+        }
+        catch (FeignException.InternalServerError fe){
+            throw new BookNotFoundException("Book ID " + bookId  + " does not exist in inventory");
+        }
 
-//        Review review = new Review();
-////        review.setUserId(reviewDTO.getUserId());
-////        review.setBookId(reviewDTO.getBookId());
-////        review.setRating(reviewDTO.getRating());
-////        review.setComment(reviewDTO.getComment());
-//        review.setCreatedAt(LocalDateTime.now());
-//        review.setUpdatedAt(LocalDateTime.now());
-//        review.setReviewDeleted(false);
-//        
-//
-//        Review savedReview = reviewRepository.save(review);
-    	
+        Optional<Review> checkReview = reviewRepository.findByUserIdAndBookId(userId, bookId);
+        if (checkReview.isPresent())
+            throw new ReviewExistsException("User " + username + " already reviewed this book");
+
     	Review newReview = modelMapper.map(reviewDTO, Review.class);
         //ReviewDTO reviewDTO = new ReviewDTO();
-    	
+
     	newReview.setCreatedAt(LocalDateTime.now());
     	newReview.setUpdatedAt(LocalDateTime.now());
     	newReview.setReviewDeleted(false);
@@ -75,8 +77,6 @@ public class ReviewServiceImplement implements IReviewService {
         newReview.setFlags(0);
 
     	Review saveReview = reviewRepository.save(newReview);
-    	
-    	
         return modelMapper.map(saveReview, ReviewDTO.class);
     }
 

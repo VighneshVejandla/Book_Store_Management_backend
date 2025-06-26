@@ -1,6 +1,7 @@
 package com.cts.feign;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -13,7 +14,7 @@ public interface UserClient {
    
 	@CircuitBreaker(name = "UserService", fallbackMethod = "getFallbackUser")
     @GetMapping("/user/viewuserbyid/{userId}")
-    UserDTO viewUserById(@PathVariable Long userId);
+    ResponseEntity<UserDTO> viewUserById(@PathVariable Long userId);
 
     default UserDTO getFallbackUser(Long id, Throwable ex) {
         return new UserDTO();

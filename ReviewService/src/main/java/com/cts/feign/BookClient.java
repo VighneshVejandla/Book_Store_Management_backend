@@ -1,6 +1,7 @@
 package com.cts.feign;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -12,7 +13,7 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 public interface BookClient {
     @CircuitBreaker(name = "Book", fallbackMethod = "getFallbackBook")
     @GetMapping("/bookmanage/viewbookbyid/{bookId}")
-    BookDTO viewBookById(@PathVariable Long bookId);
+    ResponseEntity<BookDTO> viewBookById(@PathVariable Long bookId);
     
     default BookDTO getFallbackBook(Long id, Throwable ex) {
     	BookDTO fallbackBook = new BookDTO();

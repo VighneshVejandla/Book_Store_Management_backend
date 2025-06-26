@@ -68,7 +68,7 @@ public class BookServiceImpl implements IBookService{
 		}
 		return bookDtos;
 	}
-	
+
 	@Override
 	public BookDto getBookById(Long bookId) {
 	    Book book = bookRepository.findById(bookId).get();

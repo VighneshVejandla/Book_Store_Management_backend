@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(url="http://localhost:9002",value="INVENTORY")
 public interface InventoryFeignClient {
 
-    @GetMapping("/inventory/viewstockbyid/{bookId}")
+    @GetMapping("/inventory/stockByBookId/{bookId}")
     int getStockByBookId(@PathVariable long bookId);
 }

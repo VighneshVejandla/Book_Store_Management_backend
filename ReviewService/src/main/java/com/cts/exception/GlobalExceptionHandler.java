@@ -24,4 +24,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(bnf.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(ReviewExistsException.class)
+    public ResponseEntity<String> handleReviewExists(ReviewExistsException fff){
+        return new ResponseEntity<>(fff.getMessage(), HttpStatus.ALREADY_REPORTED);
+    }
+
 }
