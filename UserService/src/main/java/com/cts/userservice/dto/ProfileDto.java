@@ -15,6 +15,9 @@ public class ProfileDto {
     private String bio;
     private String phoneNumber;
     private String address;
+
+    private String profileImageUrl;
+
 //    private Long userId;
 
 

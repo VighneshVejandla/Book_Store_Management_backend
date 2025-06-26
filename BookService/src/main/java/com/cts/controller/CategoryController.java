@@ -22,7 +22,7 @@ import com.cts.service.ICategoryService;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @Validated
 @RestController
 @RequestMapping("/bookmanage")

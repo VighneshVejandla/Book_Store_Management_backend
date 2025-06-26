@@ -9,7 +9,6 @@ import com.cts.orderservice.config.InventoryFeignClient;
 import com.cts.orderservice.config.PaymentFeignClient;
 import com.cts.orderservice.dto.*;
 import com.cts.orderservice.exception.PaymentStatusException;
-import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +49,7 @@ public class OrderServiceImpl implements IOrderService{
 
     @Override
     public ResOrderDTO addOrder(OrderDTO orderDTO) {
-
+        System.out.println(orderDTO);
         logger.info("Received request to create order for userId: {}", orderDTO.getUserId());
         Map<Long,Integer> bookIds = orderDTO.getBookIdsWithQuantity();
         logger.debug("Fetching user from userid: {}",orderDTO.getUserId());
@@ -144,10 +143,35 @@ public class OrderServiceImpl implements IOrderService{
 
     public ResOrderDTO updateOrder(OrderDTO orderdto,Long orderid) {
         Order order = orderRepository.findById(orderid).orElseThrow(()->new IdNotFoundException("Order id is not valid"));
-        order.setUserId(orderdto.getUserId());
+        UserDto user = getUserById(orderdto.getUserId());
+        order.setUserId(user.getUserId());
         order.setTotalAmount(orderdto.getTotalAmount());
         order.setStatus(orderdto.getStatus());
+
+        Map<Long,Integer> bookIDs = orderdto.getBookIdsWithQuantity();
+        for (Map.Entry<Long, Integer> entry : bookIDs.entrySet()) {
+
+            Long bookId = entry.getKey();
+            Integer quantity = entry.getValue();
+            BookDto book = bookFeignClient.getBooks(bookId);
+            //System.out.println(book);
+            if (book == null) {
+                throw new IdNotFoundException("Book ID " + bookId + " not found.");
+            }
+            Integer stockQuantity = inventoryFeignClient.getStockByBookId(bookId);
+            if (stockQuantity < quantity) {
+                throw new OutOfStockException("Out of stock: Book ID " + book.getBookId());
+            }
+        }
         order.setBookIdsWithQuantity(orderdto.getBookIdsWithQuantity());
+        try {
+            PaymentInfoDTO paymentDto = paymentFeignClient.viewPaymentDetails(orderdto.getPaymentId());
+            if(!(paymentDto.getStatus().equals("SUCCESS"))){
+                throw new PaymentStatusException("Payment is not done !");
+            }
+        } catch (FeignException.BadRequest ex) {
+            throw new PaymentStatusException("Invalid Payment ID: " + orderdto.getPaymentId());
+        }
         order.setPaymentId(orderdto.getPaymentId());
         order.setOrderUpdatedDate(LocalDateTime.now());
         order.setOrderDeleted(false);

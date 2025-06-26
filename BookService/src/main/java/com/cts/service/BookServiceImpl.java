@@ -2,12 +2,10 @@ package com.cts.service;
 
 import java.time.LocalDateTime;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import com.cts.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,10 +72,11 @@ public class BookServiceImpl implements IBookService{
 		}
 		return bookDtos;
 	}
-	
+
 	@Override
 	public BookDto getBookById(Long bookId) {
-	    Book book = bookRepository.findById(bookId).get();
+	    Book book = bookRepository.findById(bookId)
+				.orElseThrow( () -> new ResourceNotFoundException("Book not found with Book Id" + bookId));
 	    	if(!book.isBookDeleted()) {
 	    		return modelMapper.map(book, BookDto.class);
 	    	}
@@ -172,8 +171,33 @@ public class BookServiceImpl implements IBookService{
 
         return "Purchase successful for book: " + book.getTitle();
     }
+	@Override
+	public BookDto findBookByIsbn(String isbn) {
+		Book book = bookRepository.findByIsbn(isbn)
+				.filter(b -> !b.isBookDeleted())
+				.orElseThrow(() -> new ResourceNotFoundException("Book not found with ISBN: " + isbn));
 
+		return modelMapper.map(book, BookDto.class);
+	}
 
-    
+	@Override
+	public List<BookDto> findBooksByPriceRange(double min, double max) {
+		List<Book> books = bookRepository.findByPriceBetween(min, max);
+		return books.stream()
+				.filter(book -> !book.isBookDeleted())
+				.map(book -> modelMapper.map(book, BookDto.class))
+				.collect(Collectors.toList());
+	}
 
+	@Override
+	public List<BookDto> getRandomBooks(Long count) {
+		List<Book> books = bookRepository.findAll();
+		List<BookDto> bookDtos=  books.stream()
+				.map(book -> modelMapper.map(book, BookDto.class))
+				.collect(Collectors.toList());
+		Collections.shuffle(bookDtos);
+		return bookDtos.stream()
+				.limit(count)
+				.collect(Collectors.toList());
+	}
 }

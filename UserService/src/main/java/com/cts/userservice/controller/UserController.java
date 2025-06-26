@@ -2,25 +2,17 @@ package com.cts.userservice.controller;
 
 import java.util.List;
 
-import com.cts.userservice.dto.CartItemDTO;
-import com.cts.userservice.dto.UserRoleDto;
+import com.cts.userservice.dto.*;
 import com.cts.userservice.entity.User;
 import com.cts.userservice.feignclient.CartFeignClient;
 import com.cts.userservice.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
-import com.cts.userservice.dto.PasswordDto;
-import com.cts.userservice.dto.UserDto;
 import com.cts.userservice.service.IUserService;
 
 import jakarta.validation.Valid;
@@ -38,6 +30,12 @@ public class UserController {
 	@Autowired
 	CartFeignClient cartFeignClient;
 
+	@Autowired
+	ModelMapper modelMapper;
+
+	@Autowired
+	PasswordEncoder passwordEncoder;
+
 	@PostMapping("/adduser")
 	public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) {
 		return new ResponseEntity<UserDto>(userService.addUser(userDto), HttpStatus.OK);
@@ -51,6 +49,11 @@ public class UserController {
 	@GetMapping("/viewuserbyid/{userId}")
 	public ResponseEntity<UserDto> viewUserById(@PathVariable Long userId) {
 		return new ResponseEntity<UserDto>(userService.getUserById(userId), HttpStatus.OK);
+	}
+
+	@GetMapping("/viewuserbyemail/{email}")
+	public ResponseEntity<AuthDto> viewUserByEmail(@PathVariable String email) {
+		return new ResponseEntity<AuthDto>(userService.getUserByEmail(email), HttpStatus.OK);
 	}
 
 	@PutMapping("/updateuser/{userId}")
@@ -103,4 +106,17 @@ public class UserController {
 		List<CartItemDTO> cartItems = cartFeignClient.getCartItems(userId);
 		return new ResponseEntity<>(cartItems, HttpStatus.OK);
 	}
+
+	@PostMapping("/authenticate")
+	public ResponseEntity<AuthDto> authenticate(@RequestBody LoginRequest loginRequest) {
+		User user = userRepository.findByEmail(loginRequest.getEmail())
+				.orElseThrow(() -> new RuntimeException("Invalid email or password"));
+
+		if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+			throw new RuntimeException("Invalid email or password");
+		}
+
+		return new ResponseEntity<>(modelMapper.map(user, AuthDto.class), HttpStatus.OK);
+	}
+
 }
