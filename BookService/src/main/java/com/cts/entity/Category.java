@@ -31,50 +31,5 @@ public class Category {
 	
 	private LocalDateTime catCreatedDate;
 	private boolean isCatDeleted;
-
-
-
-	public Long getCatId() {
-		return catId;
-	}
-	public void setCatId(Long catId) {
-		this.catId = catId;
-	}
-	public String getCatName() {
-		return catName;
-	}
-	public void setCatName(String catName) {
-		this.catName = catName;
-	}
-	public List<Book> getBooks() {
-		return books;
-	}
-	public void setBooks(List<Book> books) {
-		this.books = books;
-	}
-	public LocalDateTime getCatCreatedDate() {
-		return catCreatedDate;
-	}
-	public void setCatCreatedDate(LocalDateTime catCreatedDate) {
-		this.catCreatedDate = catCreatedDate;
-	}
-	public boolean isCatDeleted() {
-		return isCatDeleted;
-	}
-	public void setCatDeleted(boolean isCatDeleted) {
-		this.isCatDeleted = isCatDeleted;
-	}
-	public Category(Long catId, @NotBlank String catName, List<Book> books, LocalDateTime catCreatedDate,
-			boolean isCatDeleted) {
-		super();
-		this.catId = catId;
-		this.catName = catName;
-		this.books = books;
-		this.catCreatedDate = catCreatedDate;
-		this.isCatDeleted = isCatDeleted;
-	}
-	
-	
-	
 	
 }

@@ -14,9 +14,10 @@ import com.cts.service.ICartService;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5174")
 @RestController
 @RequestMapping("/api/v1/cart")
+
 public class CartController {
 
 	@Autowired
@@ -77,6 +78,12 @@ public class CartController {
 	@GetMapping("/{userId}/viewAllProducts")
 	public ResponseEntity<List<CartItemDTO>> getCartItems(@PathVariable Integer userId) {
 		return ResponseEntity.ok(cartService.getCartItems(userId));
+	}
+
+	@PutMapping("/{userId}/total")
+	public ResponseEntity<String> updateCartTotal(@PathVariable Integer userId, @RequestBody double grandTotal) {
+		cartService.updateCartTotal(userId, grandTotal);
+		return ResponseEntity.ok("Cart total updated successfully.");
 	}
 
 

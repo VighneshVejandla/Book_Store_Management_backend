@@ -48,4 +48,11 @@ public ResponseEntity<String> handleUserNotFound(UserNotFoundException ex) {
 public ResponseEntity<String> handleOutOfStock( OutOfStockException ex) {
 	return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 }
+
+	@ExceptionHandler(CartUpdateException.class)
+	public ResponseEntity<String> handleCartUpdateException(CartUpdateException ex) {
+		System.out.println(ex.getMessage());
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+				.body("Error updating cart: " + ex.getMessage());
+	}
 }

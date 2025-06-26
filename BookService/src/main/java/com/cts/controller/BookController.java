@@ -103,11 +103,11 @@ public class BookController {
         return ResponseEntity.ok(books);
         
     }
-    
-    @PostMapping("/books/purchase")
-    public ResponseEntity<String> purchaseBook(@RequestParam Long bookId, @RequestParam int quantity) {
-        String response = bookService.purchaseBook(bookId, quantity);
-        return ResponseEntity.ok(response);
+
+    @GetMapping("/books/isbn/{isbn}")
+    public ResponseEntity<BookDto> getBookByIsbn(@PathVariable String isbn) {
+        BookDto bookDto = bookService.findBookByIsbn(isbn);
+        return ResponseEntity.ok(bookDto);
     }
 
     @GetMapping("/getRandombooks/{count}")

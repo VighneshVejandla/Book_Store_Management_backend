@@ -1,23 +1,24 @@
 package com.cts.service;
-
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Logger;
-
+import java.util.List;
+import java.util.stream.Collectors;
 import com.cts.dto.*;
 import com.cts.exception.*;
 import com.cts.feign.CartServiceClient;
+import com.cts.feign.UserClient;
 import com.netflix.discovery.converters.Auto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import com.cts.entity.Payment;
 import com.cts.repository.PaymentRepository;
 
@@ -35,16 +36,13 @@ public class PaymentServiceImpl implements PaymentService {
 	@Autowired
 	CartServiceClient cartServiceClient;
 
+	@Autowired
+	UserClient userClient;
+
 	@Override
 	public PaymentInfoDTO paymentDetails(Long PaymentId){
 		Payment details = paymentRepository.findById(PaymentId).orElseThrow(()-> new UserIdException("Payment ID " + PaymentId + " not found"));
-		PaymentInfoDTO paymentInfoDTO = modelMapper.map(details, PaymentInfoDTO.class);
-		paymentInfoDTO.setStatus(details.getStatus());
-		paymentInfoDTO.setAmount(details.getAmount());
-		paymentInfoDTO.setPaymentId(details.getPaymentId());
-		paymentInfoDTO.setCreatedAt(details.getCreatedAt());
-		paymentInfoDTO.setUserId(details.getUserId());
-		return paymentInfoDTO;
+        return modelMapper.map(details, PaymentInfoDTO.class);
 	}
 
 	@Override
@@ -58,6 +56,10 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	public PaymentResponseDto initiatePayment(Long userId, InitiatePaymentDTO initiatePaymentDTO) {
 
+		Double amount = processPayment(Math.toIntExact(userId));
+		if (amount <=0)
+			throw new AmountException("No items in cart, aborting payment operations");
+
 		if (paymentRepository.existsByUserIdAndStatus(Math.toIntExact(userId), "PENDING")){
 			throw new UserIdException("User ID " + userId + " already initiated a pending payment");
 		}
@@ -69,13 +71,14 @@ public class PaymentServiceImpl implements PaymentService {
 		payment.setCreatedAt(LocalDateTime.now());
 		payment.setUpdatedAt(LocalDateTime.now());
 		payment.setStatus("PENDING");
-		payment = paymentRepository.save(payment);
+		paymentRepository.save(payment);
 
 		String upiUri = generateUpiUri(payment);
 		logger.info("Payment initiated successfully with ID: " + payment.getPaymentId());
+		PaymentDTO saved = modelMapper.map(payment, PaymentDTO.class);
 
-		return new PaymentResponseDto(payment.getPaymentId(), upiUri, payment.getCreatedAt(), payment.getStatus(),
-				payment.getUpiId(), payment.getUserId(), payment.getAmount());
+		return new PaymentResponseDto(saved.getPaymentId(), upiUri, saved.getCreatedAt(), saved.getStatus(),
+				saved.getUpiId(), saved.getUserId(), saved.getAmount());
 	}
 
 	@Override
@@ -83,13 +86,18 @@ public class PaymentServiceImpl implements PaymentService {
 		// Retrieve payment from the database
 		Optional<Payment> optionalPayment = paymentRepository.findById(paymentId);
 
-		if (optionalPayment.isEmpty()) {
+		if (optionalPayment.isEmpty())
 			throw new PaymentException("Payment ID " + paymentId + " not found in database!");
-		}
 
 		Payment payment = optionalPayment.get();
+		Long userIdentity = payment.getUserId();
 		Duration timeElapsed = Duration.between(payment.getCreatedAt(), LocalDateTime.now());
 		long secondsElapsed = timeElapsed.toSeconds();
+
+		// Update status only if it's currently "PENDING"
+		if (!"PENDING".equals(payment.getStatus())) {
+			throw new StatusChangeException("Payment status must be Pending to update, found: " + payment.getStatus());
+		}
 
 		if (secondsElapsed > 60){
 			logger.warning("Timeout detected: " + secondsElapsed + " seconds");
@@ -97,16 +105,10 @@ public class PaymentServiceImpl implements PaymentService {
 			throw new TransactionTimeException("Transaction timeout: time exceeded beyond 60 seconds");
 
 		}
-
-		// Update status only if it's currently "PENDING"
-		if (!"PENDING".equals(payment.getStatus())) {
-			throw new StatusChangeException("Payment status must be Pending to update, found: " + payment.getStatus());
-		}
-
 		payment.setStatus("SUCCESS");
 		payment.setUpdatedAt(LocalDateTime.now());
+		ResponseEntity<String> cartDelete = cartServiceClient.clearCart(Math.toIntExact(userIdentity));
 		paymentRepository.save(payment); // Persist the updated payment status
-
 		logger.info("Payment status updated to SUCCESS for ID: " + paymentId);
 	}
 
@@ -121,7 +123,6 @@ public class PaymentServiceImpl implements PaymentService {
 
 	private Long generateUniquePaymentId() {
 		Long newId;
-
 		do {
 			newId = UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE;
 		} while (paymentRepository.existsByPaymentId(newId));
@@ -145,5 +146,17 @@ public class PaymentServiceImpl implements PaymentService {
 		payment.setStatus("CANCELLED");
 		paymentRepository.save(payment);
 	}
+
+	@Override
+	public List<PaymentInfoDTO> getAllPaymentDetails(Long userId) {
+		UserToPaymentDTO userRoleCheck = userClient.viewUserById(userId).getBody();
+		System.out.println(userRoleCheck.getRole());
+		if (userRoleCheck.getRole().equals("admin")){
+			List<Payment> paymentInfoDTOS = paymentRepository.findAll();
+			return paymentInfoDTOS.stream().map((payment) -> modelMapper.map(payment, PaymentInfoDTO.class)).collect(Collectors.toList());
+		}
+		return null;
+	}
+
 
 }
