@@ -2,12 +2,7 @@ package com.cts.entity;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -40,82 +35,8 @@ public class Book {
 	private int stockQuantity;
 	private LocalDateTime bookCreatedDate;
 	private boolean isBookDeleted;
-	
-	
-	
-	public LocalDateTime getBookCreatedDate() {
-		return bookCreatedDate;
-	}
-	public void setBookCreatedDate(LocalDateTime bookCreatedDate) {
-		this.bookCreatedDate = bookCreatedDate;
-	}
-	public boolean isBookDeleted() {
-		return isBookDeleted;
-	}
-	public void setBookDeleted(boolean isBookDeleted) {
-		this.isBookDeleted = isBookDeleted;
-	}
-	public Book(Long bookId, @NotBlank String title, Author author, Category category,
-			@NotNull @Min(value = 0, message = "Must be more than 0") Double price,
-			@NotNull @Min(value = 0, message = "Out of Stock") int stockQuantity, LocalDateTime bookCreatedDate,
-			boolean isBookDeleted) {
-		super();
-		this.bookId = bookId;
-		this.title = title;
-		this.author = author;
-		this.category = category;
-		this.price = price;
-		this.stockQuantity = stockQuantity;
-		this.bookCreatedDate = bookCreatedDate;
-		this.isBookDeleted = isBookDeleted;
-	}
-	public Long getBookId() {
-		return bookId;
-	}
-	public void setBookId(Long bookId) {
-		this.bookId = bookId;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public Author getAuthor() {
-		return author;
-	}
-	public void setAuthor(Author author) {
-		this.author = author;
-	}
-	public Category getCategory() {
-		return category;
-	}
-	public void setCategory(Category category) {
-		this.category = category;
-	}
-	public Double getPrice() {
-		return price;
-	}
-	public void setPrice(Double price) {
-		this.price = price;
-	}
-	public int getStockQuantity() {
-		return stockQuantity;
-	}
-	public void setStockQuantity(int stockQuantity) {
-		this.stockQuantity = stockQuantity;
-	}
-	public Book() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	
-	
-	
-	
-//	@OneToOne(mappedBy = "book", cascade = CascadeType.ALL)
-//	private Inventory inventory;
-	
-//	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-//	private List<Review> review;
+
+	@Column(columnDefinition = "LONGTEXT")
+	private String imageBase64;
+	private String isbn;
 }

@@ -14,6 +14,7 @@ public class ResOrderDTO {
 	private LocalDate orderDate;
 	private Double totalAmount;
 	private String status;
+	private Long paymentId;
 	//private Map<Long, Integer> bookIdsWithQuantity;
 	private List<ResBookDto> books;
 }

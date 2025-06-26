@@ -1,5 +1,6 @@
 package com.cts.controller;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import com.cts.dto.InitiatePaymentDTO;
@@ -56,6 +57,12 @@ public class PaymentController {
 	public ResponseEntity<String> cancelPayment(@PathVariable Long paymentId) {
 		paymentService.cancelPayment(paymentId);
 		return ResponseEntity.ok("Payment cancelled successfully.");
+	}
+
+	@GetMapping("/getallpaymentdetails/{userId}")
+	public List<PaymentInfoDTO> getAll(@PathVariable Long userId){
+
+		return paymentService.getAllPaymentDetails(userId);
 	}
 
 }

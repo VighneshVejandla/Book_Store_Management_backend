@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import com.cts.dto.ReviewDTO;
 import com.cts.service.IReviewService;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/reviews")
 public class ReviewController {
@@ -55,7 +54,7 @@ public class ReviewController {
         reviewService.deleteReviewbyId(reviewId);
         return ResponseEntity.ok("Review deleted successfully");
     }
-
+    
     // New endpoint: Upvote a review.
     @PostMapping("/{reviewId}/upvote")
     public ResponseEntity<ReviewDTO> upvoteReview(@PathVariable Long reviewId) {
@@ -73,12 +72,17 @@ public class ReviewController {
     public ResponseEntity<ReviewDTO> flagReview(@PathVariable Long reviewId) {
         return ResponseEntity.ok(reviewService.flagReview(reviewId));
     }
-
+    
     // New endpoint: Hard delete a review (permanent deletion).
     @DeleteMapping("/hard/{reviewId}")
     public ResponseEntity<String> hardDeleteReview(@PathVariable Long reviewId) {
         reviewService.hardDeleteReview(reviewId);
         return ResponseEntity.ok("Review permanently deleted successfully");
+    }
+
+    @GetMapping("/trendingBooks/{count}")
+    public ResponseEntity<List<ReviewDTO>> trendingBooks(@PathVariable Long count){
+        return new ResponseEntity<List<ReviewDTO>>(reviewService.TrendingBooks(count), HttpStatus.OK);
     }
 
     @GetMapping("/books/by-min-rating")

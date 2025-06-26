@@ -1,7 +1,9 @@
 package com.cts.repository;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,5 +23,7 @@ public interface IBookRepository extends JpaRepository<Book, Long> {
     
     List<Book> findByAuthor_AuthId(Long authId);
     List<Book> findByCategory_CatId(Long catId);
-    
+    Optional<Book> findByIsbn(String isbn);
+
+    List<Book> findByPriceBetween(double min, double max);
 }

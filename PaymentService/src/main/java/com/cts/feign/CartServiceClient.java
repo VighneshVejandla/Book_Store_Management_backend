@@ -3,6 +3,7 @@ package com.cts.feign;
 import com.cts.dto.CartToPaymentDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -10,4 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface CartServiceClient {
     @GetMapping("/api/v1/cart/{userId}/total-price")
     ResponseEntity<Double> calculateTotalPrice(@PathVariable Integer userId);
+
+    @DeleteMapping("/api/v1/cart/{userId}/clearcart")
+    ResponseEntity<String> clearCart(@PathVariable Integer userId);
 }
