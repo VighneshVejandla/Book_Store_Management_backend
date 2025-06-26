@@ -81,7 +81,7 @@ public class ReviewServiceImplement implements IReviewService {
 
     @Override
     public List<ReviewDTO> viewAllReviews(Long userId) {
-        List<ReviewDTO> reviews = reviewRepository.findByUserId(userId)
+    	List<ReviewDTO> reviews = reviewRepository.findByUserId(userId)
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -105,8 +105,8 @@ public class ReviewServiceImplement implements IReviewService {
     @Override
     public ReviewDTO editReviewById(Long reviewId, ReviewDTO reviewDTO) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
-
+            .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
+        
         // Update editable fields.
         review.setRating(reviewDTO.getRating());
         review.setComment(reviewDTO.getComment());
@@ -119,8 +119,8 @@ public class ReviewServiceImplement implements IReviewService {
     @Override
     public ReviewDTO deleteReviewbyId(Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
-
+            .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
+        
         // Soft delete the review.
         review.setReviewDeleted(true);
         review.setUpdatedAt(LocalDateTime.now());
@@ -133,7 +133,7 @@ public class ReviewServiceImplement implements IReviewService {
     @Override
     public ReviewDTO upvoteReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
+            .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
 
         review.setUpvotes(review.getUpvotes() + 1);
         review.setUpdatedAt(LocalDateTime.now());
@@ -145,7 +145,7 @@ public class ReviewServiceImplement implements IReviewService {
     @Override
     public ReviewDTO downvoteReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
+            .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
 
         review.setDownvotes(review.getDownvotes() + 1);
         review.setUpdatedAt(LocalDateTime.now());

@@ -15,4 +15,5 @@ public class RegisterDto {
     @Pattern(message ="Password must have atleast 8 char long with atleast 1 Alphabet, 1 special Char, and 1 Number",
             regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?`~])(?=.*[^\\s]).{8,}$")
     private String password;
+//    private String role;
 }

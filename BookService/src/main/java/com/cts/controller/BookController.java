@@ -1,29 +1,24 @@
 package com.cts.controller;
 
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 
 
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 
 import com.cts.dto.BookDto;
 import com.cts.service.IBookService;
 
 import jakarta.validation.Valid;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @CrossOrigin(origins = "*")
@@ -39,7 +34,20 @@ public class BookController {
 	public ResponseEntity<BookDto> addBook(@Valid @RequestBody BookDto bookDto){
 		return new ResponseEntity<BookDto>(bookService.addBook(bookDto), HttpStatus.OK);
 	}
-	
+
+    @PostMapping(value = "/addbookwithimage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BookDto> addBookWithImage(
+            @RequestPart("book") String bookJson,
+            @RequestPart("image") MultipartFile imageFile) throws IOException {
+
+        BookDto bookDto = new ObjectMapper().readValue(bookJson, BookDto.class);
+        String base64Image = "data:" + imageFile.getContentType() + ";base64," +
+                Base64.getEncoder().encodeToString(imageFile.getBytes());
+
+        bookDto.setImageBase64(base64Image);
+        return new ResponseEntity<>(bookService.addBook(bookDto), HttpStatus.OK);
+    }
+
 	@GetMapping("/viewallbooks")
 	public ResponseEntity<List<BookDto>> viewAllBooks(){
 		return new ResponseEntity<List<BookDto>>(bookService.viewAllBooks(), HttpStatus.OK);

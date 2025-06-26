@@ -8,8 +8,7 @@ import com.cts.Config.BookFeignClient;
 import com.cts.Config.InventoryFeignClient;
 import com.cts.Config.UserFeignClient;
 import com.cts.dto.*;
-import com.cts.exception.OutOfStockException;
-import com.cts.exception.ProductNotFoundException;
+import com.cts.exception.*;
 import feign.FeignException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,6 @@ import org.springframework.validation.annotation.Validated;
 
 import com.cts.entity.Cart;
 import com.cts.entity.CartItem;
-import com.cts.exception.CartNotFoundException;
-import com.cts.exception.UserNotFoundException;
 import com.cts.repository.CartItemRepository;
 import com.cts.repository.CartRepository;
 
@@ -275,16 +272,19 @@ public class CartServiceImpl implements ICartService{
 			}
 	}
 
+	@Override
+	@Transactional
+	public void updateCartTotal(Integer userId, double grandTotal) {
+		Cart cart = cartRepository.findCartByUserId(userId)
+				.orElseThrow(() -> new CartNotFoundException("Cart not found for user: " + userId));
 
-	/*private void validateStockAvailability(Long bookId, int requiredQty) {
-		ResponseEntity<ProductDTO> stockData = inventoryFeignClient.getStockByBookId(bookId);
-		if (stockData == null) {
-			throw new RuntimeException("Stock data not found for bookId: " + bookId);
+		cart.setGrandTotalPrice(grandTotal);
+		if(grandTotal!=cart.getGrandTotalPrice()) {
+			throw new CartUpdateException("the cart grandtotal is not updated for userId: "+userId);// Set the grand total directly
 		}
-		if (requiredQty > stockData.getQuantity()) {
-			throw new OutOfStockException("The required quantity for bookId: " + bookId + " exceeds the stock limit!");
-		}
-	}*/
+		cartRepository.save(cart); // Persist the updated cart
+	}
+
 	}
 
 	
