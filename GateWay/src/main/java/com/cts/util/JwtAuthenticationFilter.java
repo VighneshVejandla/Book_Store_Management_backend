@@ -33,7 +33,10 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
             if (request.getURI().getPath().contains("/user/authenticate") ||
                     request.getURI().getPath().contains("/user/adduser") ||
                     request.getURI().getPath().contains("/auth/register") ||
-                    request.getURI().getPath().contains("/auth/login")) {
+                    request.getURI().getPath().contains("/auth/login") ||
+                    request.getURI().getPath().startsWith("/bookmanage/getRandombooks")||
+                    request.getURI().getPath().startsWith("/bookmanage/viewbookbyid")||
+                    request.getURI().getPath().startsWith("/reviews/trendingBooks"))  {
                 return chain.filter(exchange);
             }
 

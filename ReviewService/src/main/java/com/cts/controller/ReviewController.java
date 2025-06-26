@@ -3,6 +3,7 @@ package com.cts.controller;
 import java.util.List;
 
 import com.cts.dto.BookDTO;
+import com.cts.dto.ResReviewDTO;
 import com.cts.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -75,8 +76,8 @@ public class ReviewController {
     }
 
     @GetMapping("/trendingBooks/{count}")
-    public ResponseEntity<List<ReviewDTO>> trendingBooks(@PathVariable Long count){
-        return new ResponseEntity<List<ReviewDTO>>(reviewService.TrendingBooks(count), HttpStatus.OK);
+    public ResponseEntity<List<ResReviewDTO>> trendingBooks(@PathVariable Long count){
+        return new ResponseEntity<List<ResReviewDTO>>(reviewService.TrendingBooks(count), HttpStatus.OK);
     }
 
     @GetMapping("/books/by-min-rating")
