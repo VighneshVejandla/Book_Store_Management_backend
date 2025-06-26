@@ -44,6 +44,12 @@ public class BookServiceImpl implements IBookService{
 	    newBook.setBookCreatedDate(LocalDateTime.now());
 	    newBook.setBookDeleted(false);
 
+
+		if(!catRepo.existsById(bookDto.getCategory().getCatId())){
+			throw new IllegalArgumentException("Cat Doesn't exist");
+		}
+
+
 	    Book savedBook = bookRepository.save(newBook);
 	    BookDto mappedDto = modelMapper.map(savedBook, BookDto.class);
 	    

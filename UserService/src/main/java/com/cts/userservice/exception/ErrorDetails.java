@@ -13,9 +13,4 @@ public class ErrorDetails {
 	private String path;
 	private String errorCode;
 
-//    public ErrorDetails(LocalDateTime now, String message, String description, String userNotFound) {
-//    }
-
-//	public ErrorDetails(LocalDateTime now, String message, String description, String userNotFound) {
-//	}
 }

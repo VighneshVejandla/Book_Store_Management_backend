@@ -12,7 +12,7 @@ import com.cts.dto.InventoryDTO;
 import com.cts.service.IInventoryService;
 import com.cts.service.InventoryServiceImpl;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/inventory")
 public class InventoryController {
