@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="457bea1e-edee-4980-95cc-4d02bd16cb22" name="Changes" comment="Changes" />
+    <list default="true" id="457bea1e-edee-4980-95cc-4d02bd16cb22" name="Changes" comment="Changes in Book and Gateway">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CartModule/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/CartModule/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GateWay/src/main/java/com/cts/config/GatewayConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/GateWay/src/main/java/com/cts/config/GatewayConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eurekaserver/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/eurekaserver/target/classes/application.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -78,7 +84,7 @@
     "Application.com.cts.userservice.UserServiceApplication.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "dev",
+    "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/2406313/Documents/workspace-spring-tool-suite-4-4.29.1.RELEASE_book_management_project",
@@ -159,6 +165,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.com.cts.userservice.UserServiceApplication" />
+      <item itemvalue="Application.EurekaserverApplication" />
+      <item itemvalue="Application.OrderServiceApplication" />
+      <item itemvalue="Application.ReviewServiceApplication" />
+      <item itemvalue="Application.BookApplication" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.com.cts.userservice.UserServiceApplication" />
@@ -297,6 +310,7 @@
     <MESSAGE value="Main commit 1" />
     <MESSAGE value="Dev commit 2" />
     <MESSAGE value="Changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changes" />
+    <MESSAGE value="Changes in Book and Gateway" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changes in Book and Gateway" />
   </component>
 </project>

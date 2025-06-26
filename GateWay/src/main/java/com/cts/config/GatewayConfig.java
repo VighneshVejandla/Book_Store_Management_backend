@@ -73,7 +73,7 @@ public class GatewayConfig {
 
                 .route("bookservice", r -> r.path("/bookmanage/**")
                         .filters(f -> f.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config())))
-                        .uri("http://localhost:9001"))
+                        .uri("http://localhost:9003"))
 
                 .route("cartservice", r -> r.path("/api/v1/cart/**")
                         .filters(f -> f.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config())))
