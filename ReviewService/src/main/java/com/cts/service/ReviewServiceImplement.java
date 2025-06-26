@@ -3,10 +3,19 @@ package com.cts.service;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.cts.dto.BookDTO;
+import com.cts.dto.UserDTO;
+import com.cts.exception.BookNotFoundException;
+import com.cts.exception.ReviewExistsException;
+import com.cts.exception.UserNotFoundException;
+import feign.FeignException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.cts.dto.ReviewDTO;
 import com.cts.entity.Review;
@@ -31,38 +40,48 @@ public class ReviewServiceImplement implements IReviewService {
     ModelMapper modelMapper;
 
     @Override
-    public ReviewDTO addReview(ReviewDTO reviewDTO) {
-        // Validate the user and book exist via the Feign clients.
-//        userClient.getUserById(reviewDTO.getUserId());
-//        bookClient.getBookById(reviewDTO.getBookId());
-//
-//        Review review = new Review();
-////        review.setUserId(reviewDTO.getUserId());
-////        review.setBookId(reviewDTO.getBookId());
-////        review.setRating(reviewDTO.getRating());
-////        review.setComment(reviewDTO.getComment());
-//        review.setCreatedAt(LocalDateTime.now());
-//        review.setUpdatedAt(LocalDateTime.now());
-//        review.setReviewDeleted(false);
-//        
-//
-//        Review savedReview = reviewRepository.save(review);
-    	
-    	Review newReview = modelMapper.map(reviewDTO, Review.class);
-    	
-    	newReview.setCreatedAt(LocalDateTime.now());
-    	newReview.setUpdatedAt(LocalDateTime.now());
-    	newReview.setReviewDeleted(false);
-    	
-    	Review saveReview = reviewRepository.save(newReview);
-    	
-    	
+    public ReviewDTO addReview(Long userId, Long bookId, ReviewDTO reviewDTO) {
+        String username;
+
+        try {
+            UserDTO userDTO = userClient.viewUserById(userId).getBody();
+            username = userDTO.getName();
+        } catch (FeignException.NotFound fe) {
+            throw new UserNotFoundException("User should be registered in order to be able to review");
+        }
+
+        try {
+            BookDTO bookDTO = bookClient.viewBookById(bookId).getBody();
+        } catch (FeignException.InternalServerError fe) {
+            throw new BookNotFoundException("Book ID " + bookId + " does not exist in inventory");
+        }
+
+        Optional<Review> checkReview = reviewRepository.findByUserIdAndBookId(userId, bookId);
+        if (checkReview.isPresent())
+            throw new ReviewExistsException("User " + username + " already reviewed this book");
+
+        Review newReview = modelMapper.map(reviewDTO, Review.class);
+        //ReviewDTO reviewDTO = new ReviewDTO();
+
+        newReview.setCreatedAt(LocalDateTime.now());
+        newReview.setUpdatedAt(LocalDateTime.now());
+        newReview.setReviewDeleted(false);
+        newReview.setRating(reviewDTO.getRating());
+        newReview.setBookId(bookId);
+        newReview.setUserId(userId);
+        newReview.setCreatedAt(LocalDateTime.now());
+        newReview.setUpdatedAt(LocalDateTime.now());
+        newReview.setDownvotes(0);
+        newReview.setUpvotes(0);
+        newReview.setFlags(0);
+
+        Review saveReview = reviewRepository.save(newReview);
         return modelMapper.map(saveReview, ReviewDTO.class);
     }
 
     @Override
     public List<ReviewDTO> viewAllReviews(Long userId) {
-    	List<ReviewDTO> reviews = reviewRepository.findByUserId(userId)
+        List<ReviewDTO> reviews = reviewRepository.findByUserId(userId)
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -86,8 +105,8 @@ public class ReviewServiceImplement implements IReviewService {
     @Override
     public ReviewDTO editReviewById(Long reviewId, ReviewDTO reviewDTO) {
         Review review = reviewRepository.findById(reviewId)
-            .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
-        
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
+
         // Update editable fields.
         review.setRating(reviewDTO.getRating());
         review.setComment(reviewDTO.getComment());
@@ -100,8 +119,8 @@ public class ReviewServiceImplement implements IReviewService {
     @Override
     public ReviewDTO deleteReviewbyId(Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
-            .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
-        
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
+
         // Soft delete the review.
         review.setReviewDeleted(true);
         review.setUpdatedAt(LocalDateTime.now());
@@ -114,7 +133,7 @@ public class ReviewServiceImplement implements IReviewService {
     @Override
     public ReviewDTO upvoteReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
-            .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
 
         review.setUpvotes(review.getUpvotes() + 1);
         review.setUpdatedAt(LocalDateTime.now());
@@ -126,7 +145,7 @@ public class ReviewServiceImplement implements IReviewService {
     @Override
     public ReviewDTO downvoteReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
-            .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
 
         review.setDownvotes(review.getDownvotes() + 1);
         review.setUpdatedAt(LocalDateTime.now());
@@ -169,9 +188,9 @@ public class ReviewServiceImplement implements IReviewService {
     // Helper method to convert entity to DTO.
     private ReviewDTO convertToDTO(Review review) {
         ReviewDTO dto = new ReviewDTO();
-        dto.setReviewId(review.getReviewId());
-        dto.setUserId(review.getUserId());
-        dto.setBookId(review.getBookId());
+//        dto.setReviewId(review.getReviewId());
+//        dto.setUserId(review.getUserId());
+//        dto.setBookId(review.getBookId());
         dto.setRating(review.getRating());
         dto.setComment(review.getComment());
 //        dto.setCreatedAt(review.getCreatedAt());
@@ -193,5 +212,55 @@ public class ReviewServiceImplement implements IReviewService {
                 .collect(Collectors.toList());
         return reviews;
 
+    }
+
+
+
+    @Override
+    public List<BookDTO> getBooksByMinRating(double minRating) {
+//        List<Review> relevantReviews = reviewRepository.findByRatingGreaterThanEqual(minRating).stream()
+//                .filter(review -> !review.isReviewDeleted())
+//                .collect(Collectors.toList());
+        List<Review> relevantReviews = reviewRepository.findAll().stream()
+                .filter(review -> !review.isReviewDeleted() && review.getRating() >= minRating)
+                .collect(Collectors.toList());
+
+
+        if (relevantReviews.isEmpty()) {
+            throw new ResourceNotFoundException("No reviews found with a rating of " + minRating + " or higher.");
+        }
+
+        // 2. Extract unique book IDs from these reviews to avoid fetching duplicate book details
+        Set<Long> uniqueBookIds = relevantReviews.stream()
+                .map(Review::getBookId)
+                .collect(Collectors.toSet()); // Use Set to ensure uniqueness
+
+        // 3. Fetch book details for each unique book ID using the BookClient Feign client
+        List<BookDTO> books = uniqueBookIds.stream()
+                .map(bookId -> {
+                    try {
+                        ResponseEntity<BookDTO> response = bookClient.viewBookById(bookId);
+                        if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                            return response.getBody();
+                        }
+                        System.err.println("Warning: Book with ID " + bookId + " not found or unavailable from book service.");
+                        return null; // Return null to filter out later
+                    } catch (FeignException fe) {
+                        System.err.println("Error fetching book with ID " + bookId + " from book service: " + fe.getMessage());
+                        return null; // Return null to filter out later
+                    } catch (Exception e) {
+                        System.err.println("Unexpected error fetching book with ID " + bookId + ": " + e.getMessage());
+                        return null; // Return null to filter out later
+                    }
+                })
+                .filter(bookDTO -> bookDTO != null) // Filter out any books that couldn't be fetched
+                .collect(Collectors.toList());
+
+        if (books.isEmpty()) {
+            // This can happen if reviews were found, but none of the corresponding books could be fetched
+            throw new ResourceNotFoundException("No books could be retrieved for the given rating criteria after checking the book service.");
+        }
+
+        return books;
     }
 }

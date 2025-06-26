@@ -1,5 +1,6 @@
 package com.cts.userservice.service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,7 @@ import com.cts.userservice.entity.Profile;
 import com.cts.userservice.entity.User;
 import com.cts.userservice.repository.ProfileRepository;
 import com.cts.userservice.repository.UserRepository;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ProfileServiceImplement implements IProfileService {
@@ -40,6 +42,9 @@ public class ProfileServiceImplement implements IProfileService {
     @Autowired
     OrderFeignClient orderFeignClient;
 
+    @Autowired
+    ImageStorageService imageStorageService;
+
     private ProfileDto mapToDto(Profile profile) {
         return modelMapper.map(profile, ProfileDto.class);
     }
@@ -49,13 +54,12 @@ public class ProfileServiceImplement implements IProfileService {
     }
 
     @Override
-    public ProfileDto createProfile(ProfileDto profileDto, Long userId) {
+    public ProfileDto createProfile(ProfileDto profileDto, Long userId, MultipartFile image) {
 
         User user = userRepository.findById(userId)
                 .filter(u -> !u.isDeleted())
                 .orElseThrow(() -> new UserNotFoundByIdException("User", "id", userId));
 
-//        Optional<Profile> existingProfile = Optional.ofNullable(profileRepository.findByUserUserId(userId));
         if (profileRepository.findByUserUserId(userId) != null) {
             throw new ProfileExceptions.ProfileAlreadyExistsException("Profile already exists for user ID: " + userId);
         }
@@ -65,6 +69,15 @@ public class ProfileServiceImplement implements IProfileService {
         profile.setCreatedAt(LocalDateTime.now());
         profile.setUpdatedAt(LocalDateTime.now());
         profile.setUser(user);
+
+        if(image != null && !image.isEmpty()){
+            try {
+                String path = imageStorageService.saveImage(image, userId);
+                profile.setProfileImageUrl(path);
+            }catch (IOException e){
+                throw new RuntimeException("Image upload failed: " + e.getMessage());
+            }
+        }
 
         Profile savedProfile = profileRepository.save(profile);
         return mapToDto(savedProfile);
@@ -92,16 +105,23 @@ public class ProfileServiceImplement implements IProfileService {
     }
 
     @Override
-    public ProfileDto updateProfile(Long userId, ProfileDto profileDto) {
+    public ProfileDto updateProfile(Long userId, ProfileDto profileDto, MultipartFile image) {
 
         return Optional.ofNullable(profileRepository.findByUserUserId(userId))
-                        .map(profile -> {
-                            profile.setBio(profileDto.getBio());
-                            profile.setPhoneNumber(profileDto.getPhoneNumber());
-                            profile.setAddress(profileDto.getAddress());
-                            profile.setUpdatedAt(LocalDateTime.now());
-                            return profileRepository.save(profile);
-                        }).map(this::mapToDto)
+                .map(profile -> {
+                    profile.setBio(profileDto.getBio());
+                    profile.setPhoneNumber(profileDto.getPhoneNumber());
+                    profile.setAddress(profileDto.getAddress());
+                    profile.setUpdatedAt(LocalDateTime.now());
+                    if(image != null && !image.isEmpty()){
+                        try{
+                            profile.setProfileImageUrl(imageStorageService.saveImage(image, userId));
+                        }catch (IOException e){
+                            throw new RuntimeException("Image Upload failed : " + e.getMessage());
+                        }
+                    }
+                    return profileRepository.save(profile);
+                }).map(this::mapToDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Profile", "UserId", userId));
 
     }
@@ -191,6 +211,19 @@ public class ProfileServiceImplement implements IProfileService {
         return new OrderSummaryDto(totalOrders, totalAmount);
     }
 
+    //    -------Service for Cloudinary-----------------
+
+//    public ProfileDto uploadProfileImage(Long userId, MultipartFile file) throws IOException{
+//        Profile profile = Optional.ofNullable(profileRepository.findByUserUserId(userId))
+//                .orElseThrow(() -> new ResourceNotFoundException("Profile", "UserId", userId));
+//
+//        String imageUrl = cloudinaryService.uploadImage(file);
+//        profile.setProfileImageUrl(imageUrl);
+//        profile.setUpdatedAt(LocalDateTime.now());
+//
+//        return mapToDto(profileRepository.save(profile));
+//
+//    }
 
 
 }

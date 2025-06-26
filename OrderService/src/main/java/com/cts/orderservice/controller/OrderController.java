@@ -14,6 +14,7 @@ import com.cts.orderservice.dto.OrderDTO;
 import com.cts.orderservice.dto.ResOrderDTO;
 import com.cts.orderservice.service.IOrderService;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/bookstore")
 @Validated

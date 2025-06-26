@@ -25,6 +25,7 @@ import com.cts.service.IBookService;
 
 import jakarta.validation.Valid;
 
+@CrossOrigin
 @RestController
 @Validated
 @RequestMapping("/bookmanage")

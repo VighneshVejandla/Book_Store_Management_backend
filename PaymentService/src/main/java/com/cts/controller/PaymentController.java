@@ -12,6 +12,7 @@ import com.cts.dto.PaymentRequestDto;
 import com.cts.dto.PaymentResponseDto;
 import com.cts.service.PaymentService;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/payments")
 public class PaymentController {
