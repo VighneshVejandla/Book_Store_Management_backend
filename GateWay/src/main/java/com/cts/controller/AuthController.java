@@ -36,7 +36,7 @@ public class AuthController {
         // Call user service to authenticate
         return webClientBuilder.build()
                 .post()
-                .uri("http://localhost:8009/user/authenticate")
+                .uri("http://localhost:8006/user/authenticate")
                 .bodyValue(loginRequest)
                 .retrieve()
                 .onStatus(
@@ -111,7 +111,7 @@ public class AuthController {
 
         return webClientBuilder.build()
                 .post()
-                .uri("http://localhost:8009/user/adduser")
+                .uri("http://localhost:8006/user/adduser")
                 .bodyValue(userDto)
                 .retrieve()
                 .onStatus(

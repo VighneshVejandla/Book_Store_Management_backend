@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.cts.orderservice.dto.BookDto;
 
-@FeignClient(url="http://localhost:9003", value="BOOK")
+@FeignClient(url="http://localhost:8001", value="BOOK")
 public interface BookFeignClient {
 
 	@GetMapping("/bookmanage/viewbookbyid/{bookId}") // <--- Updated to match BookController's path

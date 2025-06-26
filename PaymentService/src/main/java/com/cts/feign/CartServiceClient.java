@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(url = "http://localhost:9926", value="CARTMODULE")
+@FeignClient(url = "http://localhost:8003", value="CARTMODULE")
 public interface CartServiceClient {
     @GetMapping("/api/v1/cart/{userId}/total-price")
     ResponseEntity<Double> calculateTotalPrice(@PathVariable Integer userId);

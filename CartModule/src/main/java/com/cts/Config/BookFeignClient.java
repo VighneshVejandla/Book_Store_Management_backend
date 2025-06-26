@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(url="http://localhost:9003", value="BOOK")
+@FeignClient(url="http://localhost:8001", value="BOOK")
 public interface BookFeignClient {
 
 // Get a book by its ID

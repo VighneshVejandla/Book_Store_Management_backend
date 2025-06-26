@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-@FeignClient(url="http://localhost:9002", value="INVENTORY")
+@FeignClient(url="http://localhost:8002", value="INVENTORY")
 public interface InventoryFeignClient {
     @GetMapping("/inventory/stockByBookId/{bookId}")
     public Integer getStockByBookId(@PathVariable Long bookId);
