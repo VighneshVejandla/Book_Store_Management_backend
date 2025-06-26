@@ -15,5 +15,6 @@ public class BookDto {
 	private CategoryDto category;
 
 	private String imageBase64;
+	private String isbn;
 
 }
