@@ -125,13 +125,22 @@ public class ReviewServiceImplement implements IReviewService {
     }
 
     @Override
-    public ReviewDTO getReviewById(Long bookId) {
+    public List<ReviewDTO> getAllReviewsForBook(Long bookId) {
         return reviewRepository.findByBookId(bookId)
                 .stream()
-                .findFirst()
                 .map(this::convertToDTO)
-                .orElseThrow(() -> new ResourceNotFoundException("Review not found for Book ID: " + bookId));
+                .collect(Collectors.toList());
     }
+
+
+//    @Override
+//    public ReviewDTO getReviewById(Long bookId) {
+//        return reviewRepository.findByBookId(bookId)
+//                .stream()
+//                .findFirst()
+//                .map(this::convertToDTO)
+//                .orElseThrow(() -> new ResourceNotFoundException("Review not found for Book ID: " + bookId));
+//    }
 
     @Override
     public ReviewDTO editReviewById(Long reviewId, ReviewDTO reviewDTO) {
@@ -219,12 +228,12 @@ public class ReviewServiceImplement implements IReviewService {
     // Helper method to convert entity to DTO.
     private ReviewDTO convertToDTO(Review review) {
         ReviewDTO dto = new ReviewDTO();
-//        dto.setReviewId(review.getReviewId());
-//        dto.setUserId(review.getUserId());
+        dto.setReviewId(review.getReviewId());
+        dto.setUserId(review.getUserId());
 //        dto.setBookId(review.getBookId());
         dto.setRating(review.getRating());
         dto.setComment(review.getComment());
-//        dto.setCreatedAt(review.getCreatedAt());
+        dto.setCreatedAt(review.getCreatedAt());
 //        dto.setUpdatedAt(review.getUpdatedAt());
 //        dto.setReviewDeleted(review.isReviewDeleted());
         dto.setUpvotes(review.getUpvotes());

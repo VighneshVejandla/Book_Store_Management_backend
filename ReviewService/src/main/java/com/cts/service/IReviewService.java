@@ -12,7 +12,9 @@ public interface IReviewService {
 
     List<ReviewDTO> viewAllReviews(Long userId);
 
-    ReviewDTO getReviewById(Long bookId);
+    //ReviewDTO getReviewById(Long bookId);
+
+    List<ReviewDTO> getAllReviewsForBook(Long bookId);
 
     ReviewDTO editReviewById(Long reviewId, ReviewDTO reviewDTO);
 
