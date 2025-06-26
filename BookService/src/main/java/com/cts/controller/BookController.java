@@ -11,7 +11,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 import com.cts.dto.BookDto;
@@ -47,7 +56,7 @@ public class BookController {
         bookDto.setImageBase64(base64Image);
         return new ResponseEntity<>(bookService.addBook(bookDto), HttpStatus.OK);
     }
-	
+
 	@GetMapping("/viewallbooks")
 	public ResponseEntity<List<BookDto>> viewAllBooks(){
 		return new ResponseEntity<List<BookDto>>(bookService.viewAllBooks(), HttpStatus.OK);
@@ -99,7 +108,8 @@ public class BookController {
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
+    
+    
     @GetMapping("/books/author/{authorId}")
     public ResponseEntity<List<BookDto>> getBooksByAuthorId(@PathVariable Long authorId) {
         List<BookDto> books = bookService.getBooksByAuthorId(authorId);
@@ -112,11 +122,25 @@ public class BookController {
         return ResponseEntity.ok(books);
         
     }
-    
-    @PostMapping("/books/purchase")
-    public ResponseEntity<String> purchaseBook(@RequestParam Long bookId, @RequestParam int quantity) {
-        String response = bookService.purchaseBook(bookId, quantity);
-        return ResponseEntity.ok(response);
+
+    @GetMapping("/books/isbn/{isbn}")
+    public ResponseEntity<BookDto> getBookByIsbn(@PathVariable String isbn) {
+        BookDto bookDto = bookService.findBookByIsbn(isbn);
+        return ResponseEntity.ok(bookDto);
     }
 
+
+    @GetMapping("/price")
+    public ResponseEntity<List<BookDto>> getBooksByPriceRange(
+            @RequestParam double min,
+            @RequestParam double max) {
+        return ResponseEntity.ok(bookService.findBooksByPriceRange(min, max));
+    }
+
+
+
+    @GetMapping("/getRandombooks/{count}")
+    public ResponseEntity<List<BookDto>> getRandomBooks(@PathVariable Long count){
+        return new ResponseEntity<List<BookDto>>(bookService.getRandomBooks(count), HttpStatus.OK);
+    }
 }

@@ -17,7 +17,6 @@ import com.cts.userservice.service.IUserService;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/user")
 public class UserController {

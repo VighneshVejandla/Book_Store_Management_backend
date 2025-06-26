@@ -27,5 +27,5 @@ public interface IReviewService {
     void hardDeleteReview(Long reviewId);
 
     List<BookDTO> getBooksByMinRating(double minRating);
-
+    List<ReviewDTO> TrendingBooks(Long count);
 }
