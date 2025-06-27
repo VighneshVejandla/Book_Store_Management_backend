@@ -17,6 +17,5 @@ public class BookDto {
 	private String isbn;
 
 	private String imageBase64;
-	private String isbn;
 
 }

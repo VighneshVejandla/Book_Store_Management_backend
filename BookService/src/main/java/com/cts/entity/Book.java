@@ -40,5 +40,5 @@ public class Book {
 
 	@Column(columnDefinition = "LONGTEXT")
 	private String imageBase64;
-	private String isbn;
+
 }
