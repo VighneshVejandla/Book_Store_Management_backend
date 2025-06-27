@@ -194,7 +194,17 @@ public class OrderServiceImpl implements IOrderService{
         return order2;
     }
 
-//------------------Conversion of Dto <->Entity methods----------------------------------------------
+    @Override
+    public List<ResOrderDTO> getAllOrders() {
+        List<Order> orders = orderRepository.findAll();
+        List<ResOrderDTO> list =  ConvertListEntityToResDto(orders);
+        for(ResOrderDTO dto : list) {
+            Map<Long,Integer> bookIds = orders.get(list.indexOf(dto)).getBookIdsWithQuantity();
+            dto.setBooks(ConvertBoodIdToBook(bookIds));
+        }
+        return list;
+    }
+    //------------------Conversion of Dto <->Entity methods----------------------------------------------
 
     public Order ConvertDtoToEntity(OrderDTO orderDTO) {
         return modelMapper.map(orderDTO, Order.class);
