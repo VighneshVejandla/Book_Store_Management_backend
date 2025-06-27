@@ -70,6 +70,9 @@ public class GatewayConfig {
                 .route("userservice", r -> r.path("/user/**")
                         .filters(f -> f.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config())))
                         .uri("http://localhost:8006"))
+                .route("profileservice", r -> r.path("/profile/**")
+                        .filters(f -> f.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config())))
+                        .uri("http://localhost:8006"))
 
                 .route("bookservice", r -> r.path("/bookmanage/**")
                         .filters(f -> f.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config())))
