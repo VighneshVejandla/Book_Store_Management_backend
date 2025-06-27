@@ -1,5 +1,6 @@
 package com.cts.service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 import java.util.*;
@@ -16,6 +17,7 @@ import com.cts.entity.Book;
 import com.cts.repository.IAuthorRepository;
 import com.cts.repository.IBookRepository;
 import com.cts.repository.ICategoryRepository;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class BookServiceImpl implements IBookService{
@@ -56,6 +58,24 @@ public class BookServiceImpl implements IBookService{
 	    inventoryFeignClient.incrementStock(savedBook.getBookId(), requestBody);
 
 	    return mappedDto;
+	}
+
+	@Override
+	public void uploadBookImage(Long bookId, MultipartFile image) {
+		if (image == null || image.isEmpty()) {
+			throw new IllegalArgumentException("Image file must not be empty.");
+		}
+
+		Book book = bookRepository.findById(bookId)
+				.orElseThrow(() -> new ResourceNotFoundException("Book not found with ID: " + bookId));
+
+		try {
+			String base64Image = Base64.getEncoder().encodeToString(image.getBytes());
+			book.setImageBase64(base64Image);
+			bookRepository.save(book);
+		} catch (IOException e) {
+			throw new RuntimeException("Failed to process image file", e);
+		}
 	}
 
 
