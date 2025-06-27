@@ -194,8 +194,14 @@ public class UserServiceImplement implements IUserService {
 		User updateUser = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundByIdException("User", "Id", userId));
 
-		String password = passwordDto.getPassword();
-		updateUser.setPassword(password);
+        String rawPassword = passwordDto.getPassword();
+        String passwordRegex = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?`~])(?=.*[^\\s]).{8,}$";
+        if (!rawPassword.matches(passwordRegex)) {
+            throw new IllegalArgumentException("Password must have at least 8 characters, including an alphabet, a number, and a special character, with no whitespace.");
+        }
+
+        String encodedPassword = passwordEncoder.encode(rawPassword);
+		updateUser.setPassword(encodedPassword);
 		updateUser.setUpdatedDate(LocalDateTime.now());
 
 		User saveUser = userRepository.save(updateUser);
