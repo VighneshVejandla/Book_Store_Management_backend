@@ -14,4 +14,5 @@ public interface IOrderService {
 	ResOrderDTO getOrderByid(Long orderid); 
 	ResOrderDTO updateOrder(OrderDTO orderdto,Long orderid);
 	ResOrderDTO updateStatus(Long orderId, Map<String,String> status);
+	List<ResOrderDTO> getAllOrders();
 }

@@ -111,7 +111,6 @@ public class UserController {
 	public ResponseEntity<AuthDto> authenticate(@RequestBody LoginRequest loginRequest) {
 		User user = userRepository.findByEmail(loginRequest.getEmail())
 				.orElseThrow(() -> new RuntimeException("Invalid email or password"));
-
 		if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
 			throw new RuntimeException("Invalid email or password");
 		}
