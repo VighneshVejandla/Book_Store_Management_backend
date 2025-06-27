@@ -16,12 +16,6 @@ public class ProfileDto {
     private String phoneNumber;
     private String address;
 
-    private String profileImageUrl;
+    private String imageBase64;
 
-//    private Long userId;
-
-
-//    private String visibility;
-//    private int profileCompletion;
-//    private boolean isDeleted;
 }

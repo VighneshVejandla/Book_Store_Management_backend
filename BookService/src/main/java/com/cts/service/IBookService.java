@@ -3,11 +3,14 @@ package com.cts.service;
 import java.util.List;
 
 import com.cts.dto.BookDto;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface IBookService {
 
 //	Book addBook(Book book);
 	List<BookDto> viewAllBooks();
+
+	void uploadBookImage(Long bookId, MultipartFile image);
 
 	BookDto getBookById(Long bookId);
 
