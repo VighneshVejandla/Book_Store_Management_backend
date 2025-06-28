@@ -14,7 +14,6 @@ import com.cts.orderservice.dto.OrderDTO;
 import com.cts.orderservice.dto.ResOrderDTO;
 import com.cts.orderservice.service.IOrderService;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/bookstore")
 @Validated
@@ -46,5 +45,9 @@ public class OrderController {
 	@DeleteMapping("/deleteOrderById/{id}")
 	ResponseEntity<String> deleteOrderById(@PathVariable Long id){
 		return new ResponseEntity<String>(orderService.deleteOrderById(id),HttpStatus.OK);
+	}
+	@GetMapping("/getAllOrders")
+	ResponseEntity<List<ResOrderDTO>> getAllOrders() {
+		return new ResponseEntity<List<ResOrderDTO>>(orderService.getAllOrders(), HttpStatus.OK);
 	}
 }

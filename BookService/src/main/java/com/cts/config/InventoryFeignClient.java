@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "Inventory", url="http://localhost:9002/inventory") // Adjust port if needed
+@FeignClient(name = "Inventory", url="http://localhost:8002/inventory") // Adjust port if needed
 public interface InventoryFeignClient {
 
 	

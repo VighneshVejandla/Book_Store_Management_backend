@@ -42,8 +42,8 @@ public class UserController {
 	}
 
 	@GetMapping("/viewallusers")
-	public ResponseEntity<List<UserDto>> viewAllUsers() {
-		return new ResponseEntity<List<UserDto>>(userService.viewAllUsers(), HttpStatus.OK);
+	public ResponseEntity<List<AdminResponseDto>> viewAllUsers() {
+		return new ResponseEntity<List<AdminResponseDto>>(userService.viewAllUsers(), HttpStatus.OK);
 	}
 
 	@GetMapping("/viewuserbyid/{userId}")
@@ -111,7 +111,6 @@ public class UserController {
 	public ResponseEntity<AuthDto> authenticate(@RequestBody LoginRequest loginRequest) {
 		User user = userRepository.findByEmail(loginRequest.getEmail())
 				.orElseThrow(() -> new RuntimeException("Invalid email or password"));
-
 		if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
 			throw new RuntimeException("Invalid email or password");
 		}

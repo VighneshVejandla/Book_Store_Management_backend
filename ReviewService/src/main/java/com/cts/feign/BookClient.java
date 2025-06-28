@@ -9,7 +9,7 @@ import com.cts.dto.BookDTO;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
-@FeignClient(value = "Book", url = "http://localhost:9001")
+@FeignClient(value = "Book", url = "http://localhost:8001")
 public interface BookClient {
 //    @CircuitBreaker(name = "Book", fallbackMethod = "getFallbackBook")
 //    @GetMapping("/bookstore/book/{id}")

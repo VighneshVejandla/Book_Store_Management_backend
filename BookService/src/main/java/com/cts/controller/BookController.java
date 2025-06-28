@@ -1,14 +1,11 @@
 package com.cts.controller;
 
-import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.cts.dto.AuthorDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +17,6 @@ import com.cts.service.IBookService;
 import jakarta.validation.Valid;
 import org.springframework.web.multipart.MultipartFile;
 
-
-@CrossOrigin(origins = "*")
 @RestController
 @Validated
 @RequestMapping("/bookmanage")
@@ -35,20 +30,14 @@ public class BookController {
 		return new ResponseEntity<BookDto>(bookService.addBook(bookDto), HttpStatus.OK);
 	}
 
-    @PostMapping(value = "/addbookwithimage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<BookDto> addBookWithImage(
-            @RequestPart("book") String bookJson,
-            @RequestPart("image") MultipartFile imageFile) throws IOException {
-
-        BookDto bookDto = new ObjectMapper().readValue(bookJson, BookDto.class);
-        String base64Image = "data:" + imageFile.getContentType() + ";base64," +
-                Base64.getEncoder().encodeToString(imageFile.getBytes());
-
-        bookDto.setImageBase64(base64Image);
-        return new ResponseEntity<>(bookService.addBook(bookDto), HttpStatus.OK);
+    @PostMapping(value = "/upload-image/{bookId}", consumes = "multipart/form-data")
+    public ResponseEntity<String> uploadBookImage(@PathVariable Long bookId,
+                                                  @RequestPart("image") MultipartFile image) {
+        bookService.uploadBookImage(bookId, image);
+        return new ResponseEntity<>("Book image uploaded successfully.", HttpStatus.OK);
     }
 
-	@GetMapping("/viewallbooks")
+    @GetMapping("/viewallbooks")
 	public ResponseEntity<List<BookDto>> viewAllBooks(){
 		return new ResponseEntity<List<BookDto>>(bookService.viewAllBooks(), HttpStatus.OK);
 	}
@@ -91,6 +80,7 @@ public class BookController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+
     @GetMapping("/viewbytitle/{title}")
     public ResponseEntity<List<BookDto>> viewBooksByTitle(@PathVariable String title) {
         List<BookDto> books = bookService.findBooksByTitle(title);
@@ -120,18 +110,14 @@ public class BookController {
         return ResponseEntity.ok(bookDto);
     }
 
-
-    @GetMapping("/price")
-    public ResponseEntity<List<BookDto>> getBooksByPriceRange(
-            @RequestParam double min,
-            @RequestParam double max) {
-        return ResponseEntity.ok(bookService.findBooksByPriceRange(min, max));
-    }
-
-
-
     @GetMapping("/getRandombooks/{count}")
     public ResponseEntity<List<BookDto>> getRandomBooks(@PathVariable Long count){
         return new ResponseEntity<List<BookDto>>(bookService.getRandomBooks(count), HttpStatus.OK);
+    }
+
+    @GetMapping("/authorbybookid/{bookId}")
+    public ResponseEntity<AuthorDto> getAuthorByBookId(@PathVariable Long bookId){
+        AuthorDto authorDto = bookService.getAuthorByBookId(bookId);
+        return new ResponseEntity<>(authorDto, HttpStatus.OK);
     }
 }

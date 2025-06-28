@@ -22,7 +22,6 @@ import com.cts.service.IAuthorService;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin(origins = "*")
 @Validated
 @RestController
 @RequestMapping("/authormanage")

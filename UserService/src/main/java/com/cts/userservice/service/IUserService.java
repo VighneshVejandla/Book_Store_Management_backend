@@ -2,17 +2,14 @@ package com.cts.userservice.service;
 
 import java.util.List;
 
-import com.cts.userservice.dto.AuthDto;
-import com.cts.userservice.dto.PasswordDto;
-import com.cts.userservice.dto.UserDto;
-import com.cts.userservice.dto.UserRoleDto;
+import com.cts.userservice.dto.*;
 import com.cts.userservice.entity.User;
 
 
 public interface IUserService {
 
 	UserDto addUser(UserDto user);
-	List<UserDto> viewAllUsers();
+	List<AdminResponseDto> viewAllUsers();
 	UserDto getUserById(Long userId);
 	AuthDto getUserByEmail(String email);
 	UserDto updateUserById(Long userId, UserDto userDto);

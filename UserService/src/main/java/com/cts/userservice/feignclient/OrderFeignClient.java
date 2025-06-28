@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 
-@FeignClient(name = "OrderService", url = "http://localhost:9082/bookstore")
+@FeignClient(name = "OrderService", url = "http://localhost:8008/bookstore")
 public interface OrderFeignClient {
 
     @GetMapping("/getOrderByUserId/{userId}")

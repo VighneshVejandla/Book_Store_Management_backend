@@ -3,6 +3,7 @@ package com.cts.service;
 import java.util.List;
 
 import com.cts.dto.BookDTO;
+import com.cts.dto.ResReviewDTO;
 import com.cts.dto.ReviewDTO;
 
 public interface IReviewService {
@@ -29,5 +30,5 @@ public interface IReviewService {
     void hardDeleteReview(Long reviewId);
 
     List<BookDTO> getBooksByMinRating(double minRating);
-    List<ReviewDTO> TrendingBooks(Long count);
+    List<ResReviewDTO> TrendingBooks(Long count);
 }

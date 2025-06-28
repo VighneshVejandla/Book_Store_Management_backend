@@ -1,5 +1,6 @@
 package com.cts.dto;
 
+import com.cts.entity.Author;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,7 +27,7 @@ public class AuthorDto {
 		this.authId = authId;
 		this.authName = authName;
 	}
-	
-	
+
+
 }
 
