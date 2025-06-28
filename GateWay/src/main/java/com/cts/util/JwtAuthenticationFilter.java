@@ -117,6 +117,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                 path.contains("/user/viewallusers") ||
                 path.contains("/user/deleteuser") ||
                 path.contains("/user/updaterole") ||
+                path.contains("/bookmanage/authorbybookid") ||
                 path.contains("/bookstore/updateOrderById") ||
                 path.contains("/bookstore/updateStatusById") ||
                 path.contains("/reviews/hard/");
@@ -154,6 +155,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                 path.contains("/authormanage/getauthorbyid") ||
                 path.contains("/bookmanage/viewallcategories") ||
                 path.contains("/bookmanage/getcategorybyid") ||
+//                path.contains("/authorbybookid/{bookId}") ||
                 path.contains("/profile");
     }
 

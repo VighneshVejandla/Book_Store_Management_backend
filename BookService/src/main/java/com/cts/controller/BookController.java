@@ -3,7 +3,7 @@ package com.cts.controller;
 import java.util.List;
 
 
-
+import com.cts.dto.AuthorDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -80,6 +80,7 @@ public class BookController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+
     @GetMapping("/viewbytitle/{title}")
     public ResponseEntity<List<BookDto>> viewBooksByTitle(@PathVariable String title) {
         List<BookDto> books = bookService.findBooksByTitle(title);
@@ -112,5 +113,11 @@ public class BookController {
     @GetMapping("/getRandombooks/{count}")
     public ResponseEntity<List<BookDto>> getRandomBooks(@PathVariable Long count){
         return new ResponseEntity<List<BookDto>>(bookService.getRandomBooks(count), HttpStatus.OK);
+    }
+
+    @GetMapping("/authorbybookid/{bookId}")
+    public ResponseEntity<AuthorDto> getAuthorByBookId(@PathVariable Long bookId){
+        AuthorDto authorDto = bookService.getAuthorByBookId(bookId);
+        return new ResponseEntity<>(authorDto, HttpStatus.OK);
     }
 }
