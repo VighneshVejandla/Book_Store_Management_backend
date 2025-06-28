@@ -119,4 +119,10 @@ public class BookController {
         return new ResponseEntity<List<BookDto>>(bookService.findBooksByPriceRange(min,max), HttpStatus.OK);
     }
 
+
+    @GetMapping("/authorbybookid/{bookId}")
+    public ResponseEntity<AuthorDto> getAuthorByBookId(@PathVariable Long bookId){
+        AuthorDto authorDto = bookService.getAuthorByBookId(bookId);
+        return new ResponseEntity<>(authorDto, HttpStatus.OK);
+    }
 }

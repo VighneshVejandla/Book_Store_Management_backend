@@ -1,5 +1,6 @@
 package com.cts.userservice.dto;
 
+import com.cts.userservice.entity.Profile;
 import lombok.Data;
 
 @Data
@@ -16,5 +17,7 @@ public class UserDto {
 	
 //	@NotEmpty
 	private String password;
+
+	private Profile profile;
 
 }

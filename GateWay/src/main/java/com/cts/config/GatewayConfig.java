@@ -70,11 +70,18 @@ public class GatewayConfig {
                 .route("userservice", r -> r.path("/user/**")
                         .filters(f -> f.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config())))
                         .uri("http://localhost:8006"))
+                .route("userservice", r -> r.path("/profile/**")
+                        .filters(f -> f.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config())))
+                        .uri("http://localhost:8006"))
 
                 .route("bookservice", r -> r.path("/bookmanage/**")
                         .filters(f -> f.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config())))
                         .uri("http://localhost:8001"))
                 .route("authorservice", r -> r.path("/authormanage/**")
+                        .filters(f -> f.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config())))
+                        .uri("http://localhost:8001"))
+
+                .route("bookservice", r -> r.path("/authormanage/**")
                         .filters(f -> f.filter(jwtAuthenticationFilter.apply(new JwtAuthenticationFilter.Config())))
                         .uri("http://localhost:8001"))
 

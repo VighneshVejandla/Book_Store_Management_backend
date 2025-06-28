@@ -2,6 +2,7 @@ package com.cts.service;
 
 import java.util.List;
 
+import com.cts.dto.AuthorDto;
 import com.cts.dto.BookDto;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,5 +37,7 @@ public interface IBookService {
 
 	List<BookDto> findBooksByPriceRange(double min, double max);
 	List<BookDto> getRandomBooks(Long count);
+
+	AuthorDto getAuthorByBookId(Long bookId);
 
 }

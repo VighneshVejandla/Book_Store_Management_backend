@@ -94,6 +94,10 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
             return userRoles.contains("USER") || userRoles.contains("ADMIN");
         }
 
+        if (isCommonEndpoint(path)) {
+            return userRoles.contains("USER") || userRoles.contains("ADMIN");
+        }
+
         // Default: allow access
         return true;
     }
@@ -113,6 +117,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                 path.contains("/user/viewallusers") ||
                 path.contains("/user/deleteuser") ||
                 path.contains("/user/updaterole") ||
+                path.contains("/bookmanage/authorbybookid") ||
                 path.contains("/bookstore/updateOrderById") ||
                 path.contains("/bookstore/updateStatusById") ||
                 path.contains("/reviews/hard/");
@@ -139,6 +144,20 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                 path.contains("/user/viewuserbyid") ||
                 path.contains("/user/updateuser") ||
                 path.contains("/user/changepassword");
+    }
+
+    private boolean isCommonEndpoint(String path) {
+        return path.contains("/bookmanage/viewallbooks") ||
+                path.contains("/bookmanage/viewbookbyid") ||
+                path.contains("/bookmanage/viewbycategory") ||
+                path.contains("/bookmanage/viewbyauthor") ||
+                path.contains("/bookmanage/viewbytitle") ||
+                path.contains("/authormanage/viewallauthors") ||
+                path.contains("/authormanage/getauthorbyid") ||
+                path.contains("/bookmanage/viewallcategories") ||
+                path.contains("/bookmanage/getcategorybyid") ||
+//                path.contains("/authorbybookid/{bookId}") ||
+                path.contains("/profile");
     }
 
     private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {

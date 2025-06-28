@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import com.cts.userservice.dto.AdminResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -187,7 +188,7 @@ class UserServiceApplicationTests {
         // We do NOT mock userDtoDeleted mapping, as it should not be mapped if correctly filtered
 
         // When
-        List<UserDto> result = userService.viewAllUsers();
+        List<AdminResponseDto> result = userService.viewAllUsers();
 
         // Then
         assertNotNull(result);
@@ -212,7 +213,7 @@ class UserServiceApplicationTests {
         when(userRepository.findAll()).thenReturn(Collections.emptyList());
 
         // When
-        List<UserDto> result = userService.viewAllUsers();
+        List<AdminResponseDto> result = userService.viewAllUsers();
 
         // Then
         assertNotNull(result);
@@ -234,7 +235,7 @@ class UserServiceApplicationTests {
         when(userRepository.findAll()).thenReturn(allUsersFromRepo);
 
         // When
-        List<UserDto> result = userService.viewAllUsers();
+        List<AdminResponseDto> result = userService.viewAllUsers();
 
         // Then
         assertNotNull(result);

@@ -39,15 +39,5 @@ public class User {
 	@OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private Profile profile;
 
-
-//	private Long orderid;
-//
-//	private Long reviewid;
-	
-//	@OneToMany(mappedBy = "user", cascade=CascadeType.ALL)
-//	private List<Order> order;
-//	
-//	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//	private List<Review> review;
 }
 

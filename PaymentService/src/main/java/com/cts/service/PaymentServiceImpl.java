@@ -124,7 +124,7 @@ public class PaymentServiceImpl implements PaymentService {
 	private Long generateUniquePaymentId() {
 		Long newId;
 		do {
-			newId = UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE;
+			newId = UUID.randomUUID().getMostSignificantBits() & Integer.MAX_VALUE;
 		} while (paymentRepository.existsByPaymentId(newId));
 
 		return newId;
