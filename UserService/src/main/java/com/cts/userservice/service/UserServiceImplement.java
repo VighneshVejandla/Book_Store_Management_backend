@@ -12,6 +12,7 @@ import com.cts.userservice.exception.UserNotFoundByEmailException;
 import com.cts.userservice.exception.UserNotFoundByIdException;
 import com.cts.userservice.feignclient.CartFeignClient;
 import com.cts.userservice.repository.ProfileRepository;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -190,7 +191,9 @@ public class UserServiceImplement implements IUserService {
 	}
 
 	@Override
+	@Transactional
 	public void changePassword(Long userId, PasswordDto passwordDto) {
+		System.out.println("The password fetched:"+passwordDto.getPassword());
 		User updateUser = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundByIdException("User", "Id", userId));
 
