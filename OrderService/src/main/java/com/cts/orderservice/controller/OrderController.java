@@ -47,4 +47,8 @@ public class OrderController {
 	ResponseEntity<String> deleteOrderById(@PathVariable Long id){
 		return new ResponseEntity<String>(orderService.deleteOrderById(id),HttpStatus.OK);
 	}
+	@GetMapping("/getAllOrders")
+	ResponseEntity<List<ResOrderDTO>> getAllOrders() {
+		return new ResponseEntity<List<ResOrderDTO>>(orderService.getAllOrders(), HttpStatus.OK);
+	}
 }

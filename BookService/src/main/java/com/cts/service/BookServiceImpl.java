@@ -220,4 +220,17 @@ public class BookServiceImpl implements IBookService{
 				.limit(count)
 				.collect(Collectors.toList());
 	}
+
+	@Override
+	public AuthorDto getAuthorByBookId(Long bookId) {
+		Book book = bookRepository.findById(bookId)
+				.orElseThrow(() -> new ResourceNotFoundException("Book Not Found With id" + bookId));
+
+		if(book.getAuthor() == null || book.isBookDeleted()){
+			throw new ResourceNotFoundException("Author not Found or Book Deleted");
+		}
+
+		return modelMapper.map(book.getAuthor(), AuthorDto.class);
+	}
+
 }

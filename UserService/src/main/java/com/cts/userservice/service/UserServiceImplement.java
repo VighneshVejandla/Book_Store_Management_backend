@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.cts.userservice.dto.AuthDto;
-import com.cts.userservice.dto.UserRoleDto;
+import com.cts.userservice.dto.*;
 import com.cts.userservice.exception.InvalidRoleException;
 import com.cts.userservice.exception.UserNotFoundByEmailException;
 import com.cts.userservice.exception.UserNotFoundByIdException;
@@ -19,8 +18,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.cts.userservice.dto.PasswordDto;
-import com.cts.userservice.dto.UserDto;
 import com.cts.userservice.entity.User;
 import com.cts.userservice.exception.EmailAlreadyExistsException;
 import com.cts.userservice.repository.UserRepository;
@@ -78,18 +75,18 @@ public class UserServiceImplement implements IUserService {
 //---this gives the users only who has the isDelete as the false---
 
 	@Override
-	public List<UserDto> viewAllUsers() {
+	public List<AdminResponseDto> viewAllUsers() {
 
 		List<User> users = userRepository.findAll();
-		List<UserDto> userDtos = new ArrayList<>();
+		List<AdminResponseDto> adminResponseDtos = new ArrayList<>();
 
 		for (User user : users) {
 			if (!user.isDeleted()) {
-				userDtos.add(modelMapper.map(user, UserDto.class));
+				adminResponseDtos.add(modelMapper.map(user, AdminResponseDto.class));
 			}
 		}
 
-		return userDtos;
+		return adminResponseDtos;
 	}
 
 	@Override
@@ -197,8 +194,14 @@ public class UserServiceImplement implements IUserService {
 		User updateUser = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundByIdException("User", "Id", userId));
 
-		String password = passwordDto.getPassword();
-		updateUser.setPassword(password);
+        String rawPassword = passwordDto.getPassword();
+        String passwordRegex = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?`~])(?=.*[^\\s]).{8,}$";
+        if (!rawPassword.matches(passwordRegex)) {
+            throw new IllegalArgumentException("Password must have at least 8 characters, including an alphabet, a number, and a special character, with no whitespace.");
+        }
+
+        String encodedPassword = passwordEncoder.encode(rawPassword);
+		updateUser.setPassword(encodedPassword);
 		updateUser.setUpdatedDate(LocalDateTime.now());
 
 		User saveUser = userRepository.save(updateUser);
