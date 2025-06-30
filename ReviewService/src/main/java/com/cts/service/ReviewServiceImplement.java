@@ -57,9 +57,9 @@ public class ReviewServiceImplement implements IReviewService {
             throw new BookNotFoundException("Book ID " + bookId + " does not exist in inventory");
         }
 
-        Optional<Review> checkReview = reviewRepository.findByUserIdAndBookId(userId, bookId);
-        if (checkReview.isPresent())
-            throw new ReviewExistsException("User " + username + " already reviewed this book");
+//        Optional<Review> checkReview = reviewRepository.findByUserIdAndBookId(userId, bookId);
+//        if (checkReview.isPresent())
+//            throw new ReviewExistsException("User " + username + " already reviewed this book");
 
         Review newReview = modelMapper.map(reviewDTO, Review.class);
         //ReviewDTO reviewDTO = new ReviewDTO();
