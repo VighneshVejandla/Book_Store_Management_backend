@@ -36,7 +36,9 @@ public class Book {
 	private LocalDateTime bookCreatedDate;
 	private boolean isBookDeleted;
 
+	private String isbn;
+
 	@Column(columnDefinition = "LONGTEXT")
 	private String imageBase64;
-	private String isbn;
+
 }

@@ -21,6 +21,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/profile")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ProfileController {
 
     @Autowired

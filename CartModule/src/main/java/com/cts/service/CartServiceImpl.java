@@ -243,17 +243,31 @@ public class CartServiceImpl implements ICartService{
 	    public CartDTO convertToDto(Cart cart) {
 	        return modelMapper.map(cart, CartDTO.class);
 	    }
-	    
-	    @Override
-	    public List<CartItemDTO> getCartItems(Integer userId) {
-	        Cart cart = cartRepository.findCartByUserId(userId)
-	                .orElseThrow(() -> new CartNotFoundException("Cart not found for user: " + userId));
-	        return cart.getCartItems().stream()
-	                .map(item -> modelMapper.map(item, CartItemDTO.class))
-	                .collect(Collectors.toList());
 
+	@Override
+	public List<CartItemDTO> getCartItems(Integer userId) {
+		Cart cart = cartRepository.findCartByUserId(userId)
+				.orElseThrow(() -> new CartNotFoundException("Cart not found for user: " + userId));
 
-	    }
+		return cart.getCartItems().stream()
+				.map(item -> {
+					CartItemDTO cartItemDTO = modelMapper.map(item, CartItemDTO.class);
+
+					ResponseEntity<BookSummaryDto> bookDetailsResponse = getBookDetails(item.getBookId());
+
+					if (bookDetailsResponse.getStatusCode().is2xxSuccessful() && bookDetailsResponse.getBody() != null) {
+						BookSummaryDto bookSummary = bookDetailsResponse.getBody();
+						cartItemDTO.setBookName(bookSummary.getTitle());
+						cartItemDTO.setBookPrice(bookSummary.getPrice());
+						cartItemDTO.setImageBase64(bookSummary.getImageBase64());
+					} else {
+						System.err.println("Could not fetch book details for bookId: " + item.getBookId());
+					}
+					return cartItemDTO;
+				})
+				.collect(Collectors.toList());
+	}
+
 	public UserDto getUserById(Integer userId) {
 		try {
 			return userFeignClient.getUserId(userId);
@@ -262,15 +276,16 @@ public class CartServiceImpl implements ICartService{
 		}
 	}
 
-	public ResponseEntity<BookSummaryDto> getBookDetails(Long bookId){
-			try
-			{
-				return bookFeignClient.getBookById(bookId);
-			}
-			catch(FeignException.NotFound e){
-				throw new ProductNotFoundException("Book Details for BookId "+bookId+" not found");
-			}
+	public ResponseEntity<BookSummaryDto> getBookDetails(Long bookId) {
+		try {
+			return bookFeignClient.getBookById(bookId);
+		} catch (FeignException.NotFound e) {
+			throw new ProductNotFoundException("Book Details for BookId " + bookId + " not found");
+		} catch (Exception e) { // Catch other potential Feign exceptions
+			throw new RuntimeException("Error fetching book details for BookId " + bookId + ": " + e.getMessage(), e);
+		}
 	}
+
 
 	@Override
 	@Transactional
