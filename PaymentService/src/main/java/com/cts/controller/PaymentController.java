@@ -3,14 +3,11 @@ package com.cts.controller;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.cts.dto.InitiatePaymentDTO;
-import com.cts.dto.PaymentInfoDTO;
+import com.cts.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.cts.dto.PaymentRequestDto;
-import com.cts.dto.PaymentResponseDto;
 import com.cts.service.PaymentService;
 
 @RestController
@@ -63,5 +60,10 @@ public class PaymentController {
 
 		return paymentService.getAllPaymentDetails(userId);
 	}
+	@GetMapping("getprofiledetails/{userId}")
+	public ProfileToPaymentDTO getProfileDetails(@PathVariable Long userId)
+	{    return paymentService.getProfile(userId);
+	}
+
 
 }
