@@ -17,7 +17,6 @@ import com.cts.orderservice.service.IOrderService;
 @RestController
 @RequestMapping("/bookstore")
 @Validated
-@CrossOrigin(origins = "http://localhost:5173")
 public class OrderController {
 	
 	@Autowired

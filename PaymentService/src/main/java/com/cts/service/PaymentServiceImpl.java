@@ -49,8 +49,10 @@ public class PaymentServiceImpl implements PaymentService {
 	public Double processPayment(Integer userId) {
 		//double amount = cartServiceClient.calculateTotalPrice(userId);
 		ResponseEntity<Double> demo = cartServiceClient.calculateTotalPrice(userId);
+		Double grandtotal = demo.getBody()+5+ demo.getBody()*0.075;
+		grandtotal = Math.round(grandtotal * 100.0) / 100.0;
         //return "Processing payment of " + amount.getTotalPrice() + " for user ID: " + userId;
-		return demo.getBody();
+		return grandtotal;
 }
 
 	@Override
@@ -73,7 +75,7 @@ public class PaymentServiceImpl implements PaymentService {
 		payment.setStatus("PENDING");
 		paymentRepository.save(payment);
 
-		String upiUri = generateUpiUri(payment);
+		String upiUri = "http://google.pay?=3434";
 		logger.info("Payment initiated successfully with ID: " + payment.getPaymentId());
 		PaymentDTO saved = modelMapper.map(payment, PaymentDTO.class);
 
@@ -157,6 +159,9 @@ public class PaymentServiceImpl implements PaymentService {
 		}
 		return null;
 	}
-
+	@Override
+	public ProfileToPaymentDTO getProfile(Long userId)
+	{       return userClient.getProfile(userId).getBody();
+	}
 
 }

@@ -216,6 +216,7 @@ public class CartServiceImpl implements ICartService{
 	                .orElseThrow(() -> new CartNotFoundException("Cart not found for user: " + userId));
 	        cart.getCartItems().clear();
 			cart.setTotalPrice(0.0);
+			cart.setGrandTotalPrice(0.0);
 	        cartRepository.save(cart);
 	    }
 
@@ -286,7 +287,6 @@ public class CartServiceImpl implements ICartService{
 		}
 	}
 
-
 	@Override
 	@Transactional
 	public void updateCartTotal(Integer userId, double grandTotal) {
@@ -300,7 +300,7 @@ public class CartServiceImpl implements ICartService{
 		cartRepository.save(cart); // Persist the updated cart
 	}
 
-	}
+}
 
 	
 
