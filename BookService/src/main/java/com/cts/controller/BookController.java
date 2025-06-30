@@ -113,11 +113,19 @@ public class BookController {
     public ResponseEntity<List<BookDto>> getRandomBooks(@PathVariable Long count){
         return new ResponseEntity<List<BookDto>>(bookService.getRandomBooks(count), HttpStatus.OK);
     }
+    /*
     @GetMapping("/price")
     public ResponseEntity<List<BookDto>> findBooksByPriceRange(@RequestParam("min") double min,
                                                                @RequestParam("max") double max){
         return new ResponseEntity<List<BookDto>>(bookService.findBooksByPriceRange(min,max), HttpStatus.OK);
     }
+    */
+    @GetMapping("/price/{min}/{max}")
+    public ResponseEntity<List<BookDto>> findBooksByPriceRange(@PathVariable double min, @PathVariable double max){
+        return new ResponseEntity<List<BookDto>>(bookService.findBooksByPriceRange(min,max), HttpStatus.OK);
+    }
+
+
 
 
     @GetMapping("/authorbybookid/{bookId}")
