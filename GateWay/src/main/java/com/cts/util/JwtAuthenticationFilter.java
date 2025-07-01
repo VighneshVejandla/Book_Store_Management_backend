@@ -89,14 +89,14 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
             return userRoles.contains("ADMIN");
         }
 
-        // User endpoints (both ADMIN and USER have access)
-        if (isUserEndpoint(path)) {
-            return userRoles.contains("USER") || userRoles.contains("ADMIN");
+        if (isUserEndpoint(path) || isCommonEndpoint(path)) {
+            return userRoles.contains("ADMIN") || userRoles.contains("USER");
         }
 
-        if (isCommonEndpoint(path)) {
-            return userRoles.contains("USER") || userRoles.contains("ADMIN");
-        }
+        // User endpoints (both ADMIN and USER have access)
+//        if (isUserEndpoint(path)) {
+//            return userRoles.contains("USER") || userRoles.contains("ADMIN");
+//        }
 
         // Default: allow access
         return true;
@@ -107,7 +107,6 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                 path.contains("/bookmanage/updatebook") ||
                 path.contains("/bookmanage/deletebook") ||
                 path.contains("/authormanage/addnewauthor") ||
-                path.contains("/authormanage/viewallauthors") ||
                 path.contains("/authormanage/updateauthor") ||
                 path.contains("/authormanage/deleteauthor") ||
                 path.contains("/bookmanage/addnewcategory") ||
@@ -133,7 +132,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                 path.contains("/authormanage/getauthorbyid") ||
                 path.contains("/bookmanage/viewallcategories") ||
                 path.contains("/bookmanage/getcategorybyid") ||
-                path.contains("/api/v1/cart") ||
+                path.startsWith("/api/v1/cart") ||
                 path.contains("/bookstore/addOrder") ||
                 path.contains("/bookstore/getOrderByUserId") ||
                 path.contains("/bookstore/getOrderById") ||
@@ -155,6 +154,12 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                 path.contains("/authormanage/getauthorbyid") ||
                 path.contains("/bookmanage/viewallcategories") ||
                 path.contains("/bookmanage/getcategorybyid") ||
+                path.contains("/authormanage/addnewauthor") ||
+                path.contains("/authormanage/updateauthor") ||
+                path.contains("/authormanage/deleteauthor") ||
+                path.contains("/bookmanage/addnewcategory") ||
+                path.contains("/bookmanage/updatecategory") ||
+                path.contains("/bookmanage/deletecategory") ||
 //                path.contains("/authorbybookid/{bookId}") ||
                 path.contains("/profile");
     }

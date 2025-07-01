@@ -16,8 +16,6 @@ public interface ICartService {
     CartDTO createCartForUser(Integer userId);
     void updateCartTotal(Integer userId, double grandTotal);
 
-
-    
     List<CartItemDTO> getCartItems(Integer userId);
 
     

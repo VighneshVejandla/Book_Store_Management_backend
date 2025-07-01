@@ -80,7 +80,6 @@ public class BookController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-
     @GetMapping("/viewbytitle/{title}")
     public ResponseEntity<List<BookDto>> viewBooksByTitle(@PathVariable String title) {
         List<BookDto> books = bookService.findBooksByTitle(title);
@@ -114,6 +113,20 @@ public class BookController {
     public ResponseEntity<List<BookDto>> getRandomBooks(@PathVariable Long count){
         return new ResponseEntity<List<BookDto>>(bookService.getRandomBooks(count), HttpStatus.OK);
     }
+    /*
+    @GetMapping("/price")
+    public ResponseEntity<List<BookDto>> findBooksByPriceRange(@RequestParam("min") double min,
+                                                               @RequestParam("max") double max){
+        return new ResponseEntity<List<BookDto>>(bookService.findBooksByPriceRange(min,max), HttpStatus.OK);
+    }
+    */
+    @GetMapping("/price/{min}/{max}")
+    public ResponseEntity<List<BookDto>> findBooksByPriceRange(@PathVariable double min, @PathVariable double max){
+        return new ResponseEntity<List<BookDto>>(bookService.findBooksByPriceRange(min,max), HttpStatus.OK);
+    }
+
+
+
 
     @GetMapping("/authorbybookid/{bookId}")
     public ResponseEntity<AuthorDto> getAuthorByBookId(@PathVariable Long bookId){

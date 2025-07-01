@@ -1,9 +1,7 @@
 package com.cts.service;
 
-import com.cts.dto.InitiatePaymentDTO;
-import com.cts.dto.PaymentInfoDTO;
-import com.cts.dto.PaymentRequestDto;
-import com.cts.dto.PaymentResponseDto;
+import com.cts.dto.*;
+
 import java.util.List;
 
 public interface PaymentService {
@@ -20,6 +18,8 @@ public interface PaymentService {
 	PaymentInfoDTO paymentDetails(Long paymentId);
 
 	List<PaymentInfoDTO> getAllPaymentDetails(Long userId);
+
+	ProfileToPaymentDTO getProfile(Long userId);
 
 
 
