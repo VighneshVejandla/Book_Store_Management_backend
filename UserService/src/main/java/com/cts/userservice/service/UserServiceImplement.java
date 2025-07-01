@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.cts.userservice.dto.*;
+import com.cts.userservice.entity.Profile;
 import com.cts.userservice.exception.InvalidRoleException;
 import com.cts.userservice.exception.UserNotFoundByEmailException;
 import com.cts.userservice.exception.UserNotFoundByIdException;
@@ -62,6 +63,10 @@ public class UserServiceImplement implements IUserService {
 		newUser.setUpdatedDate(LocalDateTime.now());
 		newUser.setDeleted(false);
 		User saveUser = userRepository.save(newUser);
+		Profile profile = new Profile();
+		profile.setUser(saveUser);
+		profile.setCreatedAt(LocalDateTime.now());
+		profileRepository.save(profile);
 
 		try{
 			cartFeignClient.createCart(newUser.getUserId());
