@@ -195,23 +195,25 @@ public class UserServiceImplement implements IUserService {
 	@Override
 	@Transactional
 	public void changePassword(Long userId, PasswordDto passwordDto) {
-		System.out.println("The password fetched:"+passwordDto.getPassword());
 		User updateUser = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundByIdException("User", "Id", userId));
 
-        String rawPassword = passwordDto.getPassword();
-        String passwordRegex = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?`~])(?=.*[^\\s]).{8,}$";
-        if (!rawPassword.matches(passwordRegex)) {
-            throw new IllegalArgumentException("Password must have at least 8 characters, including an alphabet, a number, and a special character, with no whitespace.");
-        }
+		String oldPassword = passwordDto.getOldPassword();
+		if (!passwordEncoder.matches(oldPassword, updateUser.getPassword())) {
+			throw new IllegalArgumentException("Old password does not match.");
+		}
 
-        String encodedPassword = passwordEncoder.encode(rawPassword);
-		updateUser.setPassword(encodedPassword);
+		String newPassword = passwordDto.getNewPassword();
+		String passwordRegex = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?`~])(?=.*[^\\s]).{8,}$";
+		if (!newPassword.matches(passwordRegex)) {
+			throw new IllegalArgumentException("New password must have at least 8 characters, including an alphabet, a number, and a special character, with no whitespace.");
+		}
+
+		String encodedNewPassword = passwordEncoder.encode(newPassword);
+		updateUser.setPassword(encodedNewPassword);
 		updateUser.setUpdatedDate(LocalDateTime.now());
 
 		User saveUser = userRepository.save(updateUser);
-		
-		modelMapper.map(saveUser, PasswordDto.class);
 	}
 
 	public List<User> getAllDeletedUsers() {

@@ -214,17 +214,18 @@ public class ReviewServiceImplement implements IReviewService {
 
     @Override
     public List<ResReviewDTO> TrendingBooks(Long count) {
-        List<ResReviewDTO> reviews = reviewRepository.findAll()
-                .stream()
-                .map((review)->modelMapper.map(review,ResReviewDTO.class))
+        return reviewRepository.findAll().stream()
+                .collect(Collectors.groupingBy(r -> r.getBookId()))
+                .values().stream()
+                .map(reviews -> {
+                    ResReviewDTO dto = modelMapper.map(reviews.get(0), ResReviewDTO.class);
+                    double avg = reviews.stream().mapToDouble(Review::getRating).average().orElse(0);
+                    dto.setRating(avg);                return dto;
+                })
                 .sorted(Comparator.comparingDouble(ResReviewDTO::getRating).reversed())
                 .limit(count)
                 .collect(Collectors.toList());
-        return reviews;
-
     }
-
-
 
     @Override
     public List<BookDTO> getBooksByMinRating(double minRating) {
