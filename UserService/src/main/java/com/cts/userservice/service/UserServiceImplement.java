@@ -122,8 +122,8 @@ public class UserServiceImplement implements IUserService {
 //		String password = userDto.getPassword();
 //		updateUser.setPassword(password);
 
-		String encodedPassword = passwordEncoder.encode(userDto.getPassword());
-		updateUser.setPassword(encodedPassword);
+		//String encodedPassword = passwordEncoder.encode(userDto.getPassword());
+		updateUser.setPassword(userDto.getPassword());
 
 		updateUser.setUpdatedDate(LocalDateTime.now());
 
