@@ -38,11 +38,11 @@ public class AuthorController {
 	@GetMapping("/viewallauthors") // Changed endpoint name for consistency
     public ResponseEntity<List<AuthorDto>> viewAllAuthors() {
         List<AuthorDto> authors = authorService.viewAllAuthors();
-        if (!authors.isEmpty()) {
+//        if (!authors.isEmpty()) {
             return new ResponseEntity<>(authors, HttpStatus.OK);
-        }
+//        }
         // Use NO_CONTENT if the list is empty, or OK with an empty list
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 	
 	@GetMapping("/viewallbooksbyauthid/{authId}")

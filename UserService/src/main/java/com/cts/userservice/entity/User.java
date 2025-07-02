@@ -18,7 +18,7 @@ public class User {
 	private Long userId;
 	
 	@NotBlank
-	@Column(unique = true)
+//	@Column(unique = true)
 	private String name;
 	
 	@NotBlank
