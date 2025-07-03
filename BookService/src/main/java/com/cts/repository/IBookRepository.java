@@ -26,4 +26,7 @@ public interface IBookRepository extends JpaRepository<Book, Long> {
     Optional<Book> findByIsbn(String isbn);
 
     List<Book> findByPriceBetween(double min, double max);
+
+    @Query("SELECT u FROM Book u WHERE u.isBookDeleted = true")
+    List<Book> findDeletedBooks();
 }

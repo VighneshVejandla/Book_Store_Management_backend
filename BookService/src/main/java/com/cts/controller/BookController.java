@@ -4,6 +4,7 @@ import java.util.List;
 
 
 import com.cts.dto.AuthorDto;
+import com.cts.entity.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,9 +59,15 @@ public class BookController {
 	public ResponseEntity<String> deleteBookById(@PathVariable Long bookId)
 	{
 		  bookService.deleteBookById(bookId);
-		
 		  return new ResponseEntity<String>("deleted successfully", HttpStatus.OK);
 	}
+
+    @DeleteMapping("/deleteperementlybook/{bookId}")
+    public ResponseEntity<String> hardDeleteBookByBookId(@PathVariable Long bookId)
+    {
+        bookService.hardDeleteBookByBookId(bookId);
+        return new ResponseEntity<String>("deleted successfully", HttpStatus.OK);
+    }
 	
 	@GetMapping("/viewbycategory/{catName}")
     public ResponseEntity<List<BookDto>> viewBooksByCategory(@PathVariable String catName) {
@@ -126,11 +133,15 @@ public class BookController {
     }
 
 
-
-
     @GetMapping("/authorbybookid/{bookId}")
     public ResponseEntity<AuthorDto> getAuthorByBookId(@PathVariable Long bookId){
         AuthorDto authorDto = bookService.getAuthorByBookId(bookId);
         return new ResponseEntity<>(authorDto, HttpStatus.OK);
     }
+
+    @GetMapping("/viewalldeletedbooks")
+    public ResponseEntity<List<Book>> findDeletedBooks(){
+        return new ResponseEntity<List<Book>>(bookService.findDeletedBooks(), HttpStatus.OK);
+    }
+
 }
