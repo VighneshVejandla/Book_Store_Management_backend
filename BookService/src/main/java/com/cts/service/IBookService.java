@@ -4,12 +4,15 @@ import java.util.List;
 
 import com.cts.dto.AuthorDto;
 import com.cts.dto.BookDto;
+import com.cts.entity.Book;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface IBookService {
 
 //	Book addBook(Book book);
 	List<BookDto> viewAllBooks();
+
+	List<Book> findDeletedBooks();
 
 	void uploadBookImage(Long bookId, MultipartFile image);
 
@@ -18,6 +21,8 @@ public interface IBookService {
 	BookDto updateBookById(Long bookId, BookDto bookDto);
 
 	void deleteBookById(Long bookId);
+
+	void hardDeleteBookByBookId(Long bookId);
 
 	BookDto addBook(BookDto bookDto);
 

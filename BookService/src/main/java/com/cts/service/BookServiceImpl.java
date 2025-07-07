@@ -93,6 +93,10 @@ public class BookServiceImpl implements IBookService{
 		return bookDtos;
 	}
 
+	public List<Book> findDeletedBooks() {
+		return bookRepository.findDeletedBooks();
+	}
+
 	@Override
 	public BookDto getBookById(Long bookId) {
 	    Book book = bookRepository.findById(bookId)
@@ -123,6 +127,13 @@ public class BookServiceImpl implements IBookService{
 //	    		orElseThrow(() -> new ResourceNotFoundException("Book not found"));
 	    book.setBookDeleted(true);
 	    bookRepository.save(book);
+	}
+
+	@Override
+	public void hardDeleteBookByBookId(Long bookId) {
+		Book book = bookRepository.findById(bookId).get();
+//	    		orElseThrow(() -> new ResourceNotFoundException("Book not found"));
+		bookRepository.delete(book);
 	}
 	
 	

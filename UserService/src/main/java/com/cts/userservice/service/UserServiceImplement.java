@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.cts.userservice.dto.*;
+import com.cts.userservice.entity.Profile;
 import com.cts.userservice.exception.InvalidRoleException;
 import com.cts.userservice.exception.UserNotFoundByEmailException;
 import com.cts.userservice.exception.UserNotFoundByIdException;
@@ -62,6 +63,10 @@ public class UserServiceImplement implements IUserService {
 		newUser.setUpdatedDate(LocalDateTime.now());
 		newUser.setDeleted(false);
 		User saveUser = userRepository.save(newUser);
+		Profile profile = new Profile();
+		profile.setUser(saveUser);
+		profile.setCreatedAt(LocalDateTime.now());
+		profileRepository.save(profile);
 
 		try{
 			cartFeignClient.createCart(newUser.getUserId());
@@ -117,8 +122,8 @@ public class UserServiceImplement implements IUserService {
 //		String password = userDto.getPassword();
 //		updateUser.setPassword(password);
 
-		String encodedPassword = passwordEncoder.encode(userDto.getPassword());
-		updateUser.setPassword(encodedPassword);
+		//String encodedPassword = passwordEncoder.encode(userDto.getPassword());
+		updateUser.setPassword(userDto.getPassword());
 
 		updateUser.setUpdatedDate(LocalDateTime.now());
 
@@ -190,23 +195,25 @@ public class UserServiceImplement implements IUserService {
 	@Override
 	@Transactional
 	public void changePassword(Long userId, PasswordDto passwordDto) {
-		System.out.println("The password fetched:"+passwordDto.getPassword());
 		User updateUser = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundByIdException("User", "Id", userId));
 
-        String rawPassword = passwordDto.getPassword();
-        String passwordRegex = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?`~])(?=.*[^\\s]).{8,}$";
-        if (!rawPassword.matches(passwordRegex)) {
-            throw new IllegalArgumentException("Password must have at least 8 characters, including an alphabet, a number, and a special character, with no whitespace.");
-        }
+		String oldPassword = passwordDto.getOldPassword();
+		if (!passwordEncoder.matches(oldPassword, updateUser.getPassword())) {
+			throw new IllegalArgumentException("Old password does not match.");
+		}
 
-        String encodedPassword = passwordEncoder.encode(rawPassword);
-		updateUser.setPassword(encodedPassword);
+		String newPassword = passwordDto.getNewPassword();
+		String passwordRegex = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?`~])(?=.*[^\\s]).{8,}$";
+		if (!newPassword.matches(passwordRegex)) {
+			throw new IllegalArgumentException("New password must have at least 8 characters, including an alphabet, a number, and a special character, with no whitespace.");
+		}
+
+		String encodedNewPassword = passwordEncoder.encode(newPassword);
+		updateUser.setPassword(encodedNewPassword);
 		updateUser.setUpdatedDate(LocalDateTime.now());
 
 		User saveUser = userRepository.save(updateUser);
-		
-		modelMapper.map(saveUser, PasswordDto.class);
 	}
 
 	public List<User> getAllDeletedUsers() {

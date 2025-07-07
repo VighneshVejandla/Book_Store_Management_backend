@@ -18,6 +18,6 @@ public class UserDto {
 //	@NotEmpty
 	private String password;
 
-	private Profile profile;
+//	private Profile profile;
 
 }

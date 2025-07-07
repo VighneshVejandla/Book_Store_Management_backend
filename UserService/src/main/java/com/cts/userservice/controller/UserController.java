@@ -110,9 +110,9 @@ public class UserController {
 	@PostMapping("/authenticate")
 	public ResponseEntity<AuthDto> authenticate(@RequestBody LoginRequest loginRequest) {
 		User user = userRepository.findByEmail(loginRequest.getEmail())
-				.orElseThrow(() -> new RuntimeException("Invalid email or password"));
+				.orElseThrow(() -> new RuntimeException("Invalid email"));
 		if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-			throw new RuntimeException("Invalid email or password");
+			throw new RuntimeException("Invalid password");
 		}
 
 		return new ResponseEntity<>(modelMapper.map(user, AuthDto.class), HttpStatus.OK);
